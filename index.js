@@ -126,6 +126,7 @@ import { ensureQuoteSignatureSchema } from './lib/ensureQuoteSignatureSchema.js'
 import { ensureUserModuleColumns } from './lib/ensureUserModuleColumns.js';
 import { ensureCustomersResponsibleNameColumn } from './lib/ensureCustomersResponsibleNameColumn.js';
 import { ensureLeadPipelineStageEnteredAt } from './lib/ensureLeadPipelineStageEnteredAt.js';
+import { ensureLeadAddressColumn } from './lib/ensureLeadAddressColumn.js';
 import { ensurePayrollTimesheetDailyOverrideColumn } from './lib/ensurePayrollTimesheetDailyOverrideColumn.js';
 import { ensurePayrollEmployeeAllowOutsidePeriodColumn } from './lib/ensurePayrollEmployeeAllowOutsidePeriodColumn.js';
 import { ensureBuilderPaymentForecastsTable } from './lib/ensureBuilderPaymentForecastsTable.js';
@@ -279,8 +280,18 @@ const sessionMiddleware = session({
   },
 });
 
+const corsOriginsRaw = (process.env.CORS_ORIGINS || process.env.FRONTEND_URL || '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean);
 app.use(cors({
-  origin: true,
+  origin(origin, cb) {
+    // Allow same-origin / curl / server-to-server (no Origin header)
+    if (!origin) return cb(null, true);
+    if (corsOriginsRaw.length === 0) return cb(null, true); // default: reflect (compat)
+    if (corsOriginsRaw.includes('*') || corsOriginsRaw.includes(origin)) return cb(null, true);
+    return cb(null, false);
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Accept', 'Authorization', 'X-Requested-With', 'X-Sheets-Sync', 'X-Sheets-Sync-Secret'],
@@ -495,11 +506,11 @@ app.delete('/api/quotes/:id', requireAuth, requirePermission('quotes.edit'), del
 
 // Estimates (Professional Flooring Estimate Engine)
 app.get('/api/estimates', requireAuth, listEstimates);
+app.get('/api/estimates/analytics/overview', requireAuth, getEstimateAnalytics);
 app.get('/api/estimates/:id', requireAuth, getEstimate);
 app.post('/api/estimates', requireAuth, createEstimate);
 app.put('/api/estimates/:id', requireAuth, updateEstimate);
 app.delete('/api/estimates/:id', requireAuth, deleteEstimate);
-app.get('/api/estimates/analytics/overview', requireAuth, getEstimateAnalytics);
 
 // Financial (antes do router /api/projects para não colidir com /:id)
 app.get('/api/projects/:projectId/financial', requireAuth, getProjectFinancial);
@@ -519,6 +530,8 @@ registerBuilderPricingRoutes(app);
 registerBuilderGalleryRoutes(app);
 registerBuilderMessagesRoutes(app);
 registerBuilderEstimateRoutes(app);
+registerBuilderClientReportRoutes(app);
+registerBuilderEvaluationRoutes(app);
 registerBuilderRoutes(app);
 
 // Visits/Schedule
@@ -752,6 +765,7 @@ app.use((err, req, res, next) => {
 
   if (status >= 500 && hideErrorDetailFromClient) {
     return res.status(status).json({
+      success: false,
       error: true,
       message: infraDb
         ? 'Serviço temporariamente indisponível (base de dados).'
@@ -767,6 +781,7 @@ app.use((err, req, res, next) => {
   }
 
   return res.status(status).json({
+    success: false,
     error: true,
     message: (err && err.message) || 'Pedido inválido',
   });
@@ -841,6 +856,7 @@ async function start() {
       await ensureUserModuleColumns(pool);
       await ensureCustomersResponsibleNameColumn(pool);
       await ensureLeadPipelineStageEnteredAt(pool);
+      await ensureLeadAddressColumn(pool);
       await ensurePayrollTimesheetDailyOverrideColumn(pool);
       await ensurePayrollEmployeeAllowOutsidePeriodColumn(pool);
       await ensureBuilderPaymentForecastsTable(pool);

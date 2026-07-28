@@ -1098,7 +1098,13 @@ async function createVisit(payload, submitBtn) {
 }
 
 function showNewProposalModal() {
-    alert('Funcionalidade de criar proposta em desenvolvimento');
+    const id = currentLeadId || new URLSearchParams(window.location.search).get('id');
+    if (!id) {
+        if (typeof crmNotify === 'function') crmNotify('Lead ID não encontrado.', 'error');
+        else alert('Lead ID não encontrado.');
+        return;
+    }
+    window.location.href = '/quote-builder.html?lead_id=' + encodeURIComponent(id);
 }
 
 async function createInteraction(interaction) {

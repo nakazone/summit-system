@@ -1,5 +1,5 @@
 /**
- * Builder portal � profile, password, documents, manager, notification prefs.
+ * Builder portal — profile, password, documents, manager, notification prefs.
  */
 (function () {
   let me = null;
@@ -338,7 +338,7 @@
       await window.builderAuth.fetch(`/api/builder-documents/${replaceDocId}`, { method: 'DELETE' });
       cancelReplace();
     }
-    statusEl.textContent = 'Uploaded � pending Summit Flooring review.';
+    statusEl.textContent = 'Uploaded — pending Summit Flooring review.';
     e.target.reset();
     document.getElementById('docType').value = 'w9';
     loadDocs();

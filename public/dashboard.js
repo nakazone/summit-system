@@ -888,7 +888,7 @@ function destroyDashChart(id) {
 
 const SF_CHART_COLORS = {
     navy: '#1c1c1f',
-    navy2: '#252b47',
+    navy2: '#2a2a2e',
     navy3: '#2a2a2e',
     gold3: '#c9a882',
     gold4: '#b8906a',
@@ -994,7 +994,7 @@ function renderFunnel(funnel) {
 
     const COLORS = {
         lead_received: '#1c1c1f',
-        contact_made: '#252b47',
+        contact_made: '#2a2a2e',
         qualified: '#2a2a2e',
         visit_scheduled: '#c9a882',
         measurement_done: '#c9a882',
@@ -3241,13 +3241,11 @@ function changePageProjects(delta) {
 }
 
 function viewProject(id) {
-    if (typeof crmNotify === 'function') crmNotify('Ver projeto #' + id + ' — em breve.', 'info');
-    else alert('View project ' + id + ' - Feature coming soon!');
+    if (id) window.location.href = '/project-detail.html?id=' + encodeURIComponent(id);
 }
 
 function showNewProjectModal() {
-    if (typeof crmNotify === 'function') crmNotify('Novo projeto — em breve.', 'info');
-    else alert('New Project form - Coming soon!');
+    window.location.href = '/projects.html';
 }
 
 // Visits/Schedule
@@ -3294,13 +3292,11 @@ function changePageVisits(delta) {
 }
 
 function viewVisit(id) {
-    if (typeof crmNotify === 'function') crmNotify('Ver visita #' + id + ' — em breve.', 'info');
-    else alert('View visit ' + id + ' - Feature coming soon!');
+    if (id) window.location.href = '/dashboard.html?page=schedule&visit=' + encodeURIComponent(id);
 }
 
 function showNewVisitModal() {
-    if (typeof crmNotify === 'function') crmNotify('Nova visita — em breve.', 'info');
-    else alert('New Visit form - Coming soon!');
+    window.location.href = '/dashboard.html?page=schedule';
 }
 
 // Contracts/Financeiro
@@ -3348,13 +3344,11 @@ function changePageContracts(delta) {
 }
 
 function viewContract(id) {
-    if (typeof crmNotify === 'function') crmNotify('Ver contrato #' + id + ' — em breve.', 'info');
-    else alert('View contract ' + id + ' - Feature coming soon!');
+    window.location.href = '/financial.html' + (id ? ('?contract=' + encodeURIComponent(id)) : '');
 }
 
 function showNewContractModal() {
-    if (typeof crmNotify === 'function') crmNotify('Novo contrato — em breve.', 'info');
-    else alert('New Contract form - Coming soon!');
+    window.location.href = '/financial.html';
 }
 
 // Activities
@@ -3400,13 +3394,34 @@ function changePageActivities(delta) {
 }
 
 function viewActivity(id) {
-    if (typeof crmNotify === 'function') crmNotify('Ver atividade #' + id + ' — em breve.', 'info');
-    else alert('View activity ' + id + ' - Feature coming soon!');
+    window.location.href = '/dashboard.html?page=activities' + (id ? ('&activity=' + encodeURIComponent(id)) : '');
 }
 
 function showNewActivityModal() {
-    if (typeof crmNotify === 'function') crmNotify('Nova atividade — em breve.', 'info');
-    else alert('New Activity form - Coming soon!');
+    const subject = window.prompt('Assunto da atividade:');
+    if (subject == null || !String(subject).trim()) return;
+    fetch('/api/activities', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            activity_type: 'note',
+            subject: String(subject).trim(),
+            activity_date: new Date().toISOString(),
+        }),
+    })
+        .then((r) => r.json())
+        .then((d) => {
+            if (d.success) {
+                if (typeof crmNotify === 'function') crmNotify('Atividade criada.', 'success');
+                loadActivities();
+            } else if (typeof crmNotify === 'function') crmNotify(d.error || 'Falha ao criar atividade', 'error');
+            else alert(d.error || 'Falha ao criar atividade');
+        })
+        .catch((e) => {
+            if (typeof crmNotify === 'function') crmNotify(e.message || 'Erro de rede', 'error');
+            else alert(e.message || 'Erro de rede');
+        });
 }
 
 // Users & permissões por módulo

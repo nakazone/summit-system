@@ -1,5 +1,5 @@
 /**
- * CRM admin � edit partner pricing table (builders portal reads via API).
+ * CRM admin — edit partner pricing table (builders portal reads via API).
  */
 /* global crmNotify */
 (function () {

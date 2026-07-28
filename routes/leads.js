@@ -244,9 +244,9 @@ export async function getLeadsQuoteEngagementSummary(req, res) {
 }
 
 export async function getLead(req, res) {
-  if (!isDatabaseConfigured()) return res.status(503).json({ error: 'Database not configured' });
+  if (!isDatabaseConfigured()) return res.status(503).json({ success: false, error: 'Database not configured' });
   const id = parseInt(req.params.id, 10);
-  if (!id) return res.status(400).json({ error: 'Invalid id' });
+  if (!id) return res.status(400).json({ success: false, error: 'Invalid id' });
   try {
     const pool = await getDBConnection();
     const [rows] = await pool.query(
@@ -258,10 +258,10 @@ export async function getLead(req, res) {
        WHERE l.id = ?`,
       [id]
     );
-    if (!rows.length) return res.status(404).json({ error: 'Lead not found' });
+    if (!rows.length) return res.status(404).json({ success: false, error: 'Lead not found' });
     res.json({ success: true, data: rows[0] });
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ success: false, error: e.message });
   }
 }
 

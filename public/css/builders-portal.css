@@ -1,4 +1,4 @@
-/* Builder Partner Portal � brand-aligned */
+/* Builder Partner Portal — brand-aligned */
 :root {
   --bp-navy: #1c1c1f;
   --bp-navy-deep: #0e0e10;
@@ -12,7 +12,7 @@
 .bp-page-body { background: var(--bp-off-white); min-height: 100vh; font-family: Inter, system-ui, sans-serif; }
 .bp-main { padding: 1rem 1.25rem 2rem; max-width: 1280px; margin: 0 auto; }
 .bp-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--bp-tan); margin: 0 0 4px; }
-.bp-title { font-family: Poppins, Inter, sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--bp-navy); margin: 0; }
+.bp-title { font-family: 'Inter', system-ui, sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--bp-navy); margin: 0; }
 .bp-card {
   background: #fff;
   border: 1px solid var(--bp-border);
@@ -52,7 +52,7 @@
 /* External portal login */
 .bp-login-page { min-height: 100vh; background: var(--bp-navy-deep); display: flex; align-items: center; justify-content: center; padding: 24px; }
 .bp-login-box { background: #fff; border-radius: 12px; padding: 2rem; max-width: 400px; width: 100%; border: 2px solid var(--bp-tan); }
-.bp-login-box h1 { font-family: Poppins, sans-serif; color: var(--bp-navy); margin: 0 0 8px; font-size: 1.35rem; }
+.bp-login-box h1 { font-family: 'Inter', system-ui, sans-serif; color: var(--bp-navy); margin: 0 0 8px; font-size: 1.35rem; }
 /* Legacy flat sidebar (password pages only) */
 .bp-portal-layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
 .bp-portal-sidebar { background: var(--bp-navy); color: #fff; padding: 1rem; }
@@ -178,7 +178,7 @@
 .bp-manager { margin-bottom: 1rem; }
 .bp-welcome { background: var(--bp-navy); color: #fff; border: none; }
 .bp-welcome__main { display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; align-items: flex-start; }
-.bp-welcome__title { color: #fff; font-size: 1.35rem; margin: 0 0 6px; font-family: Poppins, sans-serif; }
+.bp-welcome__title { color: #fff; font-size: 1.35rem; margin: 0 0 6px; font-family: 'Inter', system-ui, sans-serif; }
 .bp-welcome__sub { opacity: 0.92; margin: 0 0 14px; font-size: 14px; max-width: 520px; }
 .bp-welcome__cta { text-decoration: none; display: inline-block; }
 .bp-welcome__manager { flex: 0 1 280px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 14px; }
@@ -411,7 +411,7 @@
 .bp-doc-list li { padding: 8px 0; border-bottom: 1px solid var(--bp-border); }
 .bp-doc-list a { font-weight: 600; color: var(--bp-navy); }
 .bp-manager-phone { margin-top: 4px; }
-/* Light cards (project detail, profile) � not the dark welcome card */
+/* Light cards (project detail, profile) — not the dark welcome card */
 .bp-card:not(.bp-welcome) .bp-manager-phone a,
 .bp-manager-card .bp-manager-phone a {
   color: var(--bp-navy);
@@ -766,7 +766,7 @@
 }
 .bp-est-success { background: #f0fdf4; border-color: #86efac; margin-top: 1rem; }
 .bp-est-success__eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #166534; margin: 0 0 6px; font-weight: 700; }
-.bp-est-success__ref { font-size: 1.35rem; font-weight: 700; color: var(--bp-navy); margin: 0 0 10px; font-family: Poppins, Inter, sans-serif; }
+.bp-est-success__ref { font-size: 1.35rem; font-weight: 700; color: var(--bp-navy); margin: 0 0 10px; font-family: 'Inter', system-ui, sans-serif; }
 .bp-est-summary { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(22, 101, 52, 0.2); }
 .bp-est-summary__title { font-size: 13px; margin: 0 0 10px; color: var(--bp-navy); }
 .bp-est-summary__dl { display: grid; grid-template-columns: minmax(7rem, 34%) 1fr; gap: 6px 12px; font-size: 13px; margin: 0; }
@@ -787,7 +787,7 @@
 .bp-ref-timeline__note { font-size: 11px; color: var(--bp-muted); }
 .hidden { display: none !important; }
 
-/* Partner pricing � admin table + service notes tooltip */
+/* Partner pricing — admin table + service notes tooltip */
 .bp-pricing-admin-wrap { overflow-x: auto; }
 .bp-pricing-admin-table .bp-inline { width: 100%; min-width: 0; font-size: 12px; padding: 6px 8px; }
 .bp-pricing-admin-table input[type="number"].bp-inline { width: 72px; }
@@ -827,9 +827,9 @@
 .bp-tooltip-wrap:hover .bp-tooltip,
 .bp-tooltip-wrap:focus-within .bp-tooltip { display: block; }
 
-/* Partner pricing � project simulations */
+/* Partner pricing — project simulations */
 .bp-pricing-sims { margin: 1.75rem 0 1rem; padding-top: 1.25rem; border-top: 1px solid var(--bp-border); }
-.bp-pricing-sims__title { font-size: 1rem; margin: 0 0 6px; color: var(--bp-navy); font-family: Poppins, Inter, sans-serif; }
+.bp-pricing-sims__title { font-size: 1rem; margin: 0 0 6px; color: var(--bp-navy); font-family: 'Inter', system-ui, sans-serif; }
 .bp-pricing-sims__intro { margin: 0 0 14px; font-size: 13px; }
 .bp-pricing-sims__grid {
   display: grid;
@@ -918,7 +918,7 @@
   font-size: 1.35rem;
   font-weight: 700;
   color: var(--bp-navy);
-  font-family: Poppins, Inter, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .bp-pricing-sim-scope {
   margin: 12px 0 0;
@@ -945,7 +945,7 @@
   font-size: 1rem;
   margin: 0 0 10px;
   color: var(--bp-navy);
-  font-family: Poppins, Inter, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 @media (max-width: 900px) {
   .bp-pricing-sims__grid { grid-template-columns: 1fr; }

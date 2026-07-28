@@ -1,5 +1,5 @@
 /**
- * Builder completed-projects portfolio PDF (pdf-lib) � Summit Flooring brand.
+ * Builder completed-projects portfolio PDF (pdf-lib) — Summit Flooring brand.
  */
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import fs from 'fs';
@@ -195,7 +195,7 @@ export async function buildBuilderHistoryPdfBuffer(opts) {
 
   ensureSpace(40);
   drawTxt(
-    `Generated ${new Date().toLocaleDateString('en-US')} � Summit Flooring Builder Portal`,
+    `Generated ${new Date().toLocaleDateString('en-US')} — Summit Flooring Builder Portal`,
     margin,
     margin + 8,
     8,

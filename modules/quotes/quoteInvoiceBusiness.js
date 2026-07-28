@@ -100,12 +100,12 @@ export async function createQuoteInvoice(pool, quoteId, body, userId) {
   if (!isQuoteApproved(ctx.quote.status)) {
     return {
       ok: false,
-      error: 'S� � poss�vel emitir invoice quando o or�amento est� aprovado. Guarde o or�amento com status Aprovado.',
+      error: 'S— — possível emitir invoice quando o or—amento est— aprovado. Guarde o or—amento com status Aprovado.',
     };
   }
 
   const quoteTotal = Number(ctx.quote.total_amount) || 0;
-  if (quoteTotal <= 0) return { ok: false, error: 'O or�amento n�o tem valor total.' };
+  if (quoteTotal <= 0) return { ok: false, error: 'O or—amento não tem valor total.' };
 
   let resolved;
   try {
@@ -113,18 +113,18 @@ export async function createQuoteInvoice(pool, quoteId, body, userId) {
   } catch (e) {
     return { ok: false, error: e.message };
   }
-  if (resolved.amount <= 0) return { ok: false, error: 'Valor do invoice inv�lido.' };
+  if (resolved.amount <= 0) return { ok: false, error: 'Valor do invoice inválido.' };
 
   const quoteNum = ctx.quote.quote_number;
   if (!quoteNum || !String(quoteNum).trim()) {
-    return { ok: false, error: 'Or�amento sem n�mero. Guarde o or�amento antes de emitir invoice.' };
+    return { ok: false, error: 'Or—amento sem n—mero. Guarde o or—amento antes de emitir invoice.' };
   }
 
   let invoiceNumber;
   try {
     invoiceNumber = await nextInvoiceNumberForQuote(pool, quoteNum);
   } catch (e) {
-    return { ok: false, error: e.message || 'N�o foi poss�vel gerar o n�mero do invoice.' };
+    return { ok: false, error: e.message || 'Não foi possível gerar o n—mero do invoice.' };
   }
 
   const dueDate = body.due_date ? String(body.due_date).slice(0, 10) : defaultDueDate(14);
@@ -212,7 +212,7 @@ export async function mailQuoteInvoice(pool, invoiceId, emailOpts = {}) {
   const inv = rows[0];
   const email = String(emailOpts.to || inv.customer_email || '').trim();
   if (!email) {
-    return { ok: false, error: 'E-mail do cliente em falta. Associe um cliente com e-mail ou indique o destinat�rio.' };
+    return { ok: false, error: 'E-mail do cliente em falta. Associe um cliente com e-mail ou indique o destinat—rio.' };
   }
 
   const pdf = await getInvoicePdfBuffer(pool, invoiceId);
@@ -226,11 +226,11 @@ export async function mailQuoteInvoice(pool, invoiceId, emailOpts = {}) {
     `<p>Hello${inv.customer_name ? ` ${inv.customer_name}` : ''},</p>
 <p>Please find attached invoice <strong>${invNum}</strong> for <strong>$${amount.toFixed(2)}</strong>${due ? ` due by ${due}` : ''}.</p>
 <p>This invoice relates to your approved quote <strong>${inv.quote_number || ''}</strong>.</p>
-<p>� Summit Flooring</p>`;
+<p>— Summit Flooring</p>`;
 
   const sent = await sendQuoteEmail({
     to: email,
-    subject: emailOpts.subject || `Invoice ${invNum} � Summit Flooring`,
+    subject: emailOpts.subject || `Invoice ${invNum} — Summit Flooring`,
     html,
     pdfBuffer: pdf.buffer,
     filename: `Summit-Flooring-${invNum}.pdf`,
@@ -282,7 +282,7 @@ export async function deleteQuoteInvoice(pool, invoiceId) {
 
   const inv = rows[0];
   if (String(inv.status || '').toLowerCase() === 'paid') {
-    return { ok: false, error: 'N�o � poss�vel apagar um invoice marcado como pago.' };
+    return { ok: false, error: 'Não — possível apagar um invoice marcado como pago.' };
   }
 
   if (

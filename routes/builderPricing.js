@@ -1,5 +1,5 @@
 /**
- * Partner pricing table � admin edit, builder read-only view.
+ * Partner pricing table — admin edit, builder read-only view.
  */
 import { getDBConnection } from '../config/db.js';
 import { requireAuth, requirePermission } from '../middleware/auth.js';
@@ -155,7 +155,7 @@ async function notifyBuildersPricingUpdated(pool, serviceName) {
     if (b.email && builderWantsEmail(b.notification_prefs, 'pricing')) {
       sendBuilderNotification({
         to: b.email,
-        subject: 'Summit Flooring � partner pricing updated',
+        subject: 'Summit Flooring — partner pricing updated',
         html: `<p>Hi ${b.first_name || 'there'},</p>
 <p>${body}</p>
 <p><a href="${pub}/builder-pricing.html">View pricing table</a></p>`,

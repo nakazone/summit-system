@@ -48,8 +48,8 @@
             '&phone=' + encodeURIComponent(phoneVal.trim()) +
             '&zipcode=' + encodeURIComponent(zipVal.trim()) +
             '&message=' + encodeURIComponent((form.querySelector('[name="message"]') || {}).value || '');
-        var url = (typeof window.SENIOR_FLOORS_FORM_URL === 'string' && window.SENIOR_FLOORS_FORM_URL)
-            ? window.SENIOR_FLOORS_FORM_URL
+        var url = (typeof window.SUMMIT_FLOORING_FORM_URL === 'string' && window.SUMMIT_FLOORING_FORM_URL)
+            ? window.SUMMIT_FLOORING_FORM_URL
             : (window.location.hostname === 'lp.summitflooring.com'
                 ? 'https://summitflooring.com/send-lead.php'
                 : (new URL(form.getAttribute('action') || 'send-lead.php', window.location.href).href));
@@ -67,8 +67,8 @@
                     form.reset();
                     form.style.display = 'none';
                     // Fallback: se send-lead não salvou no banco, reenviar direto para receive-lead (mesmo caminho do teste curl que funciona)
-                    if (data.success && data.system_database_saved === false && typeof window.SENIOR_FLOORS_RECEIVE_LEAD_URL === 'string' && window.SENIOR_FLOORS_RECEIVE_LEAD_URL) {
-                        fetch(window.SENIOR_FLOORS_RECEIVE_LEAD_URL, { method: 'POST', body: body, headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' } }).catch(function() {});
+                    if (data.success && data.system_database_saved === false && typeof window.SUMMIT_FLOORING_RECEIVE_LEAD_URL === 'string' && window.SUMMIT_FLOORING_RECEIVE_LEAD_URL) {
+                        fetch(window.SUMMIT_FLOORING_RECEIVE_LEAD_URL, { method: 'POST', body: body, headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' } }).catch(function() {});
                     }
                 } else if (errorEl) {
                     errorEl.textContent = data.message || 'Erro ao enviar. Tente novamente.';
@@ -415,8 +415,8 @@
                 }
 
                 // Igual ao teste Lead#10: POST para summitflooring.com/send-lead.php
-                const formActionUrl = (typeof window.SENIOR_FLOORS_FORM_URL === 'string' && window.SENIOR_FLOORS_FORM_URL)
-                    ? window.SENIOR_FLOORS_FORM_URL
+                const formActionUrl = (typeof window.SUMMIT_FLOORING_FORM_URL === 'string' && window.SUMMIT_FLOORING_FORM_URL)
+                    ? window.SUMMIT_FLOORING_FORM_URL
                     : (window.location.hostname === 'lp.summitflooring.com'
                         ? 'https://summitflooring.com/send-lead.php'
                         : (window.location.origin + '/send-lead.php'));
@@ -457,8 +457,8 @@
                     heroForm.reset();
                     heroForm.style.display = 'none';
                     // Fallback: se send-lead não salvou no banco, reenviar direto para receive-lead (mesmo caminho do teste curl)
-                    if (data.system_database_saved === false && typeof window.SENIOR_FLOORS_RECEIVE_LEAD_URL === 'string' && window.SENIOR_FLOORS_RECEIVE_LEAD_URL) {
-                        fetch(window.SENIOR_FLOORS_RECEIVE_LEAD_URL, { method: 'POST', body: heroParams.toString(), headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' } }).catch(function() {});
+                    if (data.system_database_saved === false && typeof window.SUMMIT_FLOORING_RECEIVE_LEAD_URL === 'string' && window.SUMMIT_FLOORING_RECEIVE_LEAD_URL) {
+                        fetch(window.SUMMIT_FLOORING_RECEIVE_LEAD_URL, { method: 'POST', body: heroParams.toString(), headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' } }).catch(function() {});
                     }
                     // Scroll to show success message - better mobile handling
                     if (/Mobile|Android|iPhone|iPad/.test(navigator.userAgent)) {
@@ -711,8 +711,8 @@
                 }
 
                 // Igual ao teste Lead#10: POST para summitflooring.com/send-lead.php
-                const formActionUrlContact = (typeof window.SENIOR_FLOORS_FORM_URL === 'string' && window.SENIOR_FLOORS_FORM_URL)
-                    ? window.SENIOR_FLOORS_FORM_URL
+                const formActionUrlContact = (typeof window.SUMMIT_FLOORING_FORM_URL === 'string' && window.SUMMIT_FLOORING_FORM_URL)
+                    ? window.SUMMIT_FLOORING_FORM_URL
                     : (window.location.hostname === 'lp.summitflooring.com'
                         ? 'https://summitflooring.com/send-lead.php'
                         : (window.location.origin + '/send-lead.php'));
@@ -753,8 +753,8 @@
                     contactForm.reset();
                     contactForm.style.display = 'none';
                     // Fallback: se send-lead não salvou no banco, reenviar direto para receive-lead (mesmo caminho do teste curl)
-                    if (data.system_database_saved === false && typeof window.SENIOR_FLOORS_RECEIVE_LEAD_URL === 'string' && window.SENIOR_FLOORS_RECEIVE_LEAD_URL) {
-                        fetch(window.SENIOR_FLOORS_RECEIVE_LEAD_URL, { method: 'POST', body: contactParams.toString(), headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' } }).catch(function() {});
+                    if (data.system_database_saved === false && typeof window.SUMMIT_FLOORING_RECEIVE_LEAD_URL === 'string' && window.SUMMIT_FLOORING_RECEIVE_LEAD_URL) {
+                        fetch(window.SUMMIT_FLOORING_RECEIVE_LEAD_URL, { method: 'POST', body: contactParams.toString(), headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' } }).catch(function() {});
                     }
                     // Scroll to show success message - better mobile handling
                     if (/Mobile|Android|iPhone|iPad/.test(navigator.userAgent)) {
