@@ -33,7 +33,10 @@
     "migrate:financial-complete:railway": "railway run npm run migrate:financial-complete",
     "google-calendar:token": "node scripts/google-oauth-token.mjs",
     "check:encoding": "node scripts/check-encoding.mjs",
-    "fix:encoding": "node scripts/fix-encoding-apply.mjs"
+    "fix:encoding": "node scripts/fix-encoding-apply.mjs",
+    "migrate:estimates-schema": "node database/run-schema-estimates-simple.js",
+    "migrate:schedule-schema": "node database/run-schema-schedule-engine.js",
+    "migrate:financial-engine-schema": "node database/run-schema-financial-engine.js"
   },
   "engines": {
     "node": ">=18"

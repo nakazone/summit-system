@@ -129,6 +129,11 @@ import { ensureLeadPipelineStageEnteredAt } from './lib/ensureLeadPipelineStageE
 import { ensureLeadAddressColumn } from './lib/ensureLeadAddressColumn.js';
 import { ensurePayrollSectorReimbursementSchema } from './lib/ensurePayrollSectorReimbursementSchema.js';
 import { ensurePayrollTimesheetDoubleLines } from './lib/ensurePayrollTimesheetDoubleLines.js';
+import {
+  ensureEstimateEngineSchema,
+  ensureScheduleEngineSchema,
+  ensureFinancialEngineSchema,
+} from './lib/ensureEngineSchemas.js';
 import { ensurePayrollTimesheetDailyOverrideColumn } from './lib/ensurePayrollTimesheetDailyOverrideColumn.js';
 import { ensurePayrollEmployeeAllowOutsidePeriodColumn } from './lib/ensurePayrollEmployeeAllowOutsidePeriodColumn.js';
 import { ensureBuilderPaymentForecastsTable } from './lib/ensureBuilderPaymentForecastsTable.js';
@@ -861,6 +866,9 @@ async function start() {
       await ensureLeadAddressColumn(pool);
       await ensurePayrollSectorReimbursementSchema(pool);
       await ensurePayrollTimesheetDoubleLines(pool);
+      await ensureEstimateEngineSchema(pool);
+      await ensureScheduleEngineSchema(pool);
+      await ensureFinancialEngineSchema(pool);
       await ensurePayrollTimesheetDailyOverrideColumn(pool);
       await ensurePayrollEmployeeAllowOutsidePeriodColumn(pool);
       await ensureBuilderPaymentForecastsTable(pool);
