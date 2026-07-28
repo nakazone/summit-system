@@ -89,7 +89,35 @@
   --tablet: 1024px;
 
   --crm-sidebar-width: 264px;
+
+  /* sf-* aliases (dashboard / project-detail legacy) */
+  --sf-navy: var(--color-primary);
+  --sf-navy2: var(--primary-light);
+  --sf-navy3: var(--primary-light);
+  --sf-gold: var(--color-accent);
+  --sf-gold2: var(--color-accent-hover);
+  --sf-gold3: #c4b092;
+  --sf-gold4: var(--secondary-dark);
+  --sf-gold5: #836f56;
+  --sf-gold-soft: #faf7f2;
   --sf-gold-bg: #faf7f2;
+  --sf-gold-card: var(--color-surface-tertiary);
+  --sf-bg: var(--color-surface-secondary);
+  --sf-white: var(--color-surface);
+  --sf-border: var(--color-border);
+  --sf-ok: var(--color-success);
+  --sf-warn: var(--color-warning);
+  --sf-bad: var(--color-danger);
+  --sf-muted: var(--color-text-muted);
+
+  /* bp-* aliases (builder portal) */
+  --bp-navy: var(--color-primary);
+  --bp-navy-deep: var(--primary-dark);
+  --bp-tan: var(--color-accent);
+  --bp-tan-pale: var(--sf-gold-bg);
+  --bp-off-white: var(--color-surface-secondary);
+  --bp-border: var(--color-border);
+  --bp-muted: var(--color-text-secondary);
 }
 
 html {

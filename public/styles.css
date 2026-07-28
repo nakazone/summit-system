@@ -3311,26 +3311,28 @@ body.lead-quick-sheet-open .pac-container {
     outline-offset: 1px;
 }
 
-/* ========== Summit Flooring design system (dashboard / sf-*) ========== */
+/* ========== Summit Flooring design system (dashboard / sf-*) ==========
+   Tokens canónicos em design-system.css — aliases locais só como fallback se
+   design-system.css não carregar. */
 :root {
-    --sf-navy: #1c1c1f;
-    --sf-navy2: #2a2a2e;
-    --sf-navy3: #2a2a2e;
-    --sf-gold: #d6c4a8;
-    --sf-gold2: #e0c4a8;
-    --sf-gold3: #c9a882;
-    --sf-gold4: #b8906a;
-    --sf-gold5: #a07850;
-    --sf-gold-soft: #f5ede0;
+    --sf-navy: var(--color-primary, #1c1c1f);
+    --sf-navy2: var(--primary-light, #2a2a2e);
+    --sf-navy3: var(--primary-light, #2a2a2e);
+    --sf-gold: var(--color-accent, #d6c4a8);
+    --sf-gold2: var(--color-accent-hover, #e4d6c4);
+    --sf-gold3: #c4b092;
+    --sf-gold4: var(--secondary-dark, #b09a7a);
+    --sf-gold5: #836f56;
+    --sf-gold-soft: #faf7f2;
     --sf-gold-bg: #faf7f2;
-    --sf-gold-card: #ecdec8;
-    --sf-bg: #f0ede8;
-    --sf-white: #ffffff;
-    --sf-border: #d4c4ae;
-    --sf-ok: #2d6e4a;
-    --sf-warn: #8f5010;
-    --sf-bad: #8f2020;
-    --sf-muted: #8a8074;
+    --sf-gold-card: var(--color-surface-tertiary, #f0e8dc);
+    --sf-bg: var(--color-surface-secondary, #f7f8fc);
+    --sf-white: var(--color-surface, #ffffff);
+    --sf-border: var(--color-border, #e2e8f0);
+    --sf-ok: var(--color-success, #22c55e);
+    --sf-warn: var(--color-warning, #f59e0b);
+    --sf-bad: var(--color-danger, #ef4444);
+    --sf-muted: var(--color-text-muted, #718096);
 }
 
 .sf-card {

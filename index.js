@@ -127,6 +127,8 @@ import { ensureUserModuleColumns } from './lib/ensureUserModuleColumns.js';
 import { ensureCustomersResponsibleNameColumn } from './lib/ensureCustomersResponsibleNameColumn.js';
 import { ensureLeadPipelineStageEnteredAt } from './lib/ensureLeadPipelineStageEnteredAt.js';
 import { ensureLeadAddressColumn } from './lib/ensureLeadAddressColumn.js';
+import { ensurePayrollSectorReimbursementSchema } from './lib/ensurePayrollSectorReimbursementSchema.js';
+import { ensurePayrollTimesheetDoubleLines } from './lib/ensurePayrollTimesheetDoubleLines.js';
 import { ensurePayrollTimesheetDailyOverrideColumn } from './lib/ensurePayrollTimesheetDailyOverrideColumn.js';
 import { ensurePayrollEmployeeAllowOutsidePeriodColumn } from './lib/ensurePayrollEmployeeAllowOutsidePeriodColumn.js';
 import { ensureBuilderPaymentForecastsTable } from './lib/ensureBuilderPaymentForecastsTable.js';
@@ -500,8 +502,8 @@ app.get('/api/quotes/:id/snapshots', requireAuth, requirePermission('quotes.view
 registerQuoteInvoiceRoutes(app);
 registerQuoteSignatureRoutes(app);
 app.get('/api/quotes/:id', requireAuth, getQuote);
-app.post('/api/quotes', requireAuth, createQuote);
-app.put('/api/quotes/:id', requireAuth, updateQuote);
+app.post('/api/quotes', requireAuth, requirePermission('quotes.create'), createQuote);
+app.put('/api/quotes/:id', requireAuth, requirePermission('quotes.edit'), updateQuote);
 app.delete('/api/quotes/:id', requireAuth, requirePermission('quotes.edit'), deleteQuote);
 
 // Estimates (Professional Flooring Estimate Engine)
@@ -653,11 +655,11 @@ app.get('/api/construction-payroll/periods/:periodId/timesheets', requireAuth, r
 app.post(
   '/api/construction-payroll/periods/:periodId/timesheets/bulk',
   requireAuth,
-  requirePermission('payroll.view'),
+  requirePermission('payroll.manage'),
   constructionPayroll.bulkTimesheets
 );
-app.put('/api/construction-payroll/timesheets/:id', requireAuth, requirePermission('payroll.view'), constructionPayroll.updateTimesheet);
-app.delete('/api/construction-payroll/timesheets/:id', requireAuth, requirePermission('payroll.view'), constructionPayroll.deleteTimesheet);
+app.put('/api/construction-payroll/timesheets/:id', requireAuth, requirePermission('payroll.manage'), constructionPayroll.updateTimesheet);
+app.delete('/api/construction-payroll/timesheets/:id', requireAuth, requirePermission('payroll.manage'), constructionPayroll.deleteTimesheet);
 app.get('/api/construction-payroll/periods/:id', requireAuth, requirePermission('payroll.view'), constructionPayroll.getPeriod);
 app.put('/api/construction-payroll/periods/:id', requireAuth, requirePermission('payroll.manage'), constructionPayroll.updatePeriod);
 app.delete('/api/construction-payroll/periods/:id', requireAuth, requirePermission('payroll.manage'), constructionPayroll.deletePeriod);
@@ -857,6 +859,8 @@ async function start() {
       await ensureCustomersResponsibleNameColumn(pool);
       await ensureLeadPipelineStageEnteredAt(pool);
       await ensureLeadAddressColumn(pool);
+      await ensurePayrollSectorReimbursementSchema(pool);
+      await ensurePayrollTimesheetDoubleLines(pool);
       await ensurePayrollTimesheetDailyOverrideColumn(pool);
       await ensurePayrollEmployeeAllowOutsidePeriodColumn(pool);
       await ensureBuilderPaymentForecastsTable(pool);
