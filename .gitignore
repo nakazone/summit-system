@@ -1,0 +1,16 @@
+.env
+.env.local
+.env.*.local
+node_modules/
+*.log
+.DS_Store
+.vscode/
+.idea/
+.cursor/*
+!.cursor/rules/
+!.cursor/rules/**
+dist/
+build/
+env
+uploads/
+database/u485294289_senior_floors_.sql
