@@ -4,6 +4,8 @@
  * Inclui aliases --primary-color, --secondary-color, etc. para compatibilidade.
  */
 
+@import url('crm-responsive.css?v=20260826-ipad');
+
 :root {
   /* Palette */
   --color-primary: #1c1c1f;
@@ -85,8 +87,12 @@
   --spacing-lg: 3rem;
   --spacing-xl: 4rem;
   --transition: all 0.2s ease;
+  /* Breakpoints (docs): phone ≤767.98 | tablet/iPad ≤1366 | desktop ≥1367 */
   --mobile: 768px;
-  --tablet: 1024px;
+  --tablet: 1366px;
+  --crm-bp-phone-max: 767.98px;
+  --crm-bp-tablet-max: 1366px;
+  --crm-bp-desktop-min: 1367px;
 
   --crm-sidebar-width: 264px;
 

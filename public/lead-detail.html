@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lead Details - Summit Flooring CRM</title>
-    <link rel="stylesheet" href="styles.css?v=20260819-menu-fix-v2">
+    <link rel="stylesheet" href="styles.css?v=20260826-ipad">
+    <link rel="stylesheet" href="design-system.css?v=20260826-ipad">
+    <link rel="stylesheet" href="crm-responsive.css?v=20260826-ipad">
     <style>
         .lead-detail-container {
             max-width: 1400px;
@@ -212,9 +214,17 @@
         }
     </style>
 </head>
-<body>
+<body class="dashboard-app-body">
+    <header class="mobile-app-header" id="mobileAppHeader" aria-label="Barra superior">
+        <button type="button" class="mobile-app-header__menu" id="mobileMenuToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="dashboardSidebar">
+            <span class="mobile-app-header__menu-icon" aria-hidden="true"></span>
+        </button>
+        <div class="mobile-app-header__brand">
+            <img src="/assets/logoSummitFlooring.png" alt="" class="mobile-app-header__logo" width="28" height="28" onerror="this.style.display='none'">
+            <h1 class="mobile-app-header__title">Lead</h1>
+        </div>
+    </header>
     <div class="dashboard-container">
-        <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
         <div class="mobile-overlay" id="mobileOverlay"></div>
         <aside class="dashboard-sidebar" id="dashboardSidebar">
             <div class="sidebar-header">
@@ -723,6 +733,8 @@
         </div>
     </div>
 
+    <script src="crm-viewport.js?v=20260826-ipad"></script>
+    <script src="crm-mobile-chrome.js?v=20260826-ipad"></script>
     <script src="pipeline-stage-labels.js?v=20260506-kanban-pt"></script>
     <script src="lead-contact-links.js?v=20260819-lead-email-msgs"></script>
     <script src="crm-address-autocomplete.js?v=20260528-pac-dismiss"></script>

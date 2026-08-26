@@ -370,7 +370,7 @@
     });
     sidebar.querySelectorAll('a').forEach((a) => {
       a.addEventListener('click', () => {
-        if (window.matchMedia('(max-width: 768px)').matches) closeMobileSidebar();
+        if (window.matchMedia('(max-width: 1366px)').matches) closeMobileSidebar();
       });
     });
   }
@@ -421,4 +421,15 @@
   document.addEventListener('DOMContentLoaded', () => {
     void whenPortalReady();
   });
+
+  (function loadCrmChrome() {
+    const files = ['crm-viewport.js?v=20260826-ipad', 'crm-mobile-chrome.js?v=20260826-ipad'];
+    files.forEach((src) => {
+      const base = src.split('?')[0];
+      if ([...document.scripts].some((el) => (el.getAttribute('src') || '').indexOf(base) !== -1)) return;
+      const s = document.createElement('script');
+      s.src = src;
+      document.head.appendChild(s);
+    });
+  })();
 })();

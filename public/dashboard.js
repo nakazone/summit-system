@@ -16,7 +16,8 @@ let crmUserPermissions = [];
 let crmUserRole = '';
 
 /** Viewport mobile (coexiste com desktop ≥768px) — usar matchMedia, não user-agent */
-const sfMobileMq = window.matchMedia('(max-width: 768px)');
+const sfMobileMq = window.matchMedia('(max-width: 767.98px)');
+const sfCompactMq = window.matchMedia('(max-width: 1366px)');
 
 /** Cache da página atual de orçamentos para pesquisa client-side no cartão mobile */
 let sfQuotesListCache = [];
@@ -264,24 +265,24 @@ const dashboardSidebar = document.getElementById('dashboardSidebar');
 const mobileOverlay = document.getElementById('mobileOverlay');
 
 function isMobile() {
-    return window.innerWidth <= 768;
+    return window.CrmViewport ? window.CrmViewport.isPhone() : window.innerWidth <= 767.98;
 }
 
 /** Telemóvel e iPad: menu em gaveta + barra hamburger (sem tab bar no tablet). */
 function isCompactNav() {
-    return window.innerWidth <= 1366;
+    return window.CrmViewport ? window.CrmViewport.isCompact() : window.innerWidth <= 1366;
 }
 
 /** Quotes: cards + cliente visivel em telemovel e iPad (incl. landscape). */
 function isQuotesCompactLayout() {
-    return window.innerWidth <= 1366;
+    return window.CrmViewport ? window.CrmViewport.isCompact() : window.innerWidth <= 1366;
 }
 
 /** Telefone, tablet e iPad — pull-to-refresh */
 function isTouchViewport() {
     if (navigator.maxTouchPoints > 0) return true;
     if (window.matchMedia('(hover: none) and (pointer: coarse)').matches) return true;
-    return window.innerWidth <= 1024;
+    return window.CrmViewport ? window.CrmViewport.isCompact() : window.innerWidth <= 1366;
 }
 
 function getSfScrollRoot() {

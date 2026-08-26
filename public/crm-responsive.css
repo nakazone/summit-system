@@ -1,0 +1,275 @@
+/**
+ * Summit Flooring CRM — viewport padrão
+ *
+ * Phone:     ≤767.98px  → tab bar + shell (quando .sf-mobile-shell)
+ * Tablet:    768–1366px → drawer + hamburger (iPad / iPad Pro 13" landscape)
+ * Desktop:   ≥1367px    → sidebar fixa
+ *
+ * Carregar DEPOIS de styles.css (via design-system.css @import ou link direto).
+ */
+
+:root {
+  --crm-bp-phone-max: 767.98px;
+  --crm-bp-tablet-max: 1366px;
+  --crm-bp-desktop-min: 1367px;
+  --crm-touch-min: 44px;
+}
+
+/* —— Compact shell (phone + tablet / iPad Pro) —— */
+@media (max-width: 1366px) {
+  .dashboard-app-body:not(.crm-standalone-page) .dashboard-sidebar,
+  body.payroll-sidebar-page .dashboard-sidebar,
+  body.bp-page-body .dashboard-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+    height: 100dvh;
+    width: min(288px, 86vw);
+    max-width: 320px;
+    transform: translateX(-100%);
+    z-index: 1100;
+    transition: transform 0.25s ease;
+  }
+
+  .dashboard-app-body:not(.crm-standalone-page) .dashboard-sidebar.mobile-open,
+  body.payroll-sidebar-page .dashboard-sidebar.mobile-open,
+  body.bp-page-body .dashboard-sidebar.mobile-open {
+    transform: translateX(0);
+    box-shadow: 12px 0 40px rgba(0, 0, 0, 0.22);
+  }
+
+  .dashboard-app-body:not(.crm-standalone-page) .dashboard-main,
+  body.payroll-sidebar-page .dashboard-main,
+  body.bp-page-body .dashboard-main {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100%;
+    padding-top: calc(52px + env(safe-area-inset-top, 0px) + 12px) !important;
+  }
+
+  .mobile-app-header {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1040;
+    min-height: calc(52px + env(safe-area-inset-top, 0px));
+    padding: env(safe-area-inset-top, 0px) 12px 10px 12px;
+    background: linear-gradient(180deg, var(--primary-color, #1c1c1f) 0%, var(--primary-dark, #0e0e10) 100%);
+    box-shadow: 0 2px 16px rgba(28, 28, 31, 0.35);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .mobile-app-header__menu {
+    display: flex !important;
+    flex-shrink: 0;
+    width: var(--crm-touch-min);
+    height: var(--crm-touch-min);
+    border: none;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.12);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-app-header__menu-icon {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: #fff;
+    border-radius: 1px;
+    box-shadow: 0 7px 0 #fff, 0 -7px 0 #fff;
+  }
+
+  .mobile-app-header__brand {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mobile-app-header__logo {
+    border-radius: 8px;
+    flex-shrink: 0;
+    object-fit: contain;
+  }
+
+  .mobile-app-header__title {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mobile-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1080;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .mobile-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  /* Legacy ☰ button: hide when modern header exists */
+  body:has(.mobile-app-header) .mobile-menu-toggle {
+    display: none !important;
+  }
+
+  .table-container,
+  .bp-table-wrap,
+  .fin-table-wrap,
+  .crm-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+
+  .btn,
+  button.btn,
+  .bp-btn-tan,
+  .bp-btn-navy {
+    min-height: var(--crm-touch-min);
+  }
+
+  .lead-detail-container {
+    padding: 12px !important;
+    max-width: 100%;
+  }
+
+  .lead-meta {
+    gap: 12px !important;
+  }
+
+  .bd-layout {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* —— Phone only: bottom tab bar (never on iPad) —— */
+@media (min-width: 768px) {
+  .mobile-tab-bar,
+  .sf-bottom-nav.mobile-tab-bar {
+    display: none !important;
+  }
+
+  .dashboard-app-body:not(.sf-mobile-shell) .dashboard-main {
+    padding-bottom: 16px !important;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .mobile-tab-bar {
+    display: flex;
+  }
+
+  .dashboard-app-body:not(.sf-mobile-shell) .dashboard-main {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .stats-grid,
+  .bp-metrics,
+  .charts-container {
+    grid-template-columns: 1fr !important;
+  }
+
+  .page-header,
+  .crm-page-header__actions,
+  .bp-page-header {
+    flex-wrap: wrap;
+  }
+}
+
+/* —— Tablet content: 2 cols when space allows —— */
+@media (min-width: 768px) and (max-width: 1366px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bp-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bp-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 1100px) and (max-width: 1366px) {
+  .bp-dashboard-grid {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Standalone pages (no sidebar): compact top nav */
+@media (max-width: 1366px) {
+  body.crm-standalone-page .crm-shared-nav {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 12px;
+  }
+
+  body.crm-standalone-page .dashboard-main {
+    padding-top: 12px !important;
+  }
+}
+
+/* Builder portal floating hamburger → align with CRM header band */
+@media (max-width: 1366px) {
+  .bp-menu-toggle {
+    display: flex !important;
+    position: fixed;
+    top: calc(8px + env(safe-area-inset-top, 0px));
+    left: 10px;
+    z-index: 1050;
+    width: var(--crm-touch-min);
+    height: var(--crm-touch-min);
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 12px;
+    background: var(--primary-color, #1c1c1f);
+    color: #fff;
+    font-size: 1.25rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body.bp-page-body:has(.mobile-app-header) .bp-menu-toggle {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1367px) {
+  .bp-menu-toggle {
+    display: none !important;
+  }
+
+  .mobile-app-header {
+    display: none !important;
+  }
+}

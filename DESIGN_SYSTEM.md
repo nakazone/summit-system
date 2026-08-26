@@ -42,9 +42,14 @@ PDFs (quotes, invoices, payroll): paleta RGB equivalente em `modules/**/*Pdf.js`
 ## Layout
 
 - Sidebar CRM: `--crm-sidebar-width: 264px`, fundo primary
-- Mobile: drawer + header compacto (`mobile-design-system.css`)
-- Breakpoints: mobile ≤768px, tablet ≤1024px
+- Shell responsivo: `public/crm-responsive.css` + `crm-mobile-chrome.js`
+- Breakpoints padronizados:
+  - **Phone** ≤767.98px — tab bar + shell (`sf-mobile-shell`)
+  - **Tablet / iPad (incl. Pro 13")** 768–1366px — gaveta + hamburger, **sem** tab bar
+  - **Desktop** ≥1367px — sidebar fixa
+- Tokens: `--crm-bp-phone-max`, `--crm-bp-tablet-max`, `--crm-bp-desktop-min`
+- Helpers JS: `CrmViewport.isPhone()` / `.isCompact()` / `.isDesktop()`
 
 ## Componentes
 
-Botões primary (charcoal) / secondary (bege), badges de status, cards de dashboard, tabelas com scroll horizontal no mobile.
+Botões primary (charcoal) / secondary (bege), badges de status, cards de dashboard, tabelas com scroll horizontal no mobile/tablet (`.table-container`, `.bp-table-wrap`).

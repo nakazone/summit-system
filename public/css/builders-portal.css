@@ -663,16 +663,16 @@
 .bp-star--on { color: #e6a817; }
 .bp-eval-modal .bp-modal__box { max-width: 420px; }
 
-/* Mobile and tablet - includes iPads up to 1024px */
-@media (max-width: 1024px) {
+/* Mobile and tablet / iPad Pro (≤1366) */
+@media (max-width: 1366px) {
   .bp-portal-layout { grid-template-columns: 1fr; }
   .bp-portal-sidebar { position: fixed; left: -260px; top: 0; bottom: 0; width: 240px; z-index: 90; transition: left 0.2s; }
   .bp-portal-sidebar.bp-sidebar--open { left: 0; }
   .bp-menu-toggle { display: block; }
   .dashboard-main.bp-portal-main,
-  .bp-portal-main { padding-top: 48px; }
+  .bp-portal-main { padding-top: calc(52px + env(safe-area-inset-top, 0px)); }
   .bp-form-grid { grid-template-columns: 1fr; }
-  .bp-tabs { overflow-x: auto; flex-wrap: nowrap; }
+  .bp-tabs { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; }
   .bp-calc-line { grid-template-columns: 1fr; }
   .bp-calc-breakdown-table thead { display: none; }
   .bp-calc-breakdown-table tr { display: block; border-bottom: 1px solid var(--bp-border); padding: 10px 0; }
@@ -699,6 +699,10 @@
   .bp-cal-event__head { flex-direction: column; align-items: flex-start; }
   body[data-bp-page="messages"] #portalShell .bp-portal-main { padding: 0; }
   body[data-bp-page="messages"] #portalThread { min-height: 100vh; border-radius: 0; }
+  .bp-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bp-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+  .bp-welcome__main { flex-direction: column; }
+  .bp-dashboard-quick { display: flex; flex-wrap: wrap; gap: 8px; }
 }
 .bp-proj-toolbar { align-items: center; }
 .bp-view-toggle { display: flex; gap: 4px; margin-left: auto; }

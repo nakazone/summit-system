@@ -242,6 +242,17 @@ body.crm-standalone-page .dashboard-main {
   max-width: 100% !important;
 }
 
+@media (max-width: 1366px) {
+  .crm-shared-nav__inner {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0.4rem 0.65rem 0.5rem;
+  }
+  .crm-shared-nav__link {
+    min-height: 40px;
+  }
+}
+
 @media (max-width: 640px) {
   .crm-shared-nav__inner {
     padding: 0.3rem 0.5rem 0.45rem;

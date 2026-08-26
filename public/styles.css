@@ -2782,8 +2782,9 @@ input.score-auto {
         text-overflow: ellipsis;
     }
 
+    /* Tab bar: phone only — iPad usa gaveta (crm-responsive.css) */
     .mobile-tab-bar {
-        display: flex;
+        display: none;
         position: fixed;
         left: 0;
         right: 0;

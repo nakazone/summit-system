@@ -109,8 +109,8 @@
   display: none !important;
 }
 
-/* Mobile and tablet (includes iPads up to 1024px) */
-@media (max-width: 1024px) {
+/* Conteúdo compacto: telefone + tablet/iPad (≤1366) */
+@media (max-width: 1366px) {
   .sf-mobile-only {
     display: block !important;
   }
@@ -120,7 +120,10 @@
   .sf-mobile-hide {
     display: none !important;
   }
+}
 
+/* Phone shell (classe .sf-mobile-shell só é aplicada ≤768 via JS) */
+@media (max-width: 767.98px) {
   .dashboard-app-body.sf-mobile-shell {
     background: var(--sf-bg-base);
     color: var(--sf-text-primary);
@@ -380,7 +383,10 @@
     scroll-snap-align: start;
     min-height: var(--sf-touch-min);
   }
+}
 
+/* Quotes cards: phone + tablet/iPad (lista compacta até 1366) */
+@media (max-width: 1366px) {
   /* Quotes mobile */
   .sf-quotes-toolbar {
     position: sticky;

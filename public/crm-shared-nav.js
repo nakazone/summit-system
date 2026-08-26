@@ -405,4 +405,14 @@
   } else {
     init();
   }
+
+  function loadScriptOnce(src) {
+    const base = src.split('?')[0];
+    if ([...document.scripts].some((el) => (el.getAttribute('src') || '').indexOf(base) !== -1)) return;
+    const s = document.createElement('script');
+    s.src = src;
+    document.head.appendChild(s);
+  }
+  loadScriptOnce('crm-viewport.js?v=20260826-ipad');
+  loadScriptOnce('crm-mobile-chrome.js?v=20260826-ipad');
 })();
