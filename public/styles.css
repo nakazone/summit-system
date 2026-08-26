@@ -7116,6 +7116,30 @@ body.lead-quick-sheet-open {
     white-space: normal;
 }
 
+.lead-quick-sheet__email-menu .lead-quick-sheet__sms-option {
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    background: transparent;
+    font: inherit;
+}
+
+.sf-email-menu-hint {
+    margin: 6px 8px 4px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: var(--bg-light, #f8fafc);
+    color: var(--text-muted, #64748b);
+    font-size: 0.72rem;
+    line-height: 1.4;
+}
+
+.sf-email-copy-sig-btn {
+    margin-top: 2px;
+    font-weight: 600;
+    color: var(--primary-color, #1c1c1f);
+}
+
 .lead-quick-sheet__status-menu {
     margin: 0;
     padding: 4px;

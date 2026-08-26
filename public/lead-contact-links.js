@@ -126,6 +126,169 @@
     return buildEmailSignature(getCrmEmailUser());
   }
 
+  function assetUrl(path) {
+    const origin =
+      global.location && global.location.origin ? String(global.location.origin).replace(/\/$/, '') : '';
+    return origin + path;
+  }
+
+  function buildEmailSignatureHtml(user) {
+    const u = user || getCrmEmailUser();
+    const nameRaw = String(u?.name || '').trim() || EMAIL_FROM_LABEL;
+    const name = escapeHtml(nameRaw);
+    const title = escapeHtml(roleSignatureTitle(u?.role));
+    const emailAddr = String(u?.email || '').trim() || EMAIL_CONTACT;
+    const phone = formatSignaturePhone(u?.phone);
+    const logoUrl = assetUrl('/assets/summitLogo.jpg');
+    const phoneBlock = phone
+      ? `<tr><td style="padding-top:3px;font-size:13px;line-height:1.45;"><a href="tel:${escapeAttr(
+          normalizePhoneDigits(phone)
+        )}" style="color:#1c1c1f;text-decoration:none;">${escapeHtml(phone)}</a></td></tr>`
+      : '';
+    return (
+      '<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin:0;font-family:Inter,Arial,Helvetica,sans-serif;font-size:14px;line-height:1.45;color:#1c1c1f;max-width:440px;">' +
+      '<tr><td style="padding:0 14px 0 0;vertical-align:top;">' +
+      `<img src="${escapeAttr(logoUrl)}" alt="Summit Flooring" width="76" height="76" style="display:block;width:76px;height:76px;border-radius:10px;border:0;outline:none;" />` +
+      '</td><td style="padding:0 0 0 14px;vertical-align:top;border-left:3px solid #d6c4a8;">' +
+      `<div style="font-size:15px;font-weight:700;color:#1c1c1f;line-height:1.25;">${name}</div>` +
+      `<div style="font-size:13px;color:#6b7280;margin-top:3px;line-height:1.3;">${title}</div>` +
+      `<div style="font-size:13px;font-weight:600;color:#1c1c1f;margin-top:8px;line-height:1.3;">${escapeHtml(
+        EMAIL_FROM_LABEL
+      )}</div>` +
+      '<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin-top:6px;">' +
+      `<tr><td style="font-size:13px;line-height:1.45;"><a href="mailto:${escapeAttr(
+        emailAddr
+      )}" style="color:#1c1c1f;text-decoration:none;">${escapeHtml(emailAddr)}</a></td></tr>` +
+      phoneBlock +
+      `<tr><td style="padding-top:3px;font-size:13px;line-height:1.45;"><a href="${escapeAttr(
+        EMAIL_WEBSITE
+      )}" style="color:#9a8458;text-decoration:none;font-weight:600;">summitflooring.com</a></td></tr>` +
+      '</table></td></tr></table>'
+    );
+  }
+
+  function buildEmailSignatureFallbackHtml() {
+    const logoUrl = assetUrl('/assets/summitLogo.jpg');
+    return (
+      '<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="font-family:Inter,Arial,Helvetica,sans-serif;font-size:14px;color:#1c1c1f;">' +
+      '<tr><td style="padding-right:12px;vertical-align:top;">' +
+      `<img src="${escapeAttr(logoUrl)}" alt="Summit Flooring" width="76" height="76" style="display:block;width:76px;height:76px;border-radius:10px;" />` +
+      '</td><td style="vertical-align:top;border-left:3px solid #d6c4a8;padding-left:12px;">' +
+      `<div style="font-weight:700;font-size:15px;">${escapeHtml(EMAIL_FROM_LABEL)}</div>` +
+      `<div style="margin-top:6px;font-size:13px;"><a href="mailto:${escapeAttr(
+        EMAIL_CONTACT
+      )}" style="color:#1c1c1f;text-decoration:none;">${escapeHtml(EMAIL_CONTACT)}</a></div>` +
+      `<div style="margin-top:3px;font-size:13px;"><a href="${escapeAttr(
+        EMAIL_WEBSITE
+      )}" style="color:#9a8458;text-decoration:none;font-weight:600;">summitflooring.com</a></div>` +
+      '</td></tr></table>'
+    );
+  }
+
+  function copyHtmlFallback(html, plain) {
+    const div = document.createElement('div');
+    div.contentEditable = 'true';
+    div.innerHTML = html;
+    div.setAttribute('aria-hidden', 'true');
+    div.style.position = 'fixed';
+    div.style.left = '-9999px';
+    div.style.top = '0';
+    document.body.appendChild(div);
+    const range = document.createRange();
+    range.selectNodeContents(div);
+    const sel = global.getSelection();
+    if (sel) {
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+    let ok = false;
+    try {
+      ok = document.execCommand('copy');
+    } catch (_) {}
+    document.body.removeChild(div);
+    if (sel) sel.removeAllRanges();
+    if (!ok && plain && navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(plain).then(
+        () => true,
+        () => false
+      );
+    }
+    return Promise.resolve(ok);
+  }
+
+  function copyRichEmailSignature(user) {
+    const html = user ? buildEmailSignatureHtml(user) : buildEmailSignatureFallbackHtml();
+    const plain = buildEmailSignature(user);
+    if (navigator.clipboard && global.ClipboardItem) {
+      return navigator.clipboard
+        .write([
+          new ClipboardItem({
+            'text/html': new Blob([html], { type: 'text/html' }),
+            'text/plain': new Blob([plain], { type: 'text/plain' }),
+          }),
+        ])
+        .then(() => true)
+        .catch(() => copyHtmlFallback(html, plain));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return copyHtmlFallback(html, plain);
+    }
+    return copyHtmlFallback(html, plain);
+  }
+
+  function notifyEmailSignatureCopied(copied) {
+    if (typeof global.crmNotify !== 'function') return;
+    global.crmNotify(
+      copied
+        ? 'Assinatura com logo copiada — cole no final do e-mail no Gmail.'
+        : 'Abra o Gmail e use “Copiar assinatura” no menu Email.',
+      copied ? 'success' : 'info'
+    );
+  }
+
+  function launchLeadEmail(mailtoHref) {
+    if (!mailtoHref) return;
+    loadCrmEmailUser()
+      .then(() => copyRichEmailSignature(getCrmEmailUser()))
+      .then((copied) => {
+        closeMessageChoiceMenu();
+        notifyEmailSignatureCopied(copied);
+        global.location.href = mailtoHref;
+      })
+      .catch(() => {
+        closeMessageChoiceMenu();
+        global.location.href = mailtoHref;
+      });
+  }
+
+  function copyEmailSignatureOnly() {
+    loadCrmEmailUser()
+      .then(() => copyRichEmailSignature(getCrmEmailUser()))
+      .then((copied) => {
+        closeMessageChoiceMenu();
+        notifyEmailSignatureCopied(copied);
+      });
+  }
+
+  function wireEmailChoiceMenu(menu) {
+    if (!menu) return;
+    menu.querySelectorAll('[data-sf-email-mailto]').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        launchLeadEmail(btn.getAttribute('data-sf-email-mailto'));
+      });
+    });
+    const copyBtn = menu.querySelector('[data-sf-email-copy-sig]');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        copyEmailSignatureOnly();
+      });
+    }
+  }
+
   const FOLLOW_UP_SMS = [
     {
       id: 'follow_up_quote_reminder',
@@ -397,7 +560,14 @@
 
   function defaultLeadEmailBody(lead) {
     const def = UNIVERSAL_EMAIL_TEMPLATES[0];
-    return fillEmailTemplate(def.template, lead) + getEmailSignature();
+    return fillEmailTemplate(def.template, lead) + '\n\nBest regards,\n';
+  }
+
+  /**
+   * Message only — rich HTML signature is copied separately for Gmail paste.
+   */
+  function buildLeadEmailMessageBody(template, lead) {
+    return fillEmailTemplate(template, lead) + '\n\nBest regards,\n';
   }
 
   /**
@@ -414,7 +584,7 @@
       subject: def.subject
         ? fillEmailTemplate(def.subject, lead)
         : defaultLeadEmailSubject(lead),
-      body: fillEmailTemplate(def.template, lead) + getEmailSignature(),
+      body: buildLeadEmailMessageBody(def.template, lead),
     }));
   }
 
@@ -523,34 +693,48 @@
 
   function openMessageChoiceMenu(anchorEl, options, menuId) {
     if (!anchorEl || !options || !options.length) return;
+    const isEmailMenu = menuId === 'sfEmailChoiceMenu';
     if (options.length === 1) {
-      global.location.href = options[0].href;
+      if (isEmailMenu) launchLeadEmail(options[0].href);
+      else global.location.href = options[0].href;
       return;
     }
     closeMessageChoiceMenu();
     const menu = document.createElement('div');
     menu.id = menuId || 'sfSmsChoiceMenu';
-    menu.className = 'lead-quick-sheet__status-menu lead-quick-sheet__sms-menu';
+    menu.className =
+      'lead-quick-sheet__status-menu lead-quick-sheet__sms-menu' +
+      (isEmailMenu ? ' lead-quick-sheet__email-menu' : '');
     menu.setAttribute('role', 'menu');
-    menu.innerHTML = options
+    const itemsHtml = options
       .map((o) => {
         const preview =
-          o.body && menuId === 'sfEmailChoiceMenu'
-            ? String(o.body).split('\n').find((line) => line.trim()) || ''
-            : '';
+          o.body && isEmailMenu ? String(o.body).split('\n').find((line) => line.trim()) || '' : '';
         const sub =
           preview && preview.length > 72
             ? `<span class="lead-quick-sheet__sms-option-preview">${escapeHtml(preview.slice(0, 72) + '…')}</span>`
             : preview
               ? `<span class="lead-quick-sheet__sms-option-preview">${escapeHtml(preview)}</span>`
               : '';
+        if (isEmailMenu) {
+          return `<button type="button" class="lead-quick-sheet__status-option lead-quick-sheet__sms-option" role="menuitem" data-sf-email-mailto="${escapeAttr(
+            o.href
+          )}">${escapeHtml(o.label)}${sub}</button>`;
+        }
         return `<a class="lead-quick-sheet__status-option lead-quick-sheet__sms-option" role="menuitem" href="${escapeAttr(
           o.href
         )}">${escapeHtml(o.label)}${sub}</a>`;
       })
       .join('');
+    menu.innerHTML =
+      itemsHtml +
+      (isEmailMenu
+        ? '<p class="sf-email-menu-hint">A assinatura com logo e copiada ao escolher um modelo — cole no Gmail apos abrir.</p>' +
+          `<button type="button" class="lead-quick-sheet__status-option sf-email-copy-sig-btn" data-sf-email-copy-sig role="menuitem">Copiar assinatura com logo</button>`
+        : '');
     menu._anchor = anchorEl;
     document.body.appendChild(menu);
+    if (isEmailMenu) wireEmailChoiceMenu(menu);
     choiceMenuEl = menu;
     positionChoiceMenu();
     window.addEventListener('resize', positionChoiceMenu);
@@ -595,9 +779,6 @@
     const opts = getLeadEmailOptions(lead);
     if (!opts.length) return '';
     const cls = buttonClass || 'lead-quick-sheet__action';
-    if (opts.length === 1) {
-      return `<a class="${cls}" href="${escapeAttr(opts[0].href)}">Email</a>`;
-    }
     const extra = attrs && typeof attrs === 'object' ? attrs : {};
     let dataAttrs = ' data-lqs-email-menu data-sf-email-picker-btn aria-haspopup="menu"';
     Object.keys(extra).forEach((k) => {
@@ -617,6 +798,9 @@
   global.sfGetStageEmailDefinitions = getStageEmailDefinitions;
   global.sfFillEmailTemplate = fillEmailTemplate;
   global.sfBuildEmailSignature = buildEmailSignature;
+  global.sfBuildEmailSignatureHtml = buildEmailSignatureHtml;
+  global.sfCopyRichEmailSignature = copyRichEmailSignature;
+  global.sfLaunchLeadEmail = launchLeadEmail;
   global.sfSetCrmEmailUser = setCrmEmailUser;
   global.sfLoadCrmEmailUser = loadCrmEmailUser;
   global.sfGetStageSmsDefinitions = getStageSmsDefinitions;
