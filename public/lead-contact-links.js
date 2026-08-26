@@ -1,10 +1,23 @@
 /**
  * Native tel:/sms:/mailto links and stage-based message templates for leads.
+ * Email templates are tuned for Gmail on phone/tablet (mailto: opens the compose screen).
  */
 (function (global) {
   const SMS_COMPANY = 'Summit Flooring';
+  const EMAIL_FROM_LABEL = 'Summit Flooring';
+  const EMAIL_CONTACT = 'contact@summit-flooring.com';
+  const EMAIL_WEBSITE = 'https://summitflooring.com';
 
-  const FOLLOW_UP_TEMPLATES = [
+  /** Appended to every email body — keep short for mobile mailto limits. */
+  const EMAIL_SIGNATURE =
+    '\n\nBest regards,\n' +
+    EMAIL_FROM_LABEL +
+    '\n' +
+    EMAIL_CONTACT +
+    '\n' +
+    EMAIL_WEBSITE;
+
+  const FOLLOW_UP_SMS = [
     {
       id: 'follow_up_quote_reminder',
       label: 'Follow up — quote reminder',
@@ -19,6 +32,104 @@
     },
   ];
 
+  /** Quick-send email templates (shown for every stage). */
+  const UNIVERSAL_EMAIL_TEMPLATES = [
+    {
+      id: 'email_intro',
+      label: 'Email — thank you & intro',
+      subject: 'Summit Flooring — your flooring project',
+      template:
+        'Hi [name],\n\nThank you for reaching out to Summit Flooring. We would love to help with your project.\n\nCould you share a few details?\n• Type of flooring or service\n• Approximate square footage\n• Your timeline\n\nReply to this email or call us — we will get back to you shortly.',
+    },
+    {
+      id: 'email_schedule_visit',
+      label: 'Email — schedule visit',
+      subject: 'Summit Flooring — schedule a visit',
+      template:
+        'Hi [name],\n\nThank you for your interest in Summit Flooring.\n\nI would be happy to stop by for a free on-site estimate. What day and time works best for you this week?\n\nLooking forward to hearing from you.',
+    },
+    {
+      id: 'email_follow_up',
+      label: 'Email — gentle follow-up',
+      subject: 'Following up — Summit Flooring',
+      template:
+        'Hi [name],\n\nI wanted to follow up on your flooring project and see if you had any questions.\n\nWhenever you are ready, we are here to help — no pressure at all.',
+    },
+  ];
+
+  /** @type {Record<string, Array<{ id: string, label: string, subject: string, template: string }>>} */
+  const STAGE_EMAIL_TEMPLATES = {
+    new_lead: [
+      {
+        id: 'email_new_lead_welcome',
+        label: 'Email — new inquiry reply',
+        subject: 'Thanks for contacting Summit Flooring',
+        template:
+          'Hi [name],\n\nThanks for submitting your request — we received it and a member of our team will be in touch soon.\n\nIf you have photos of the space or a rough square footage, feel free to reply with them. It helps us prepare for your estimate.',
+      },
+    ],
+    contacted: [
+      {
+        id: 'email_contacted_next_steps',
+        label: 'Email — next steps',
+        subject: 'Summit Flooring — next steps',
+        template:
+          'Hi [name],\n\nGreat connecting with you. As discussed, here are the next steps:\n\n1. Confirm your preferred date for an on-site visit\n2. We measure and review options on site\n3. You receive a detailed quote\n\nLet me know what works best for your schedule.',
+      },
+    ],
+    meeting_scheduled: [
+      {
+        id: 'email_meeting_confirm',
+        label: 'Email — confirm appointment',
+        subject: 'Summit Flooring — appointment confirmation',
+        template:
+          'Hi [name],\n\nThis confirms your appointment with Summit Flooring. We look forward to meeting you and reviewing your project in person.\n\nIf anything changes, just reply to this email or give us a call.',
+      },
+    ],
+    quote_sent: [
+      {
+        id: 'email_quote_sent',
+        label: 'Email — quote sent',
+        subject: 'Your Summit Flooring quote',
+        template:
+          'Hi [name],\n\nThank you for your time. Please find your quote attached / in the link we shared.\n\nIf you have questions about materials, timeline, or pricing, reply here — we are happy to walk through everything.\n\nLearn more about us: ' +
+          EMAIL_WEBSITE,
+      },
+      {
+        id: 'email_quote_follow_up',
+        label: 'Email — quote follow-up',
+        subject: 'Following up on your quote — Summit Flooring',
+        template:
+          'Hi [name],\n\nI hope you had a chance to review the quote we sent. If everything looks good, we can get your project on the schedule.\n\nLet me know if you would like to adjust anything or if you have questions.',
+      },
+    ],
+    follow_up_1: [
+      {
+        id: 'email_follow_up_quote',
+        label: 'Email — quote reminder',
+        subject: 'Quick follow-up — Summit Flooring',
+        template:
+          'Hi [name],\n\nJust following up on the quote we sent. If the timing works, we would love to reserve a spot for your project.\n\nIf you need more time, no problem — reply when you are ready.',
+      },
+      {
+        id: 'email_follow_up_last',
+        label: 'Email — last check-in',
+        subject: 'Checking in — Summit Flooring',
+        template:
+          'Hi [name],\n\nI wanted to check in one last time about your flooring project. If now is not the right time, we understand — feel free to reach out whenever you are ready.\n\nWe are always happy to help.',
+      },
+    ],
+    won: [
+      {
+        id: 'email_won_thanks',
+        label: 'Email — thank you (won)',
+        subject: 'Thank you — Summit Flooring',
+        template:
+          'Hi [name],\n\nThank you for choosing Summit Flooring. We are excited to get started on your project.\n\nWe will be in touch shortly with scheduling details. If you need anything in the meantime, reply here.',
+      },
+    ],
+  };
+
   /** @type {Record<string, Array<{ id: string, label: string, template: string }>>} */
   const STAGE_SMS_TEMPLATES = {
     new_lead: [
@@ -28,7 +139,7 @@
         template:
           "Hi [name], thanks for reaching out to Summit Flooring. I'd be happy to help. Can you tell me a little about the project?",
       },
-      ...FOLLOW_UP_TEMPLATES,
+      ...FOLLOW_UP_SMS,
     ],
     quote_sent: [
       {
@@ -38,7 +149,7 @@
           "Hello [name], thank you for your time today. I've sent email and attached the quote PDF with the options we discussed. Thank you!\n\nFor know more about us\nhttps://summitflooring.com/",
       },
     ],
-    follow_up_1: FOLLOW_UP_TEMPLATES.slice(),
+    follow_up_1: FOLLOW_UP_SMS.slice(),
   };
 
   function escapeHtml(s) {
@@ -76,6 +187,12 @@
     return full.split(/\s+/).filter(Boolean)[0] || 'there';
   }
 
+  function leadFullName(lead) {
+    const full =
+      lead && (lead.name || lead.full_name) ? String(lead.name || lead.full_name).trim() : '';
+    return full || 'there';
+  }
+
   function resolveLeadStageSlug(lead) {
     if (!lead) return '';
     const raw = String(lead.pipeline_stage_slug || lead.status || '').trim();
@@ -85,8 +202,21 @@
     return raw;
   }
 
+  function fillMessageTemplate(template, lead) {
+    const first = leadFirstName(lead);
+    const full = leadFullName(lead);
+    return String(template)
+      .replace(/\[first_name\]/gi, first)
+      .replace(/\[full_name\]/gi, full)
+      .replace(/\[name\]/gi, first);
+  }
+
   function fillSmsTemplate(template, lead) {
-    return String(template).replace(/\[name\]/gi, leadFirstName(lead));
+    return fillMessageTemplate(template, lead);
+  }
+
+  function fillEmailTemplate(template, lead) {
+    return fillMessageTemplate(template, lead);
   }
 
   function defaultLeadSmsBody(lead) {
@@ -139,7 +269,59 @@
 
   function defaultLeadEmailSubject(lead) {
     const first = leadFirstName(lead);
-    return first && first !== 'there' ? `${SMS_COMPANY} — ${first}` : SMS_COMPANY;
+    return first && first !== 'there'
+      ? `${EMAIL_FROM_LABEL} — ${first}`
+      : `${EMAIL_FROM_LABEL} — your flooring project`;
+  }
+
+  function getStageEmailDefinitions(slug) {
+    const stage = STAGE_EMAIL_TEMPLATES[slug] || [];
+    const seen = new Set();
+    const merged = [];
+    [...UNIVERSAL_EMAIL_TEMPLATES, ...stage].forEach((def) => {
+      if (seen.has(def.id)) return;
+      seen.add(def.id);
+      merged.push(def);
+    });
+    return merged;
+  }
+
+  function defaultLeadEmailBody(lead) {
+    const def = UNIVERSAL_EMAIL_TEMPLATES[0];
+    return fillEmailTemplate(def.template, lead) + EMAIL_SIGNATURE;
+  }
+
+  /**
+   * @param {object} lead
+   * @returns {Array<{ id: string, label: string, subject: string, body: string }>}
+   */
+  function getLeadEmailBodies(lead) {
+    if (!lead) return [];
+    const slug = resolveLeadStageSlug(lead);
+    const defs = getStageEmailDefinitions(slug);
+    return defs.map((def) => ({
+      id: def.id,
+      label: def.label,
+      subject: def.subject
+        ? fillEmailTemplate(def.subject, lead)
+        : defaultLeadEmailSubject(lead),
+      body: fillEmailTemplate(def.template, lead) + EMAIL_SIGNATURE,
+    }));
+  }
+
+  /**
+   * @param {object} lead
+   * @returns {Array<{ id: string, label: string, body: string, href: string, subject: string }>}
+   */
+  function getLeadEmailOptions(lead) {
+    const email = lead && lead.email != null ? String(lead.email).trim() : '';
+    if (!email || !email.includes('@')) return [];
+    return getLeadEmailBodies(lead)
+      .map((o) => ({
+        ...o,
+        href: buildMailtoHref(email, o.subject, o.body),
+      }))
+      .filter((o) => o.href);
   }
 
   function buildMailtoHref(email, subject, body) {
@@ -153,23 +335,6 @@
       q.push('body=' + encodeURIComponent(String(body)));
     }
     return q.length ? `mailto:${addr}?${q.join('&')}` : `mailto:${addr}`;
-  }
-
-  /**
-   * @param {object} lead
-   * @returns {Array<{ id: string, label: string, body: string, href: string, subject: string }>}
-   */
-  function getLeadEmailOptions(lead) {
-    const email = lead && lead.email != null ? String(lead.email).trim() : '';
-    if (!email || !email.includes('@')) return [];
-    const subject = defaultLeadEmailSubject(lead);
-    return getLeadMessageBodies(lead)
-      .map((o) => ({
-        ...o,
-        subject,
-        href: buildMailtoHref(email, subject, o.body),
-      }))
-      .filter((o) => o.href);
   }
 
   function buildTelHref(phone) {
@@ -201,7 +366,7 @@
     if (body != null) return buildMailtoHref(email, subject, body);
     const opts = getLeadEmailOptions(lead);
     if (opts.length) return opts[0].href;
-    return buildMailtoHref(email, subject, defaultLeadSmsBody(lead));
+    return buildMailtoHref(email, subject, defaultLeadEmailBody(lead));
   }
 
   let choiceMenuEl = null;
@@ -259,12 +424,21 @@
     menu.className = 'lead-quick-sheet__status-menu lead-quick-sheet__sms-menu';
     menu.setAttribute('role', 'menu');
     menu.innerHTML = options
-      .map(
-        (o) =>
-          `<a class="lead-quick-sheet__status-option lead-quick-sheet__sms-option" role="menuitem" href="${escapeAttr(
-            o.href
-          )}">${escapeHtml(o.label)}</a>`
-      )
+      .map((o) => {
+        const preview =
+          o.body && menuId === 'sfEmailChoiceMenu'
+            ? String(o.body).split('\n').find((line) => line.trim()) || ''
+            : '';
+        const sub =
+          preview && preview.length > 72
+            ? `<span class="lead-quick-sheet__sms-option-preview">${escapeHtml(preview.slice(0, 72) + '…')}</span>`
+            : preview
+              ? `<span class="lead-quick-sheet__sms-option-preview">${escapeHtml(preview)}</span>`
+              : '';
+        return `<a class="lead-quick-sheet__status-option lead-quick-sheet__sms-option" role="menuitem" href="${escapeAttr(
+          o.href
+        )}">${escapeHtml(o.label)}${sub}</a>`;
+      })
       .join('');
     menu._anchor = anchorEl;
     document.body.appendChild(menu);
@@ -326,7 +500,11 @@
   global.sfResolveLeadStageSlug = resolveLeadStageSlug;
   global.sfGetLeadMessageBodies = getLeadMessageBodies;
   global.sfGetLeadSmsOptions = getLeadSmsOptions;
+  global.sfGetLeadEmailBodies = getLeadEmailBodies;
+  global.sfDefaultLeadEmailBody = defaultLeadEmailBody;
   global.sfGetLeadEmailOptions = getLeadEmailOptions;
+  global.sfGetStageEmailDefinitions = getStageEmailDefinitions;
+  global.sfFillEmailTemplate = fillEmailTemplate;
   global.sfGetStageSmsDefinitions = getStageSmsDefinitions;
   global.sfFillSmsTemplate = fillSmsTemplate;
   global.sfBuildTelHref = buildTelHref;
@@ -340,4 +518,6 @@
   global.sfOpenEmailChoiceMenu = openEmailChoiceMenu;
   global.sfCloseSmsChoiceMenu = closeMessageChoiceMenu;
   global.STAGE_SMS_TEMPLATES = STAGE_SMS_TEMPLATES;
+  global.STAGE_EMAIL_TEMPLATES = STAGE_EMAIL_TEMPLATES;
+  global.UNIVERSAL_EMAIL_TEMPLATES = UNIVERSAL_EMAIL_TEMPLATES;
 })(typeof window !== 'undefined' ? window : globalThis);
