@@ -180,9 +180,9 @@
       <dl class="bp-est-summary__dl">
         <dt>Project type</dt><dd>${escapeHtml(snapshot.project_type_label)}</dd>
         <dt>Address</dt><dd>${escapeHtml(snapshot.address)}</dd>
-        <dt>Services</dt><dd>${snapshot.services.length ? escapeHtml(snapshot.services.join(', ')) : '—'}</dd>
+        <dt>Services</dt><dd>${snapshot.services.length ? escapeHtml(snapshot.services.join(', ')) : ''}</dd>
         <dt>Area</dt><dd>${escapeHtml(snapshot.area_sqft)} sq ft</dd>
-        <dt>Desired start</dt><dd>${snapshot.desired_start ? escapeHtml(snapshot.desired_start) : '—'}</dd>
+        <dt>Desired start</dt><dd>${snapshot.desired_start ? escapeHtml(snapshot.desired_start) : ''}</dd>
         <dt>Urgency</dt><dd>${escapeHtml(snapshot.urgency_label)}</dd>
         <dt>Site access</dt><dd>${snapshot.site_access ? 'Yes' : 'No'}</dd>
         <dt>Attachments</dt><dd>${files}</dd>
@@ -218,7 +218,7 @@
     selectedFiles.forEach((item) => fd.append('attachments', item.file));
 
     btn.disabled = true;
-    btn.textContent = 'Submitting—';
+    btn.textContent = 'Submitting';
     try {
       const r = await window.builderAuth.fetch('/api/estimate-requests', { method: 'POST', body: fd });
       const j = await r.json();

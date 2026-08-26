@@ -27,7 +27,7 @@ const REPLACEMENTS = [
   [/received \uFFFD \$\{/g, `received ${EM} \${`],
   [/estimate \uFFFD \$\{/g, `estimate ${EM} \${`],
   [/address \|\| '\uFFFD'/g, `address || '${EM}'`],
-  [/Builder \uFFFD Summit/g, `Builder ${EM} Summit`],
+  [/Builder \uFFFD Senior/g, `Builder ${EM} Senior`],
   [/carregar\uFFFD/g, `carregar${ELL}`],
   [/return '\uFFFD'/g, `return '${EM}'`],
   [/join\(' \uFFFD '\)/g, `join(' ${MID} ')`],

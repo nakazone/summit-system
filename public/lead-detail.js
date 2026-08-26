@@ -64,7 +64,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const phoneActions = document.getElementById('leadPhoneActions');
     if (phoneActions) {
-        phoneActions.addEventListener('click', onLeadDetailPhoneActionsClick);
+        phoneActions.addEventListener('click', onLeadDetailContactActionsClick);
+    }
+    const emailActions = document.getElementById('leadEmailActions');
+    if (emailActions) {
+        emailActions.addEventListener('click', onLeadDetailContactActionsClick);
     }
 });
 
@@ -110,36 +114,50 @@ async function loadLead() {
 }
 
 function renderLeadContactActions(lead) {
-    const mount = document.getElementById('leadPhoneActions');
-    if (!mount) return;
-    if (!lead || !lead.phone) {
-        mount.innerHTML = '';
-        return;
+    const phoneMount = document.getElementById('leadPhoneActions');
+    if (phoneMount) {
+        if (!lead || !lead.phone) {
+            phoneMount.innerHTML = '';
+        } else {
+            const tel =
+                typeof window.sfBuildTelHref === 'function' ? window.sfBuildTelHref(lead.phone) : '';
+            const smsHtml =
+                typeof window.sfRenderLeadSmsActionHtml === 'function'
+                    ? window.sfRenderLeadSmsActionHtml(lead, 'btn btn-sm btn-secondary lead-contact-actions__btn')
+                    : '';
+            let html = '';
+            if (tel) {
+                html += `<a class="btn btn-sm btn-secondary lead-contact-actions__btn" href="${tel}">Ligar</a>`;
+            }
+            html += smsHtml;
+            phoneMount.innerHTML = html;
+        }
     }
-    const tel =
-        typeof window.sfBuildTelHref === 'function' ? window.sfBuildTelHref(lead.phone) : '';
-    const smsHtml =
-        typeof window.sfRenderLeadSmsActionHtml === 'function'
-            ? window.sfRenderLeadSmsActionHtml(lead, 'btn btn-sm btn-secondary lead-contact-actions__btn')
-            : '';
-    if (!tel && !smsHtml) {
-        mount.innerHTML = '';
-        return;
+    const emailMount = document.getElementById('leadEmailActions');
+    if (emailMount) {
+        emailMount.innerHTML =
+            lead && lead.email && typeof window.sfRenderLeadEmailActionHtml === 'function'
+                ? window.sfRenderLeadEmailActionHtml(lead, 'btn btn-sm btn-secondary lead-contact-actions__btn')
+                : '';
     }
-    let html = '';
-    if (tel) {
-        html += `<a class="btn btn-sm btn-secondary lead-contact-actions__btn" href="${tel}">Ligar</a>`;
-    }
-    html += smsHtml;
-    mount.innerHTML = html;
 }
 
-function onLeadDetailPhoneActionsClick(e) {
-    const btn = e.target.closest('[data-sf-sms-picker-btn]');
-    if (!btn || !currentLead) return;
-    e.preventDefault();
-    if (typeof window.sfOpenSmsChoiceMenu === 'function') {
-        window.sfOpenSmsChoiceMenu(btn, currentLead);
+function onLeadDetailContactActionsClick(e) {
+    if (!currentLead) return;
+    const smsBtn = e.target.closest('[data-sf-sms-picker-btn]');
+    if (smsBtn) {
+        e.preventDefault();
+        if (typeof window.sfOpenSmsChoiceMenu === 'function') {
+            window.sfOpenSmsChoiceMenu(smsBtn, currentLead);
+        }
+        return;
+    }
+    const emailBtn = e.target.closest('[data-sf-email-picker-btn]');
+    if (emailBtn) {
+        e.preventDefault();
+        if (typeof window.sfOpenEmailChoiceMenu === 'function') {
+            window.sfOpenEmailChoiceMenu(emailBtn, currentLead);
+        }
     }
 }
 
@@ -847,11 +865,11 @@ async function showNewVisitModal() {
     if (!currentLead) return;
     if (typeof window.sfOpenLeadVisitInDeviceCalendar === 'function') {
         try {
-            await window.sfOpenLeadVisitInDeviceCalendar(currentLead);
-            return;
+            const ok = window.sfOpenLeadVisitInDeviceCalendar(currentLead);
+            if (ok) return;
         } catch (err) {
             if (typeof crmNotify === 'function') {
-                crmNotify(err.message || 'Nao foi possivel abrir o calendario.', 'error');
+                crmNotify(err.message || 'Não foi possível abrir o calendário.', 'error');
             }
         }
     }
@@ -1098,13 +1116,7 @@ async function createVisit(payload, submitBtn) {
 }
 
 function showNewProposalModal() {
-    const id = currentLeadId || new URLSearchParams(window.location.search).get('id');
-    if (!id) {
-        if (typeof crmNotify === 'function') crmNotify('Lead ID não encontrado.', 'error');
-        else alert('Lead ID não encontrado.');
-        return;
-    }
-    window.location.href = '/quote-builder.html?lead_id=' + encodeURIComponent(id);
+    alert('Funcionalidade de criar proposta em desenvolvimento');
 }
 
 async function createInteraction(interaction) {

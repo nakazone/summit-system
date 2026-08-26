@@ -203,7 +203,7 @@ export async function postChangePassword(req, res) {
         subject: 'Your Summit Flooring portal password was changed',
         html: `<p>Hi ${builder.first_name || 'there'},</p>
 <p>This confirms that your Builder Portal password was changed successfully.</p>
-<p>If you did not make this change, contact Summit Flooring immediately at contact@summit-flooring.com.</p>
+<p>If you did not make this change, contact Summit Flooring immediately at contact@summitflooring.com.</p>
 <p><a href="${pub}/builder-login.html">Sign in to the portal</a></p>`,
       }).catch((e) => console.warn('[builderAuth] password change email:', e.message));
     }

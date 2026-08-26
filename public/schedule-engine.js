@@ -291,7 +291,7 @@ function renderMonthView() {
                                 font-size: 0.75rem;
                                 cursor: pointer;
                                 border-left: 3px solid ${getPriorityColor(schedule.priority)};"
-                         onclick="viewSchedule(${schedule.id}, ${schedule.project_id || 'null'})"
+                         onclick="viewSchedule(${schedule.id})"
                          title="${escapeHtml(schedule.crew_name)} — ${escapeHtml(schedule.project_name || schedule.project_number || '')}">
                         ${escapeHtml((schedule.crew_name || '').substring(0, 8))}…
                     </div>
@@ -413,7 +413,7 @@ function renderCrewTimeline() {
                     <span class="badge badge-${schedule.status}">${escapeHtml(schedule.status)}</span>
                 </td>
                 <td style="padding: 8px; border-bottom: 1px solid var(--border-color);">
-                    <button class="btn btn-sm" onclick="viewSchedule(${schedule.id}, ${schedule.project_id || 'null'})">View</button>
+                    <button class="btn btn-sm" onclick="viewSchedule(${schedule.id})">View</button>
                 </td>
             </tr>
         `;
@@ -502,20 +502,17 @@ function changeScheduleWeek(delta) {
     renderWeekView();
 }
 
-function viewSchedule(scheduleId, projectId) {
-    const pid = projectId || (typeof allSchedules !== 'undefined'
-        ? (allSchedules.find((s) => Number(s.id) === Number(scheduleId)) || {}).project_id
-        : null);
-    if (pid) {
-        window.location.href = '/project-detail.html?id=' + encodeURIComponent(pid);
-        return;
+function viewSchedule(scheduleId) {
+    if (typeof crmNotify === 'function') {
+        crmNotify('Agenda #' + scheduleId + ' — detalhe em breve.', 'info');
+    } else {
+        alert(`Schedule ID: ${scheduleId}\nFeature: View schedule details (to be implemented)`);
     }
-    if (typeof crmNotify === 'function') crmNotify('Projeto da agenda #' + scheduleId + ' não encontrado.', 'warning');
-    else alert('Projeto da agenda #' + scheduleId + ' não encontrado.');
 }
 
 function showNewScheduleModal() {
-    window.location.href = '/projects.html';
+    if (typeof crmNotify === 'function') crmNotify('Nova marcação — em breve.', 'info');
+    else alert('Feature: New schedule modal (to be implemented)');
 }
 
 if (typeof window !== 'undefined') {

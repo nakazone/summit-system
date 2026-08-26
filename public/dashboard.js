@@ -267,9 +267,14 @@ function isMobile() {
     return window.innerWidth <= 768;
 }
 
-/** Quotes: cards + cliente visivel em telemovel e iPad (ate 1024px). */
+/** Telemóvel e iPad: menu em gaveta + barra hamburger (sem tab bar no tablet). */
+function isCompactNav() {
+    return window.innerWidth <= 1366;
+}
+
+/** Quotes: cards + cliente visivel em telemovel e iPad (incl. landscape). */
 function isQuotesCompactLayout() {
-    return window.innerWidth <= 1024;
+    return window.innerWidth <= 1366;
 }
 
 /** Telefone, tablet e iPad — pull-to-refresh */
@@ -514,15 +519,16 @@ function openMobileMoreSheet() {
 function updateMobileChromeVisibility() {
     const header = document.getElementById('mobileAppHeader');
     const tabBar = document.getElementById('mobileTabBar');
-    const m = isMobile();
-    if (header) header.setAttribute('aria-hidden', m ? 'false' : 'true');
-    if (tabBar) tabBar.setAttribute('aria-hidden', m ? 'false' : 'true');
-    if (!m) closeMobileMoreSheet();
+    const phone = isMobile();
+    const compact = isCompactNav();
+    if (header) header.setAttribute('aria-hidden', compact ? 'false' : 'true');
+    if (tabBar) tabBar.setAttribute('aria-hidden', phone ? 'false' : 'true');
+    if (!phone) closeMobileMoreSheet();
 }
 
 function updateMobileMenuVisibility() {
     if (mobileMenuToggle && dashboardSidebar) {
-        if (isMobile()) {
+        if (isCompactNav()) {
             mobileMenuToggle.style.display = 'flex';
         } else {
             mobileMenuToggle.style.display = 'none';
@@ -545,7 +551,7 @@ sfMobileMq.addEventListener('change', () => applySfMobileShell());
 
 window.addEventListener('resize', () => {
     applySfMobileShell();
-    if (!isMobile()) {
+    if (!isCompactNav()) {
         setMobileMenuOpen(false);
     }
 });
@@ -563,7 +569,7 @@ if (mobileMenuToggle && dashboardSidebar && mobileOverlay) {
     dashboardSidebar.querySelectorAll('.nav-item').forEach((item) => {
         item.addEventListener('click', () => {
             if (item.tagName === 'SUMMARY') return;
-            if (isMobile()) {
+            if (isCompactNav()) {
                 dashboardSidebar.classList.remove('mobile-open');
                 mobileOverlay.classList.remove('active');
             }
@@ -785,7 +791,7 @@ function showPage(pageName) {
         else if (pageName === 'users') { currentPage = 1; loadUsers(); }
 
         syncMobileAppChrome(pageName);
-        if (isMobile()) setMobileMenuOpen(false);
+        if (isCompactNav()) setMobileMenuOpen(false);
     }
 }
 
@@ -2533,7 +2539,7 @@ const QUOTES_FILTER_LABELS = {
 function getQuotesListSearchQuery() {
     const desktop = document.getElementById('quotesDesktopSearch');
     const mobile = document.getElementById('quotesMobileSearch');
-    const raw = isMobile() ? mobile?.value : desktop?.value ?? mobile?.value;
+    const raw = isQuotesCompactLayout() ? mobile?.value : desktop?.value ?? mobile?.value;
     return String(raw || '').trim();
 }
 
@@ -3241,11 +3247,13 @@ function changePageProjects(delta) {
 }
 
 function viewProject(id) {
-    if (id) window.location.href = '/project-detail.html?id=' + encodeURIComponent(id);
+    if (typeof crmNotify === 'function') crmNotify('Ver projeto #' + id + ' — em breve.', 'info');
+    else alert('View project ' + id + ' - Feature coming soon!');
 }
 
 function showNewProjectModal() {
-    window.location.href = '/projects.html';
+    if (typeof crmNotify === 'function') crmNotify('Novo projeto — em breve.', 'info');
+    else alert('New Project form - Coming soon!');
 }
 
 // Visits/Schedule
@@ -3292,11 +3300,13 @@ function changePageVisits(delta) {
 }
 
 function viewVisit(id) {
-    if (id) window.location.href = '/dashboard.html?page=schedule&visit=' + encodeURIComponent(id);
+    if (typeof crmNotify === 'function') crmNotify('Ver visita #' + id + ' — em breve.', 'info');
+    else alert('View visit ' + id + ' - Feature coming soon!');
 }
 
 function showNewVisitModal() {
-    window.location.href = '/dashboard.html?page=schedule';
+    if (typeof crmNotify === 'function') crmNotify('Nova visita — em breve.', 'info');
+    else alert('New Visit form - Coming soon!');
 }
 
 // Contracts/Financeiro
@@ -3344,11 +3354,13 @@ function changePageContracts(delta) {
 }
 
 function viewContract(id) {
-    window.location.href = '/financial.html' + (id ? ('?contract=' + encodeURIComponent(id)) : '');
+    if (typeof crmNotify === 'function') crmNotify('Ver contrato #' + id + ' — em breve.', 'info');
+    else alert('View contract ' + id + ' - Feature coming soon!');
 }
 
 function showNewContractModal() {
-    window.location.href = '/financial.html';
+    if (typeof crmNotify === 'function') crmNotify('Novo contrato — em breve.', 'info');
+    else alert('New Contract form - Coming soon!');
 }
 
 // Activities
@@ -3394,34 +3406,13 @@ function changePageActivities(delta) {
 }
 
 function viewActivity(id) {
-    window.location.href = '/dashboard.html?page=activities' + (id ? ('&activity=' + encodeURIComponent(id)) : '');
+    if (typeof crmNotify === 'function') crmNotify('Ver atividade #' + id + ' — em breve.', 'info');
+    else alert('View activity ' + id + ' - Feature coming soon!');
 }
 
 function showNewActivityModal() {
-    const subject = window.prompt('Assunto da atividade:');
-    if (subject == null || !String(subject).trim()) return;
-    fetch('/api/activities', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            activity_type: 'note',
-            subject: String(subject).trim(),
-            activity_date: new Date().toISOString(),
-        }),
-    })
-        .then((r) => r.json())
-        .then((d) => {
-            if (d.success) {
-                if (typeof crmNotify === 'function') crmNotify('Atividade criada.', 'success');
-                loadActivities();
-            } else if (typeof crmNotify === 'function') crmNotify(d.error || 'Falha ao criar atividade', 'error');
-            else alert(d.error || 'Falha ao criar atividade');
-        })
-        .catch((e) => {
-            if (typeof crmNotify === 'function') crmNotify(e.message || 'Erro de rede', 'error');
-            else alert(e.message || 'Erro de rede');
-        });
+    if (typeof crmNotify === 'function') crmNotify('Nova atividade — em breve.', 'info');
+    else alert('New Activity form - Coming soon!');
 }
 
 // Users & permissões por módulo

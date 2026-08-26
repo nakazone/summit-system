@@ -42,6 +42,7 @@ import {
   deleteQuote,
   createQuoteFromInvoicePdf,
   streamQuoteInvoicePdf,
+  listQuoteBuildersLookup,
 } from './routes/quotes.js';
 import * as quoteExt from './routes/quoteExtended.js';
 import { registerQuoteInvoiceRoutes } from './routes/quoteInvoices.js';
@@ -123,6 +124,8 @@ import { ensureQuoteInvoicesSchema } from './lib/ensureQuoteInvoicesSchema.js';
 import { ensureQuotePdfViewedColumn } from './lib/ensureQuotePdfViewedColumn.js';
 import { ensureQuoteNumberOffset } from './lib/ensureQuoteNumberOffset.js';
 import { ensureQuoteSignatureSchema } from './lib/ensureQuoteSignatureSchema.js';
+import { ensureQuotePartySchema } from './lib/ensureQuotePartySchema.js';
+import { ensureQuoteClientPublishSchema } from './lib/ensureQuoteClientPublishSchema.js';
 import { ensureUserModuleColumns } from './lib/ensureUserModuleColumns.js';
 import { ensureCustomersResponsibleNameColumn } from './lib/ensureCustomersResponsibleNameColumn.js';
 import { ensureLeadPipelineStageEnteredAt } from './lib/ensureLeadPipelineStageEnteredAt.js';
@@ -293,9 +296,8 @@ const corsOriginsRaw = (process.env.CORS_ORIGINS || process.env.FRONTEND_URL || 
   .filter(Boolean);
 app.use(cors({
   origin(origin, cb) {
-    // Allow same-origin / curl / server-to-server (no Origin header)
     if (!origin) return cb(null, true);
-    if (corsOriginsRaw.length === 0) return cb(null, true); // default: reflect (compat)
+    if (corsOriginsRaw.length === 0) return cb(null, true);
     if (corsOriginsRaw.includes('*') || corsOriginsRaw.includes(origin)) return cb(null, true);
     return cb(null, false);
   },
@@ -473,6 +475,7 @@ app.put('/api/customers/:id', requireAuth, requirePermission('customers.edit'), 
 
 // Quotes (rotas específicas antes de :id)
 app.get('/api/quotes', requireAuth, listQuotes);
+app.get('/api/quotes/lookup/builders', requireAuth, requirePermission('quotes.view'), listQuoteBuildersLookup);
 app.post('/api/quotes/import-invoice-pdf', requireAuth, quotePdfUploadMiddleware, createQuoteFromInvoicePdf);
 app.post('/api/quotes/full', requireAuth, requirePermission('quotes.create'), quoteExt.postQuoteCreateFull);
 app.post('/api/quotes/from-template', requireAuth, requirePermission('quotes.create'), quoteExt.postQuoteFromTemplate);
@@ -502,6 +505,7 @@ app.put('/api/quotes/:id/full', requireAuth, requirePermission('quotes.edit'), q
 app.post('/api/quotes/:id/duplicate', requireAuth, requirePermission('quotes.create'), quoteExt.postQuoteDuplicate);
 app.post('/api/quotes/:id/generate-pdf', requireAuth, requirePermission('quotes.edit'), quoteExt.postQuoteGeneratePdf);
 app.post('/api/quotes/:id/send-email', requireAuth, requirePermission('quotes.edit'), quoteExt.postQuoteSendEmail);
+app.post('/api/quotes/:id/publish-client', requireAuth, requirePermission('quotes.edit'), quoteExt.postQuotePublishClient);
 app.get('/api/quotes/:id/engagement', requireAuth, requirePermission('quotes.view'), quoteExt.getQuoteEngagement);
 app.get('/api/quotes/:id/snapshots', requireAuth, requirePermission('quotes.view'), quoteExt.getQuoteSnapshots);
 registerQuoteInvoiceRoutes(app);
@@ -772,7 +776,6 @@ app.use((err, req, res, next) => {
 
   if (status >= 500 && hideErrorDetailFromClient) {
     return res.status(status).json({
-      success: false,
       error: true,
       message: infraDb
         ? 'Serviço temporariamente indisponível (base de dados).'
@@ -788,7 +791,6 @@ app.use((err, req, res, next) => {
   }
 
   return res.status(status).json({
-    success: false,
     error: true,
     message: (err && err.message) || 'Pedido inválido',
   });
@@ -860,6 +862,8 @@ async function start() {
       await ensureQuotePdfViewedColumn(pool);
       await ensureQuoteNumberOffset(pool);
       await ensureQuoteSignatureSchema(pool);
+      await ensureQuotePartySchema(pool);
+      await ensureQuoteClientPublishSchema(pool);
       await ensureUserModuleColumns(pool);
       await ensureCustomersResponsibleNameColumn(pool);
       await ensureLeadPipelineStageEnteredAt(pool);

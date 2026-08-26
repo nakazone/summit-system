@@ -1,5 +1,5 @@
 /**
- * Builder portal — partner pricing (read-only static table).
+ * Builder portal  partner pricing (read-only static table).
  */
 (function () {
   const $ = (id) => document.getElementById(id);
@@ -11,7 +11,7 @@
     { range: '5,000+ sq ft', pct: 15 },
   ];
 
-  /** Example complete projects — service lines resolved by name against partner table */
+  /** Example complete projects  service lines resolved by name against partner table */
   const PROJECT_SIMULATIONS = [
     {
       id: 'condo-refresh',
@@ -338,7 +338,7 @@
       const stamp = new Date().toISOString().slice(0, 10);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `summit-flooring-partner-pricing-${stamp}.pdf`;
+      a.download = `senior-floors-partner-pricing-${stamp}.pdf`;
       a.rel = 'noopener';
       document.body.appendChild(a);
       a.click();

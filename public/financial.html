@@ -6,16 +6,18 @@
   <meta name="theme-color" content="#1c1c1f" />
   <title>Financeiro — Summit Flooring</title>
   <link rel="icon" type="image/png" href="/assets/logoSummitFlooring.png" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=20260819-menu-fix-v2" />
   <link rel="stylesheet" href="design-system.css" />
-  <link rel="stylesheet" href="crm-shared-nav.css?v=13" />
+  <link rel="stylesheet" href="crm-shared-nav.css?v=11" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body class="dashboard-app-body fin-page payroll-sidebar-page">
   <header class="mobile-app-header" id="mobileAppHeader" aria-label="Barra superior">
-    <button type="button" class="mobile-app-header__menu" id="mobileMenuToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="finSidebar"></button>
+    <button type="button" class="mobile-app-header__menu" id="mobileMenuToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="finSidebar">
+      <span class="mobile-app-header__menu-icon" aria-hidden="true"></span>
+    </button>
     <div class="mobile-app-header__brand">
       <img src="/assets/logoSummitFlooring.png" alt="" width="28" height="28" onerror="this.style.display='none'" />
       <h1 class="mobile-app-header__title">Financeiro</h1>
@@ -312,7 +314,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script src="crm-shared-nav.js?v=13"></script>
+  <script src="crm-shared-nav.js?v=12"></script>
   <script src="financial.js?v=14"></script>
 </body>
 </html>

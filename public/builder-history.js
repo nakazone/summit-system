@@ -170,7 +170,7 @@
       const stamp = new Date().toISOString().slice(0, 10);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `summit-flooring-completed-projects-${stamp}.pdf`;
+      a.download = `senior-floors-completed-projects-${stamp}.pdf`;
       a.rel = 'noopener';
       document.body.appendChild(a);
       a.click();
@@ -226,7 +226,7 @@
     const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'summit-flooring-completed-projects.csv';
+    a.download = 'senior-floors-completed-projects.csv';
     a.click();
   });
 

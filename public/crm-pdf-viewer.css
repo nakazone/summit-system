@@ -37,7 +37,7 @@
   padding: 0 14px;
   border: none;
   border-radius: 10px;
-  background: rgba(214, 196, 168, 0.2);
+  background: rgba(214, 181, 152, 0.2);
   color: #d6c4a8;
   font-size: 15px;
   font-weight: 600;
@@ -46,7 +46,7 @@
 }
 .crm-pdf-viewer__close:hover,
 .crm-pdf-viewer__close:focus-visible {
-  background: rgba(214, 196, 168, 0.35);
+  background: rgba(214, 181, 152, 0.35);
   color: #fff;
   outline: none;
 }

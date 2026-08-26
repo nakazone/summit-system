@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quote — Summit Flooring CRM</title>
   <link rel="icon" type="image/png" href="/assets/logoSummitFlooring.png" />
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="design-system.css" />
-  <link rel="stylesheet" href="crm-shared-nav.css?v=13" />
+  <link rel="stylesheet" href="styles.css?v=20260819-menu-fix-v2" />
+  <link rel="stylesheet" href="design-system.css?v=20260819-menu-fix-v2" />
+  <link rel="stylesheet" href="crm-shared-nav.css?v=12" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = { corePlugins: { preflight: false } };
@@ -486,7 +486,73 @@
     .qb-notify--error .qb-notify__panel {
       border-top-color: #b91c1c;
     }
-    .qb-client-search {
+    .qb-party-tabs {
+      display: flex;
+      gap: 0.4rem;
+      margin-bottom: 0.85rem;
+    }
+    .qb-party-tab {
+      flex: 1;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      color: #334155;
+      font-size: 0.875rem;
+      font-weight: 600;
+      font-family: inherit;
+      padding: 0.55rem 0.75rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .qb-party-tab.is-active {
+      background: #1c1c1f;
+      border-color: #1c1c1f;
+      color: #fff;
+    }
+    .qb-builder-select {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+      background: #fff;
+      box-sizing: border-box;
+    }
+    .qb-job-fields {
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .qb-job-fields__title {
+      margin: 0;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #64748b;
+    }
+    .qb-job-fields label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #64748b;
+      margin-bottom: 0.25rem;
+    }
+    .qb-job-fields input {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+      box-sizing: border-box;
+    }
+    .qb-pricing-active {
+      font-size: 0.8125rem;
+      color: #0f172a;
+      margin: 0.25rem 0 0;
+    }
       position: relative;
     }
     .qb-client-search__input {
@@ -496,6 +562,10 @@
       padding: 0.5rem 0.75rem;
       font-size: 0.875rem;
       background: #fff;
+      box-sizing: border-box;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .qb-client-search__results {
       position: absolute;
@@ -538,6 +608,9 @@
     .qb-client-search__item-name {
       display: block;
       font-weight: 600;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
     .qb-client-search__item-meta {
       display: block;
@@ -647,32 +720,51 @@
       border-radius: 8px;
       background: var(--bg-primary-light);
       border: 1px solid var(--border-color);
+      min-width: 0;
+      max-width: 100%;
     }
     .qb-client-details.hidden {
       display: none !important;
     }
     .qb-client-details__list {
       margin: 0;
-      display: grid;
-      gap: 0.55rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      min-width: 0;
+      max-width: 100%;
     }
     .qb-client-details__row {
-      display: grid;
-      grid-template-columns: 5.5rem 1fr;
-      gap: 0.5rem;
-      align-items: start;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.2rem;
+      min-width: 0;
+      max-width: 100%;
       font-size: 0.8125rem;
-      line-height: 1.4;
+      line-height: 1.45;
     }
     .qb-client-details__row dt {
       margin: 0;
       font-weight: 600;
       color: #64748b;
     }
-    .qb-client-details__row dd {
+    .qb-client-details__row dd,
+    #qbClientName,
+    #qbClientPhone,
+    #qbClientEmail,
+    #qbClientAddress {
+      display: block;
       margin: 0;
       color: #0f172a;
-      word-break: break-word;
+      min-width: 0;
+      max-width: 100%;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: pre-wrap !important;
+      overflow-wrap: anywhere !important;
+      word-break: break-word !important;
+      word-break: break-all;
     }
     .qb-client-meta {
       margin-top: 1.25rem;
@@ -1273,9 +1365,36 @@
     body.qb-dashboard-inner .qb-page {
       padding-bottom: calc(3.25rem + env(safe-area-inset-bottom, 0px));
     }
-    @media (max-width: 768px) {
+    @media (max-width: 1366px) {
       .qb-action-bar {
         left: 0;
+      }
+    }
+    @media (max-width: 1100px) {
+      .qb-topbar {
+        flex-wrap: wrap;
+        align-items: flex-start;
+      }
+      .qb-topbar__actions {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      .qb-action-bar__inner {
+        flex-wrap: wrap;
+      }
+      .qb-action-bar .btn {
+        flex: 1 1 33.33%;
+        min-width: 33.33%;
+        font-size: 0.75rem;
+        padding: 0.85rem 0.4rem;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .qb-action-bar .btn:nth-child(3n) {
+        border-right: none;
+      }
+      body.qb-dashboard-inner,
+      body.qb-dashboard-inner .qb-page {
+        padding-bottom: calc(6.5rem + env(safe-area-inset-bottom, 0px));
       }
     }
     @media (max-width: 900px) {
@@ -1523,6 +1642,11 @@
             <section class="qb-sheet__section" id="qbClientSection">
               <h2 class="qb-sheet__title">Cliente</h2>
               <div class="qb-sheet__body">
+                <div class="qb-party-tabs" role="tablist" aria-label="Tipo de cliente">
+                  <button type="button" class="qb-party-tab is-active" id="qbPartyLead" data-party="lead">Leads</button>
+                  <button type="button" class="qb-party-tab" id="qbPartyBuilder" data-party="builder">Builders</button>
+                </div>
+                <div id="qbLeadPanel">
                 <div class="qb-client-search" id="qbClientSearchWrap">
                   <input
                     type="search"
@@ -1590,6 +1714,45 @@
                     </div>
                   </dl>
                 </div>
+                </div>
+                <div id="qbBuilderPanel" class="hidden">
+                  <label class="block text-xs font-semibold text-slate-500 mb-1" for="quoteBuilderSelect">Builder cadastrado</label>
+                  <select id="quoteBuilderSelect" class="qb-builder-select" aria-label="Selecionar builder">
+                    <option value="">Selecionar builder…</option>
+                  </select>
+                  <p class="text-xs text-slate-500 mt-2">Ao escolher um builder, o catálogo passa automaticamente para a taxa builder.</p>
+                  <div id="qbBuilderDetails" class="qb-client-details hidden" aria-live="polite">
+                    <dl class="qb-client-details__list">
+                      <div class="qb-client-details__row">
+                        <dt>Empresa</dt>
+                        <dd id="qbBuilderCompany">—</dd>
+                      </div>
+                      <div class="qb-client-details__row">
+                        <dt>Contato</dt>
+                        <dd id="qbBuilderContact">—</dd>
+                      </div>
+                      <div class="qb-client-details__row">
+                        <dt>Email</dt>
+                        <dd id="qbBuilderEmail">—</dd>
+                      </div>
+                      <div class="qb-client-details__row">
+                        <dt>Phone</dt>
+                        <dd id="qbBuilderPhone">—</dd>
+                      </div>
+                    </dl>
+                  </div>
+                  <div class="qb-job-fields">
+                    <p class="qb-job-fields__title">Projeto deste quote</p>
+                    <div>
+                      <label for="quoteJobName">Nome do projeto</label>
+                      <input type="text" id="quoteJobName" autocomplete="off" placeholder="Ex.: Residência Smith — living room" />
+                    </div>
+                    <div>
+                      <label for="quoteJobAddress">Endereço do projeto</label>
+                      <input type="text" id="quoteJobAddress" autocomplete="off" placeholder="Digite a morada (Google Maps)..." />
+                    </div>
+                  </div>
+                </div>
                 <div class="qb-client-meta">
                   <div class="qb-client-meta__grid">
                     <div>
@@ -1609,8 +1772,9 @@
                     </div>
                   </div>
                   <div class="qb-client-meta__pricing">
-                    <span class="block text-xs font-semibold text-slate-500 mb-1">Preço do catálogo</span>
-                    <div class="flex flex-wrap gap-4 text-sm">
+                    <span class="block text-xs font-semibold text-slate-500 mb-1">Tabela de preços</span>
+                    <p id="qbPricingActiveLabel" class="qb-pricing-active">Taxa cliente final (leads)</p>
+                    <div class="flex flex-wrap gap-4 text-sm hidden" id="qbPricingRadios">
                       <label class="inline-flex items-center gap-2 cursor-pointer"><input type="radio" name="pricingCatalog" value="customer" checked class="rounded border-slate-300" /> Taxa cliente final</label>
                       <label class="inline-flex items-center gap-2 cursor-pointer"><input type="radio" name="pricingCatalog" value="builder" class="rounded border-slate-300" /> Taxa builder</label>
                     </div>
@@ -1892,6 +2056,7 @@
                 <button type="button" id="btnOpenInvoiceModal" class="btn btn-sm btn-secondary">Emitir</button>
               </div>
               <p class="text-xs text-slate-500 mb-2">Cobrança ao cliente após aprovação do orçamento.</p>
+              <p id="quoteInvoiceBalance" class="text-xs text-slate-600 mb-2 hidden"></p>
               <div id="quoteInvoicesList" class="qb-invoices-list"></div>
             </div>
 
@@ -1932,10 +2097,12 @@
     <div class="qb-modal__panel">
       <h2 id="qbInvoiceModalTitle" class="qb-modal__title">Emitir invoice</h2>
       <p class="qb-modal__sub text-sm text-slate-500">Fatura de pagamento ao cliente com base no orçamento aprovado.</p>
+      <p id="invBalanceHint" class="text-sm text-slate-600 mb-3 hidden"></p>
       <form id="qbInvoiceForm" class="qb-invoice-form">
         <label class="qb-invoice-form__label">Tipo de cobrança
           <select id="invType" class="qb-invoice-form__input">
             <option value="deposit" selected>Depósito (%)</option>
+            <option value="final">Saldo restante</option>
             <option value="full">Valor total</option>
             <option value="progress">Parcela / progresso</option>
             <option value="custom">Valor personalizado</option>
@@ -1944,6 +2111,7 @@
         <label class="qb-invoice-form__label" id="invDepositWrap">Percentagem do depósito
           <input type="number" id="invDepositPct" class="qb-invoice-form__input" min="1" max="100" value="50" />
         </label>
+        <p id="invFinalHint" class="text-xs text-slate-500 hidden mb-2">O valor será o saldo ainda não faturado do orçamento.</p>
         <label class="qb-invoice-form__label hidden" id="invCustomWrap">Valor ($)
           <input type="number" id="invCustomAmount" class="qb-invoice-form__input" min="0" step="0.01" />
         </label>
@@ -1974,13 +2142,13 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
-  <script src="crm-address-autocomplete.js?v=20260528-pac-dismiss"></script>
-  <script src="crm-shared-nav.js?v=13"></script>
+  <script src="crm-address-autocomplete.js?v=20260819-quote-job"></script>
+  <script src="crm-shared-nav.js?v=12"></script>
   <script src="crm-toast.js"></script>
   <script src="crm-pdf-viewer.js?v=20260531"></script>
-  <script src="lead-contact-links.js?v=20260526-utf8"></script>
+  <script src="lead-contact-links.js?v=20260819-lead-email-msgs"></script>
   <script src="quote-signature-auto.js?v=20260708"></script>
-  <script src="quote-builder.js?v=20260708-auto-sign"></script>
+  <script src="quote-builder.js?v=20260819-client-lock"></script>
   <script>
     (function () {
       var t = document.getElementById('mobileMenuToggle');

@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#1c1c1f" />
   <title>Quick Quote — Summit Flooring</title>
   <link rel="icon" type="image/png" href="/assets/logoSummitFlooring.png" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=20260819-menu-fix-v2" />
   <link rel="stylesheet" href="design-system.css" />
   <script src="crm-tailwind-brand.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -14,7 +14,8 @@
     tailwind.config = window.SUMMIT_TAILWIND_CONFIG;
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="crm-shared-nav.css?v=13" />
+  <link rel="stylesheet" href="crm-shared-nav.css?v=8" />
+  <link rel="stylesheet" href="design-system.css" />
   <link rel="stylesheet" href="crm-toast.css" />
   <style>
     html { font-family: Inter, system-ui, sans-serif; }
@@ -26,10 +27,10 @@
     .os-safe-pb { padding-bottom: max(0.75rem, env(safe-area-inset-bottom)); }
     .os-safe-pt { padding-top: max(0.5rem, env(safe-area-inset-top)); }
     .os-step-dot { width: 10px; height: 10px; border-radius: 9999px; background: rgba(255,255,255,0.22); transition: background 0.2s, transform 0.2s; }
-    .os-step-dot--on { background: var(--color-accent); transform: scale(1.2); }
+    .os-step-dot--on { background: #d6c4a8; transform: scale(1.2); }
     .os-card-tap { transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.15s ease; }
     .os-card-tap:active { transform: scale(0.98); }
-    .os-card-tap.os-card-tap--sel { box-shadow: 0 0 0 2px var(--color-accent); border-color: var(--color-accent) !important; }
+    .os-card-tap.os-card-tap--sel { box-shadow: 0 0 0 2px #d6c4a8; border-color: #d6c4a8 !important; }
     .os-sq-input { font-size: clamp(1.75rem, 8vw, 2.25rem); font-weight: 800; letter-spacing: -0.02em; }
     details.os-details > summary { list-style: none; cursor: pointer; user-select: none; }
     details.os-details > summary::-webkit-details-marker { display: none; }
@@ -247,7 +248,7 @@
     <button type="button" id="btnVoice" class="mt-2 w-full py-2 rounded-xl bg-slate-100 text-slate-700 font-semibold text-sm">Try voice</button>
   </div>
 
-  <script src="crm-shared-nav.js?v=13"></script>
+  <script src="crm-shared-nav.js?v=8"></script>
   <script src="crm-toast.js"></script>
   <script src="onsite-quote.js"></script>
 </body>

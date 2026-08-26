@@ -11,7 +11,7 @@
     --text-dark: #1a1a1a;
     --text-light: #6b6b6b;
     --text-muted: #9b9b9b;
-    --bg-light: #f7f8fc;
+    --bg-light: #f8f7f5;
     --bg-white: #ffffff;
     --bg-primary-light: #f0efe9;
     --border-color: #e5e3dd;
@@ -39,7 +39,8 @@
     display: inline-block;
 }
 
-@media (max-width: 768px) {
+/* Mobile and tablet - includes iPads */
+@media (max-width: 1024px) {
     .mobile-only {
         display: inline-block;
     }
@@ -162,8 +163,8 @@ body {
     transition: transform 0.3s ease;
 }
 
-/* Mobile sidebar behavior */
-@media (max-width: 768px) {
+/* Mobile sidebar behavior - includes tablets/iPads */
+@media (max-width: 1024px) {
     .dashboard-sidebar {
         transform: translateX(-100%);
         width: 240px;
@@ -334,6 +335,15 @@ body {
     font-size: 1.75rem;
     font-weight: 600;
     color: var(--text-dark);
+    margin-bottom: var(--spacing-md);
+}
+
+.page-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
     margin-bottom: var(--spacing-md);
 }
 
@@ -646,7 +656,7 @@ input.score-auto {
     border-radius: 50%;
     overflow: hidden;
     flex-shrink: 0;
-    background: var(--primary-color, #1c1c1f);
+    background: var(--primary-color, #1e3a5f);
     color: #fff;
     position: relative;
 }
@@ -693,7 +703,7 @@ input.score-auto {
     border-radius: 50%;
     object-fit: cover;
     flex-shrink: 0;
-    background: var(--primary-color, #1c1c1f);
+    background: var(--primary-color, #1e3a5f);
     color: #fff;
     display: flex;
     align-items: center;
@@ -769,8 +779,8 @@ input.score-auto {
     display: block;
 }
 
-/* Mobile Styles */
-@media (max-width: 768px) {
+/* Mobile Styles - includes tablets/iPads up to 1024px */
+@media (max-width: 1024px) {
     html {
         font-size: 14px;
     }
@@ -957,6 +967,158 @@ input.score-auto {
     
     .charts-container {
         grid-template-columns: 1fr;
+    }
+}
+
+/* iPad / tablets (incl. landscape ~1366): gaveta + hamburger, sem tab bar */
+@media (min-width: 769px) and (max-width: 1366px) {
+    .dashboard-sidebar {
+        transform: translateX(-100%);
+        width: min(288px, 80vw);
+        z-index: 1100;
+    }
+
+    .dashboard-sidebar.mobile-open {
+        transform: translateX(0);
+        box-shadow: 12px 0 40px rgba(0, 0, 0, 0.22);
+    }
+
+    .dashboard-main {
+        margin-left: 0 !important;
+        width: 100%;
+        padding-top: calc(52px + env(safe-area-inset-top, 0px) + 12px) !important;
+    }
+    
+    /* Show mobile menu and header on tablets/iPads */
+    .mobile-app-header {
+        display: flex !important;
+    }
+    
+    .mobile-menu-toggle {
+        display: block !important;
+    }
+    
+    .mobile-app-header__menu {
+        display: flex !important;
+    }
+
+    .mobile-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 1080;
+        background: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .mobile-overlay.active {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    .mobile-app-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1040;
+        min-height: calc(52px + env(safe-area-inset-top, 0px));
+        padding: env(safe-area-inset-top, 0px) 12px 10px 12px;
+        background: linear-gradient(180deg, var(--primary-color) 0%, var(--primary-dark, #14192b) 100%);
+        box-shadow: 0 2px 16px rgba(28, 28, 31, 0.35);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .mobile-app-header__menu {
+        flex-shrink: 0;
+        width: 44px;
+        height: 44px;
+        border: none;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.12);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .mobile-app-header__menu-icon {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background: #fff;
+        border-radius: 1px;
+        box-shadow: 0 7px 0 #fff, 0 -7px 0 #fff;
+    }
+
+    .mobile-app-header__brand {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .mobile-app-header__logo {
+        border-radius: 8px;
+        flex-shrink: 0;
+        object-fit: contain;
+    }
+
+    .mobile-app-header__title {
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: #fff;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .crm-page-header__actions,
+    .page-header {
+        flex-wrap: wrap;
+    }
+
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        max-width: 100%;
+    }
+
+    .btn {
+        min-height: 40px;
+    }
+
+    .kanban-board-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .kanban-board-grid,
+    .kanban-board-grid.kanban-board-grid--with-lost {
+        grid-template-columns: repeat(3, minmax(200px, 1fr));
+        min-width: 640px;
+    }
+
+    .notification-bell-wrap {
+        top: max(8px, env(safe-area-inset-top, 0px));
+        right: max(12px, env(safe-area-inset-right, 0px));
+        z-index: 1050;
+    }
+
+    .notification-bell-btn {
+        width: 42px;
+        height: 42px;
     }
 }
 
@@ -1723,7 +1885,7 @@ input.score-auto {
     height: 48px;
     border-radius: 12px;
     border: none;
-    background: linear-gradient(135deg, #1c1c1f 0%, #3a3a40 100%);
+    background: linear-gradient(135deg, #1c1c1f 0%, #2d3555 100%);
     color: #fff;
     cursor: pointer;
     box-shadow: 0 4px 20px rgba(28, 28, 31, 0.35);
@@ -2536,7 +2698,8 @@ input.score-auto {
     animation: mobilePageFlash 0.24s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@media (max-width: 768px) {
+/* Mobile and tablet - includes iPads up to 1024px */
+@media (max-width: 1024px) {
     .dashboard-app-body {
         min-height: 100dvh;
         min-height: 100vh;
@@ -2984,6 +3147,19 @@ input.score-auto {
     width: 100%;
 }
 
+.quotes-mobile-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 12px;
+}
+
+.quotes-mobile-actions .btn {
+    flex: 1 1 auto;
+    min-height: 44px;
+    white-space: nowrap;
+}
+
 .quotes-list-toolbar__total-label {
     font-size: 0.8rem;
     font-weight: 600;
@@ -3068,16 +3244,16 @@ body.lead-quick-sheet-open .pac-container {
 }
 
 .quotes-data-table .quotes-cell-client {
-    white-space: nowrap !important;
-    word-break: normal !important;
-    overflow-wrap: normal !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
     overflow: visible !important;
     text-overflow: unset !important;
     line-height: 1.35;
     font-weight: 600;
     color: var(--text-dark);
-    min-width: 12rem;
-    max-width: none;
+    min-width: 8rem;
+    max-width: 16rem;
 }
 
 .quotes-data-table .quotes-table-row--open {
@@ -3097,8 +3273,8 @@ body.lead-quick-sheet-open .pac-container {
     -webkit-overflow-scrolling: touch;
 }
 
-/* iPad / tablet: lista em cards (cliente em destaque) em vez da tabela comprimida */
-@media (min-width: 769px) and (max-width: 1024px) {
+/* iPad / tablet (incl. landscape ~1366): lista em cards + ações visíveis */
+@media (min-width: 769px) and (max-width: 1366px) {
     #quotesPage #quotesMobileShell.sf-mobile-only {
         display: block !important;
     }
@@ -3107,7 +3283,7 @@ body.lead-quick-sheet-open .pac-container {
         display: none !important;
     }
 
-    #quotesPage .quotes-list-toolbar.sf-desktop-quotes-toolbar {
+    #quotesPage .sf-quotes-chips-scroll.sf-mobile-only--flex {
         display: flex !important;
     }
 
@@ -3311,28 +3487,26 @@ body.lead-quick-sheet-open .pac-container {
     outline-offset: 1px;
 }
 
-/* ========== Summit Flooring design system (dashboard / sf-*) ==========
-   Tokens canónicos em design-system.css — aliases locais só como fallback se
-   design-system.css não carregar. */
+/* ========== Summit Flooring design system (dashboard / sf-*) ========== */
 :root {
-    --sf-navy: var(--color-primary, #1c1c1f);
-    --sf-navy2: var(--primary-light, #2a2a2e);
-    --sf-navy3: var(--primary-light, #2a2a2e);
-    --sf-gold: var(--color-accent, #d6c4a8);
-    --sf-gold2: var(--color-accent-hover, #e4d6c4);
-    --sf-gold3: #c4b092;
-    --sf-gold4: var(--secondary-dark, #b09a7a);
-    --sf-gold5: #836f56;
-    --sf-gold-soft: #faf7f2;
+    --sf-navy: #1c1c1f;
+    --sf-navy2: #2a2a2e;
+    --sf-navy3: #2a2a2e;
+    --sf-gold: #d6c4a8;
+    --sf-gold2: #e0c4a8;
+    --sf-gold3: #c9a882;
+    --sf-gold4: #b8906a;
+    --sf-gold5: #a07850;
+    --sf-gold-soft: #f5ede0;
     --sf-gold-bg: #faf7f2;
-    --sf-gold-card: var(--color-surface-tertiary, #f0e8dc);
-    --sf-bg: var(--color-surface-secondary, #f7f8fc);
-    --sf-white: var(--color-surface, #ffffff);
-    --sf-border: var(--color-border, #e2e8f0);
-    --sf-ok: var(--color-success, #22c55e);
-    --sf-warn: var(--color-warning, #f59e0b);
-    --sf-bad: var(--color-danger, #ef4444);
-    --sf-muted: var(--color-text-muted, #718096);
+    --sf-gold-card: #ecdec8;
+    --sf-bg: #f0ede8;
+    --sf-white: #ffffff;
+    --sf-border: #d4c4ae;
+    --sf-ok: #2d6e4a;
+    --sf-warn: #8f5010;
+    --sf-bad: #8f2020;
+    --sf-muted: #8a8074;
 }
 
 .sf-card {
@@ -3965,7 +4139,7 @@ body.lead-quick-sheet-open .pac-container {
 }
 
 .pd-body.project-detail-page .dashboard-main.pd-main.sf-main-content {
-    margin-left: var(--crm-sidebar-width, 264px);
+    margin-left: 240px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;

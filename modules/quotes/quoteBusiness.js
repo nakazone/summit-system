@@ -166,14 +166,122 @@ function buildQuoteEmailHtml(quote, items, publicUrl) {
   return buildQuoteAccessEmailHtml(quote, publicUrl);
 }
 
+async function selectQuoteRows(pool, whereSql, params) {
+  try {
+    const [rows] = await pool.query(
+      `SELECT q.*, c.name AS customer_name, c.email AS customer_email, c.phone AS customer_phone,
+              b.company AS builder_company, b.first_name AS builder_first_name,
+              b.last_name AS builder_last_name, b.email AS builder_email, b.phone AS builder_phone
+       FROM quotes q
+       LEFT JOIN customers c ON q.customer_id = c.id
+       LEFT JOIN builders b ON q.builder_id = b.id
+       ${whereSql}`,
+      params
+    );
+    return rows;
+  } catch {
+    const [rows] = await pool.query(
+      `SELECT q.*, c.name AS customer_name, c.email AS customer_email, c.phone AS customer_phone
+       FROM quotes q
+       LEFT JOIN customers c ON q.customer_id = c.id
+       ${whereSql}`,
+      params
+    );
+    return rows;
+  }
+}
+
+function quotePartyContact(quote) {
+  const isBuilder = String(quote?.quote_party || '') === 'builder' || quote?.builder_id;
+  const builderPerson = [quote?.builder_first_name, quote?.builder_last_name].filter(Boolean).join(' ').trim();
+  return {
+    isBuilder,
+    name: isBuilder
+      ? quote.builder_company || builderPerson || quote.customer_name || 'Builder'
+      : quote?.customer_name || 'Client',
+    email: String(quote?.builder_email || quote?.customer_email || '').trim(),
+    phone: String(quote?.builder_phone || quote?.customer_phone || '').trim(),
+  };
+}
+
+function defaultQuoteEmailSubject(quote, quoteId) {
+  const num = quote?.quote_number || quoteId;
+  const isBuilder = String(quote?.quote_party || '') === 'builder' || quote?.builder_id;
+  const job = quote?.job_name != null ? String(quote.job_name).trim() : '';
+  if (isBuilder && job) {
+    return `Quote ${num} — ${job} — Summit Flooring`;
+  }
+  return `Quote ${num} — Summit Flooring`;
+}
+
+function parseClientSnapshot(raw) {
+  if (raw == null || raw === '') return null;
+  try {
+    const s = typeof raw === 'string' ? JSON.parse(raw) : raw;
+    if (!s || typeof s !== 'object' || !s.quote) return null;
+    return s;
+  } catch {
+    return null;
+  }
+}
+
+function stripQuoteForClientSnapshot(quote) {
+  if (!quote) return quote;
+  const q = { ...quote };
+  delete q.invoice_pdf;
+  delete q.client_snapshot_json;
+  delete q.client_signature_png;
+  return q;
+}
+
+/** Vista pública: conteúdo enviado ao cliente, com estado/assinatura atuais. */
+export function applyClientPublishedView(ctx) {
+  if (!ctx?.quote) return ctx;
+  const snap = parseClientSnapshot(ctx.quote.client_snapshot_json);
+  if (!snap?.quote) return ctx;
+  const live = ctx.quote;
+  const published = { ...snap.quote };
+  delete published.invoice_pdf;
+  delete published.client_snapshot_json;
+  delete published.client_signature_png;
+  return {
+    ...ctx,
+    quote: {
+      ...published,
+      id: live.id,
+      public_token: live.public_token,
+      quote_number: live.quote_number || published.quote_number,
+      status: live.status,
+      viewed_at: live.viewed_at,
+      pdf_viewed_at: live.pdf_viewed_at,
+      email_sent_at: live.email_sent_at,
+      approved_at: live.approved_at,
+      client_signed_name: live.client_signed_name,
+      client_signature_png: live.client_signature_png,
+    },
+    items: Array.isArray(snap.items) ? snap.items : ctx.items,
+  };
+}
+
+export async function publishQuoteForClient(pool, quoteId) {
+  const cols = await repo.quoteColumns(pool);
+  if (!cols.has('client_snapshot_json')) return { ok: false, error: 'schema' };
+  const ctx = await loadQuoteContext(pool, quoteId);
+  if (!ctx) return { ok: false, error: 'Quote not found' };
+  const payload = {
+    quote: stripQuoteForClientSnapshot(ctx.quote),
+    items: ctx.items || [],
+    published_at: new Date().toISOString(),
+  };
+  await pool.execute('UPDATE quotes SET client_snapshot_json = ? WHERE id = ?', [
+    JSON.stringify(payload),
+    quoteId,
+  ]);
+  return { ok: true };
+}
+
 export async function loadQuoteContext(pool, quoteId) {
-  const [quotes] = await pool.query(
-    `SELECT q.*, c.name AS customer_name, c.email AS customer_email, c.phone AS customer_phone
-     FROM quotes q
-     LEFT JOIN customers c ON q.customer_id = c.id
-     WHERE q.id = ?`,
-    [quoteId]
-  );
+  const quotes = await selectQuoteRows(pool, 'WHERE q.id = ?', [quoteId]);
   if (!quotes.length) return null;
   const q = quotes[0];
   const itemCols = await repo.quoteItemColumns(pool);
@@ -214,6 +322,10 @@ export async function saveQuoteFull(pool, quoteId, body, userId, { snapshotPrevi
 
   if (body.customer_id !== undefined) set('customer_id', body.customer_id);
   if (body.lead_id !== undefined) set('lead_id', body.lead_id);
+  if (body.builder_id !== undefined) set('builder_id', body.builder_id);
+  if (body.quote_party !== undefined) set('quote_party', body.quote_party);
+  if (body.job_name !== undefined) set('job_name', body.job_name);
+  if (body.job_address !== undefined) set('job_address', body.job_address);
   if (body.assigned_to !== undefined) set('assigned_to', body.assigned_to);
   if (Array.isArray(body.items)) {
     const summary = deriveQuoteServiceSummary(items);
@@ -301,6 +413,10 @@ export async function createQuoteFull(pool, body, userId) {
   const fields = [
     'lead_id',
     'customer_id',
+    'builder_id',
+    'quote_party',
+    'job_name',
+    'job_address',
     'project_id',
     'total_amount',
     'labor_amount',
@@ -327,6 +443,14 @@ export async function createQuoteFull(pool, body, userId) {
         return body.lead_id ?? null;
       case 'customer_id':
         return body.customer_id ?? null;
+      case 'builder_id':
+        return body.builder_id ?? null;
+      case 'quote_party':
+        return body.quote_party === 'builder' ? 'builder' : 'lead';
+      case 'job_name':
+        return body.job_name ? String(body.job_name).trim() : null;
+      case 'job_address':
+        return body.job_address ? String(body.job_address).trim() : null;
       case 'project_id':
         return body.project_id ?? null;
       case 'total_amount':
@@ -409,6 +533,10 @@ export async function duplicateQuote(pool, quoteId, userId) {
   const body = {
     lead_id: q.lead_id,
     customer_id: q.customer_id,
+    builder_id: q.builder_id,
+    quote_party: q.quote_party,
+    job_name: q.job_name,
+    job_address: q.job_address,
     project_id: q.project_id,
     status: 'draft',
     expiration_date: null,
@@ -447,13 +575,14 @@ export async function generatePdfAndStore(pool, quoteId) {
   const ctx = await loadQuoteContext(pool, quoteId);
   if (!ctx) return { ok: false, error: 'Quote not found' };
   const ownerSignature = await getOwnerSignature(pool);
+  const party = quotePartyContact(ctx.quote);
   const pdfBuf = await buildQuotePdfBuffer({
     quote: ctx.quote,
     items: ctx.items,
     customer: {
-      name: ctx.quote.customer_name,
-      email: ctx.quote.customer_email,
-      phone: ctx.quote.customer_phone,
+      name: party.name,
+      email: party.email || ctx.quote.customer_email,
+      phone: party.phone || ctx.quote.customer_phone,
     },
     ownerSignature,
   });
@@ -486,9 +615,10 @@ export async function mailQuote(pool, quoteId, EmailOpts = {}) {
   const ctx = await loadQuoteContext(pool, quoteId);
   if (!ctx) return { ok: false, error: 'Quote not found' };
   const rawTo = EmailOpts.to != null ? String(EmailOpts.to).trim() : '';
+  const party = quotePartyContact(ctx.quote);
   const custEmail =
     ctx.quote.customer_email != null ? String(ctx.quote.customer_email).trim() : '';
-  const email = rawTo || custEmail;
+  const email = rawTo || custEmail || party.email;
   if (!email) {
     return {
       ok: false,
@@ -499,6 +629,11 @@ export async function mailQuote(pool, quoteId, EmailOpts = {}) {
   const gen = await generatePdfAndStore(pool, quoteId);
   if (!gen.ok) {
     return { ok: false, error: gen.error || 'Não foi possível gerar o PDF do orçamento.' };
+  }
+  try {
+    await publishQuoteForClient(pool, quoteId);
+  } catch (e) {
+    console.warn('[quotes] publishQuoteForClient:', e.message);
   }
   const base = getPublicCrmBaseUrl();
   const token = ctx.quote.public_token;
@@ -517,9 +652,10 @@ export async function mailQuote(pool, quoteId, EmailOpts = {}) {
   const useCustomHtml =
     EmailOpts.html != null && String(EmailOpts.html).trim() !== '';
   const attachPdf = EmailOpts.attachPdf === true;
+  const customSubject = EmailOpts.subject != null ? String(EmailOpts.subject).trim() : '';
   const result = await sendQuoteEmail({
     to: email,
-    subject: EmailOpts.subject || `Quote ${ctx.quote.quote_number || quoteId} — Summit Flooring`,
+    subject: customSubject || defaultQuoteEmailSubject(ctx.quote, quoteId),
     html: useCustomHtml ? EmailOpts.html : buildQuoteAccessEmailHtml(ctx.quote, publicUrl),
     pdfBuffer: attachPdf ? gen.buffer : null,
     filename: `Summit-Flooring-${ctx.quote.quote_number || quoteId}.pdf`,
@@ -554,13 +690,7 @@ export async function mailQuote(pool, quoteId, EmailOpts = {}) {
 }
 
 export async function getByPublicToken(pool, token) {
-  const [quotes] = await pool.query(
-    `SELECT q.*, c.name AS customer_name, c.email AS customer_email, c.phone AS customer_phone
-     FROM quotes q
-     LEFT JOIN customers c ON q.customer_id = c.id
-     WHERE q.public_token = ?`,
-    [token]
-  );
+  const quotes = await selectQuoteRows(pool, 'WHERE q.public_token = ?', [token]);
   if (!quotes.length) return null;
   const q = quotes[0];
   const itemCols = await repo.quoteItemColumns(pool);
@@ -569,19 +699,13 @@ export async function getByPublicToken(pool, token) {
     `SELECT * FROM quote_items WHERE quote_id = ? ORDER BY ${ob}`,
     [q.id]
   );
-  return { quote: q, items: items.map(mapItemRow) };
+  return applyClientPublishedView({ quote: q, items: items.map(mapItemRow) });
 }
 
 export async function getByQuoteNumber(pool, quoteNumber) {
   const qn = normalizeQuoteNumberForUrl(quoteNumber) || String(quoteNumber || '').trim();
   if (!qn) return null;
-  const [quotes] = await pool.query(
-    `SELECT q.*, c.name AS customer_name, c.email AS customer_email, c.phone AS customer_phone
-     FROM quotes q
-     LEFT JOIN customers c ON q.customer_id = c.id
-     WHERE q.quote_number = ?`,
-    [qn]
-  );
+  const quotes = await selectQuoteRows(pool, 'WHERE q.quote_number = ?', [qn]);
   if (!quotes.length) return null;
   const q = quotes[0];
   const itemCols = await repo.quoteItemColumns(pool);
@@ -590,7 +714,7 @@ export async function getByQuoteNumber(pool, quoteNumber) {
     `SELECT * FROM quote_items WHERE quote_id = ? ORDER BY ${ob}`,
     [q.id]
   );
-  return { quote: q, items: items.map(mapItemRow) };
+  return applyClientPublishedView({ quote: q, items: items.map(mapItemRow) });
 }
 
 export async function markQuoteViewedByNumber(pool, quoteNumber) {
@@ -667,9 +791,22 @@ export async function markQuotePdfDownloaded(pool, token) {
 }
 
 export async function getQuotePdfBufferForPublic(pool, quoteId) {
-  const gen = await generatePdfAndStore(pool, quoteId);
-  if (!gen.ok || !gen.buffer) return null;
-  return gen.buffer;
+  const live = await loadQuoteContext(pool, quoteId);
+  if (!live) return null;
+  const ctx = applyClientPublishedView(live);
+  const ownerSignature = await getOwnerSignature(pool);
+  const party = quotePartyContact(ctx.quote);
+  const pdfBuf = await buildQuotePdfBuffer({
+    quote: ctx.quote,
+    items: ctx.items,
+    customer: {
+      name: party.name,
+      email: party.email || ctx.quote.customer_email,
+      phone: party.phone || ctx.quote.customer_phone,
+    },
+    ownerSignature,
+  });
+  return pdfBuf || null;
 }
 
 export async function approvePublicQuote(pool, token, signatureOpts = {}) {

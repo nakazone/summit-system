@@ -484,7 +484,7 @@ export async function getBuilderHistoryPdf(req, res) {
  res.setHeader('Content-Type', 'application/pdf');
  res.setHeader(
   'Content-Disposition',
-  `attachment; filename="summit-flooring-completed-projects-${stamp}.pdf"`
+  `attachment; filename="senior-floors-completed-projects-${stamp}.pdf"`
  );
  res.send(pdfBuf);
  } catch (e) {

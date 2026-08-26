@@ -13,13 +13,13 @@ const COMPANY = {
   name: 'Summit Flooring',
   tagline: 'Hardwood - LVP - Refinishing - Denver Metro',
   phone: '(720) 751-9813',
-  email: 'contact@summit-flooring.com',
+  email: 'contact@summitflooring.com',
 };
 
 const PAL = {
-  primary: rgb(28 / 255, 28 / 255, 31 / 255),
-  primaryMuted: rgb(42 / 255, 42 / 255, 46 / 255),
-  secondary: rgb(214 / 255, 196 / 255, 168 / 255),
+  primary: rgb(26 / 255, 32 / 255, 54 / 255),
+  primaryMuted: rgb(42 / 255, 49 / 255, 80 / 255),
+  secondary: rgb(214 / 255, 181 / 255, 152 / 255),
   panelBg: rgb(240 / 255, 242 / 255, 248 / 255),
   lineMuted: rgb(0.35, 0.37, 0.42),
   rule: rgb(0.86, 0.88, 0.92),
