@@ -1296,14 +1296,28 @@ input.score-auto {
 }
 
 .login-header .logo-image {
-    height: 80px;
-    margin-bottom: 1.5rem;
+    height: auto;
+    width: min(220px, 88%);
+    margin-bottom: 1.25rem;
     display: block;
     margin-left: auto;
     margin-right: auto;
-    max-width: 100%;
     object-fit: contain;
-    width: auto;
+    border-radius: 12px;
+}
+
+.login-header .login-logo-wrap {
+    display: inline-block;
+    background: var(--primary-color, #1c1c1f);
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 8px 24px rgba(28, 28, 31, 0.25);
+}
+
+.login-header .login-logo-wrap .logo-image {
+    margin-bottom: 0;
+    width: min(200px, 100%);
 }
 
 .login-header .logo-image[src*="data:image"] {

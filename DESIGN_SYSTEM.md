@@ -27,9 +27,10 @@ Semânticas: success `#22c55e`, warning `#f59e0b`, danger `#ef4444`, info `#3b82
 
 ### Logo
 
-- Arquivo: `/assets/logoSummitFlooring.png` (também `summitLogo.jpg`)
-- Favicon e sidebar usam o mesmo asset
-- Fonte: site Summit Flooring (`public/assets/`)
+- Arquivo principal (fundo escuro): `/assets/summitLogo.jpg`
+- Variante transparente: `/assets/logoSummitFlooring.png`
+- Favicon: `/favicon.ico` + `/assets/favicon-32x32.png`, `apple-touch-icon.png`, `android-chrome-*.png` (gerados a partir de `summitLogo.jpg`)
+- Login CRM usa `summitLogo.jpg` com moldura `--primary-color`
 
 ### Tokens CSS
 

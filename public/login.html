@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1c1c1f">
     <title>Summit Flooring - Admin Login</title>
-    <!-- Favicon (mesmo padrão do site Summit Flooring) -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logoSummitFlooring.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/logoSummitFlooring.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/logoSummitFlooring.png">
-    <link rel="icon" type="image/png" href="/assets/logoSummitFlooring.png">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="design-system.css">
     <link rel="stylesheet" href="crm-toast.css">
@@ -21,10 +20,14 @@
     <div class="login-container">
         <div class="login-box">
             <div class="login-header">
-                <img src="assets/logoSummitFlooring.png" 
-                     alt="Summit Flooring" 
-                     class="logo-image"
-                     onerror="handleLogoError(this)">
+                <div class="login-logo-wrap">
+                    <img src="assets/summitLogo.jpg"
+                         alt="Summit Flooring"
+                         class="logo-image"
+                         width="200"
+                         height="200"
+                         onerror="handleLogoError(this)">
+                </div>
                 <h1>Summit Flooring</h1>
                 <p>CRM System</p>
             </div>
@@ -59,11 +62,10 @@
         function handleLogoError(img) {
             // Try alternative URLs
             const alternatives = [
+                '/assets/summitLogo.jpg',
+                'assets/summitLogo.jpg',
                 '/assets/logoSummitFlooring.png',
-                'assets/logoSummitFlooring.png',
-                'https://www.summitflooring.com/assets/logoSummitFlooring.png',
-                'https://summitflooring.com/summitLogo.jpg',
-                'https://www.summitflooring.com/summitLogo.jpg'
+                'assets/logoSummitFlooring.png'
             ];
             
             let currentIndex = 0;
