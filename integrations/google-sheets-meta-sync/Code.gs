@@ -1,14 +1,15 @@
 /**
- * Google Apps Script — sincronizar planilha Meta → CRM (Railway)
+ * Google Apps Script — Summit Meta Leads → Summit Flooring CRM (Railway)
  *
- * Instalação: na Google Sheet → Extensões → Apps Script → colar este ficheiro.
- * Depois: ⚙️ Definições do projeto → Propriedades do script → adicionar API_SYNC_SECRET
- *         (mesmo valor que SHEETS_SYNC_SECRET no Railway).
+ * Planilha: "Summit Meta Leads" (conta contact@summit-floors.com)
+ * Instalação:
+ * 1. Abra a planilha → Extensões → Apps Script → cole este ficheiro (substitua o código).
+ * 2. ⚙ Definições do projeto → Propriedades do script → API_SYNC_SECRET
+ *    = mesmo valor de SHEETS_SYNC_SECRET no Railway (serviço summit-system).
+ * 3. Adicione coluna CRM_Synced na linha de cabeçalho se ainda não existir.
+ * 4. Executar syncMetaLeadsToCrm uma vez (autorizar), depois Acionadores a cada 10–30 min.
  *
- * Agendar: Acionadores → syncMetaLeadsToCrm → disparador temporal (recomendado: 10–30 min).
- * Cada execução faz 1 UrlFetch para POST .../api/receive-lead-batch (vários leads no JSON).
- * Requer CRM atualizado com esse endpoint e SHEETS_SYNC_SECRET no Railway.
- * Quota Gmail ~20k UrlFetch/dia: com batch, 20k execuções ≈ até 20k × MAX_LEADS_PER_BATCH linhas.
+ * Endpoint: POST {API_BASE}/api/receive-lead-batch
  */
 
 var CONFIG = {
@@ -73,6 +74,14 @@ function syncMetaLeadsToCrm() {
   } finally {
     lock.releaseLock();
   }
+}
+
+/**
+ * Rode uma vez se quiser só criar a coluna CRM_Synced na planilha.
+ */
+function setupSummitMetaSheet() {
+  ensureCrmSyncedColumn_(SpreadsheetApp.getActiveSpreadsheet().getActiveSheet());
+  Logger.log('Coluna "' + CONFIG.SYNC_COLUMN_HEADER + '" pronta na linha ' + CONFIG.HEADER_ROW + '.');
 }
 
 function ensureCrmSyncedColumn_(sheet) {
