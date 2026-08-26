@@ -25,6 +25,11 @@ window.addEventListener('DOMContentLoaded', () => {
                 window.location.href = '/login.html';
                 return;
             }
+            if (typeof window.sfSetCrmEmailUser === 'function') {
+                window.sfSetCrmEmailUser(data.user);
+            } else {
+                window.sfCrmSessionUser = data.user;
+            }
             const un = document.getElementById('userName');
             if (un) un.textContent = data.user.name || data.user.email;
             loadLead();

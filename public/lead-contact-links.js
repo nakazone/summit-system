@@ -8,14 +8,123 @@
   const EMAIL_CONTACT = 'contact@summit-flooring.com';
   const EMAIL_WEBSITE = 'https://summitflooring.com';
 
-  /** Appended to every email body — keep short for mobile mailto limits. */
-  const EMAIL_SIGNATURE =
+  /** Appended to every email body — personalized when CRM user is loaded. */
+  const EMAIL_SIGNATURE_FALLBACK =
     '\n\nBest regards,\n' +
     EMAIL_FROM_LABEL +
     '\n' +
     EMAIL_CONTACT +
     '\n' +
     EMAIL_WEBSITE;
+
+  const ROLE_SIGNATURE_TITLES = {
+    admin: 'Summit Flooring',
+    sales_rep: 'Sales Consultant',
+    sales: 'Sales Consultant',
+    project_manager: 'Project Manager',
+    manager: 'Manager',
+    support: 'Customer Support',
+    operational: 'Operations',
+    user: 'Summit Flooring Team',
+  };
+
+  let crmEmailUserCache = null;
+  let crmEmailUserPromise = null;
+
+  function setCrmEmailUser(user) {
+    if (user && typeof user === 'object') {
+      crmEmailUserCache = {
+        id: user.id,
+        name: user.name || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        role: user.role || '',
+      };
+      try {
+        global.sfCrmSessionUser = crmEmailUserCache;
+      } catch (_) {}
+    }
+  }
+
+  function getCrmEmailUser() {
+    if (crmEmailUserCache) return crmEmailUserCache;
+    if (global.sfCrmSessionUser && typeof global.sfCrmSessionUser === 'object') {
+      setCrmEmailUser(global.sfCrmSessionUser);
+      return crmEmailUserCache;
+    }
+    return null;
+  }
+
+  function loadCrmEmailUser() {
+    const cached = getCrmEmailUser();
+    if (cached) return Promise.resolve(cached);
+    if (crmEmailUserPromise) return crmEmailUserPromise;
+    crmEmailUserPromise = fetch('/api/auth/session', { credentials: 'include' })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data && data.authenticated && data.user) setCrmEmailUser(data.user);
+        return crmEmailUserCache;
+      })
+      .catch(() => null)
+      .finally(() => {
+        crmEmailUserPromise = null;
+      });
+    return crmEmailUserPromise;
+  }
+
+  function roleSignatureTitle(role) {
+    const key = String(role || '')
+      .trim()
+      .toLowerCase();
+    if (!key) return 'Summit Flooring Team';
+    return ROLE_SIGNATURE_TITLES[key] || 'Summit Flooring Team';
+  }
+
+  function formatSignaturePhone(phone) {
+    const raw = String(phone || '').trim();
+    if (!raw) return '';
+    if (typeof global.sfNormalizePhoneDigits === 'function') {
+      const digits = global.sfNormalizePhoneDigits(raw).replace(/\D/g, '');
+      if (digits.length === 10) {
+        return '(' + digits.slice(0, 3) + ') ' + digits.slice(3, 6) + '-' + digits.slice(6);
+      }
+      if (digits.length === 11 && digits.charAt(0) === '1') {
+        return (
+          '(' +
+          digits.slice(1, 4) +
+          ') ' +
+          digits.slice(4, 7) +
+          '-' +
+          digits.slice(7)
+        );
+      }
+    }
+    return raw;
+  }
+
+  function buildEmailSignature(user) {
+    const u = user || getCrmEmailUser();
+    if (!u || (!u.name && !u.email && !u.phone)) {
+      return EMAIL_SIGNATURE_FALLBACK;
+    }
+    const lines = ['', 'Best regards,', ''];
+    const name = String(u.name || '').trim();
+    const title = roleSignatureTitle(u.role);
+    const email = String(u.email || '').trim();
+    const phone = formatSignaturePhone(u.phone);
+    if (name) lines.push(name);
+    if (title) lines.push(title);
+    lines.push(EMAIL_FROM_LABEL);
+    if (email) lines.push(email);
+    else lines.push(EMAIL_CONTACT);
+    if (phone) lines.push(phone);
+    lines.push(EMAIL_WEBSITE);
+    return lines.join('\n');
+  }
+
+  function getEmailSignature() {
+    return buildEmailSignature(getCrmEmailUser());
+  }
 
   const FOLLOW_UP_SMS = [
     {
@@ -288,7 +397,7 @@
 
   function defaultLeadEmailBody(lead) {
     const def = UNIVERSAL_EMAIL_TEMPLATES[0];
-    return fillEmailTemplate(def.template, lead) + EMAIL_SIGNATURE;
+    return fillEmailTemplate(def.template, lead) + getEmailSignature();
   }
 
   /**
@@ -305,7 +414,7 @@
       subject: def.subject
         ? fillEmailTemplate(def.subject, lead)
         : defaultLeadEmailSubject(lead),
-      body: fillEmailTemplate(def.template, lead) + EMAIL_SIGNATURE,
+      body: fillEmailTemplate(def.template, lead) + getEmailSignature(),
     }));
   }
 
@@ -457,7 +566,9 @@
 
   function openEmailChoiceMenu(anchorEl, lead) {
     if (!anchorEl || !lead) return;
-    openMessageChoiceMenu(anchorEl, getLeadEmailOptions(lead), 'sfEmailChoiceMenu');
+    loadCrmEmailUser().finally(() => {
+      openMessageChoiceMenu(anchorEl, getLeadEmailOptions(lead), 'sfEmailChoiceMenu');
+    });
   }
 
   /**
@@ -505,6 +616,9 @@
   global.sfGetLeadEmailOptions = getLeadEmailOptions;
   global.sfGetStageEmailDefinitions = getStageEmailDefinitions;
   global.sfFillEmailTemplate = fillEmailTemplate;
+  global.sfBuildEmailSignature = buildEmailSignature;
+  global.sfSetCrmEmailUser = setCrmEmailUser;
+  global.sfLoadCrmEmailUser = loadCrmEmailUser;
   global.sfGetStageSmsDefinitions = getStageSmsDefinitions;
   global.sfFillSmsTemplate = fillSmsTemplate;
   global.sfBuildTelHref = buildTelHref;
@@ -520,4 +634,6 @@
   global.STAGE_SMS_TEMPLATES = STAGE_SMS_TEMPLATES;
   global.STAGE_EMAIL_TEMPLATES = STAGE_EMAIL_TEMPLATES;
   global.UNIVERSAL_EMAIL_TEMPLATES = UNIVERSAL_EMAIL_TEMPLATES;
+
+  loadCrmEmailUser();
 })(typeof window !== 'undefined' ? window : globalThis);

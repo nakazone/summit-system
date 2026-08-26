@@ -149,6 +149,11 @@ fetch('/api/auth/session', { credentials: 'include' })
         }
         crmUserPermissions = Array.isArray(u.permissions) ? u.permissions : [];
         crmUserRole = u.role || '';
+        if (typeof window.sfSetCrmEmailUser === 'function') {
+            window.sfSetCrmEmailUser(u);
+        } else {
+            window.sfCrmSessionUser = u;
+        }
         const disp = (u.name && String(u.name).trim()) || u.email || 'Utilizador';
         const sn = document.getElementById('sidebarUserName');
         const sr = document.getElementById('sidebarUserRole');

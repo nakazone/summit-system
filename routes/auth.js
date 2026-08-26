@@ -227,6 +227,24 @@ export async function checkSession(req, res) {
       } catch (_) {
         /* mantém permissionKeys já na sessão */
       }
+      let phone = null;
+      try {
+        const pool = await getDBConnection();
+        if (pool) {
+          const [cols] = await pool.query('SHOW COLUMNS FROM users');
+          const columnNames = (cols || []).map((c) => c.Field);
+          if (columnNames.includes('phone')) {
+            const [rows] = await pool.query('SELECT phone FROM users WHERE id = ? LIMIT 1', [
+              req.session.userId,
+            ]);
+            if (rows && rows.length && rows[0].phone) {
+              phone = String(rows[0].phone).trim() || null;
+            }
+          }
+        }
+      } catch (_) {
+        /* phone opcional */
+      }
       return res.json({
         success: true,
         authenticated: true,
@@ -235,6 +253,7 @@ export async function checkSession(req, res) {
           email: req.session.userEmail,
           role: req.session.userRole,
           name: req.session.userName,
+          phone,
           must_change_password: !!req.session.mustChangePassword,
           permissions: req.session.permissionKeys || [],
         },
