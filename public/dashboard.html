@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#0d0d14">
+    <meta name="theme-color" content="#1c1c1f">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Summit Flooring - Dashboard</title>
@@ -15,7 +15,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
     <link rel="stylesheet" href="styles.css?v=20260827-page-panel">
     <link rel="stylesheet" href="design-system.css?v=20260826-ipad">
-    <link rel="stylesheet" href="mobile-design-system.css?v=20260827-iphone-ux">
+    <link rel="stylesheet" href="mobile-design-system.css?v=20260827-summit-mobile">
     <link rel="stylesheet" href="crm-responsive.css?v=20260827-shell">
     <link rel="stylesheet" href="crm-page.css?v=20260827-page-panel">
     <link rel="stylesheet" href="crm-toast.css?v=20260827-iphone-ux">
@@ -40,30 +40,30 @@
     <div class="mobile-more-backdrop" id="mobileMoreBackdrop" hidden aria-hidden="true"></div>
     <div class="mobile-more-sheet" id="mobileMoreSheet" role="dialog" aria-modal="true" aria-labelledby="mobileMoreSheetTitle" hidden>
         <div class="mobile-more-sheet__handle" aria-hidden="true"></div>
-        <h2 class="mobile-more-sheet__title" id="mobileMoreSheetTitle">Mais opções</h2>
+        <h2 class="mobile-more-sheet__title" id="mobileMoreSheetTitle">Mais</h2>
         <nav class="mobile-more-sheet__nav" aria-label="Mais módulos">
-            <a href="marketing.html" class="mobile-more-sheet__btn" data-crm-permission="reports.view"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" style="display:block;margin:0 auto;color:var(--text-dark)" aria-hidden="true"><path d="M3 11v2a1 1 0 001 1h2l4 9V4L6 11H4a1 1 0 00-1 1z"/><path d="M16 9a4 4 0 010 8"/><path d="M19 6a8 8 0 010 12"/></svg></span> Marketing</a>
-            <button type="button" class="mobile-more-sheet__btn" data-page="leads" data-crm-permission="leads.view"><span class="mobile-more-sheet__emoji" aria-hidden="true">📋</span> Leads</button>
-            <a href="onsite-quote.html" class="mobile-more-sheet__btn" data-crm-permission="quotes.create"><span class="mobile-more-sheet__emoji" aria-hidden="true">📐</span> Field quote</a>
-            <button type="button" class="mobile-more-sheet__btn" data-page="schedule" data-crm-permission="visits.view"><span class="mobile-more-sheet__emoji" aria-hidden="true">📅</span> Agenda</button>
-            <a href="projects.html" class="mobile-more-sheet__btn" data-crm-permission="projects.view"><span class="mobile-more-sheet__emoji" aria-hidden="true">🔧</span> Projetos</a>
-            <a href="financial.html" class="mobile-more-sheet__btn" data-crm-permission="contracts.view"><span class="mobile-more-sheet__emoji" aria-hidden="true">💵</span> Financeiro</a>
-            <a href="payroll-module.html" class="mobile-more-sheet__btn" data-crm-permission="payroll.view"><span class="mobile-more-sheet__emoji" aria-hidden="true">👷</span> Folha de pagamento</a>
+            <a href="marketing.html" class="mobile-more-sheet__btn" data-crm-permission="reports.view"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 11v2a1 1 0 001 1h2l4 9V4L6 11H4a1 1 0 00-1 1z"/><path d="M16 9a4 4 0 010 8"/><path d="M19 6a8 8 0 010 12"/></svg></span> Marketing</a>
+            <button type="button" class="mobile-more-sheet__btn" data-page="leads" data-crm-permission="leads.view"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><path d="M9 5a2 2 0 012-2h2a2 2 0 012 2v0a2 2 0 01-2 2H9a2 2 0 01-2-2v0z"/><path d="M9 12h6"/><path d="M9 16h6"/></svg></span> Leads</button>
+            <a href="onsite-quote.html" class="mobile-more-sheet__btn" data-crm-permission="quotes.create"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M12 10v6"/></svg></span> Field quote</a>
+            <button type="button" class="mobile-more-sheet__btn" data-page="schedule" data-crm-permission="visits.view"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg></span> Agenda</button>
+            <a href="projects.html" class="mobile-more-sheet__btn" data-crm-permission="projects.view"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></span> Projetos</a>
+            <a href="financial.html" class="mobile-more-sheet__btn" data-crm-permission="contracts.view"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></span> Financeiro</a>
+            <a href="payroll-module.html" class="mobile-more-sheet__btn" data-crm-permission="payroll.view"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span> Folha</a>
             <details class="mobile-more-sheet__cadastro">
-                <summary class="mobile-more-sheet__btn mobile-more-sheet__cadastro-summary"><span class="mobile-more-sheet__emoji" aria-hidden="true">📋</span> Cadastros</summary>
+                <summary class="mobile-more-sheet__btn mobile-more-sheet__cadastro-summary"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span> Cadastros</summary>
                 <div class="mobile-more-sheet__cadastro-panel">
-                    <a href="products-erp.html" class="mobile-more-sheet__btn mobile-more-sheet__btn--sub" data-crm-permission="quotes.view"><span class="mobile-more-sheet__emoji" aria-hidden="true">📦</span> Produtos</a>
-                    <a href="financial.html#vendors" class="mobile-more-sheet__btn mobile-more-sheet__btn--sub" data-crm-permission="contracts.view"><span class="mobile-more-sheet__emoji" aria-hidden="true">🏷</span> Fornecedores</a>
-                    <a href="quote-catalog.html" class="mobile-more-sheet__btn mobile-more-sheet__btn--sub" data-crm-permission="quotes.edit"><span class="mobile-more-sheet__emoji" aria-hidden="true">📑</span> Serviços</a>
-                    <a href="dashboard.html?page=customers" class="mobile-more-sheet__btn mobile-more-sheet__btn--sub" data-crm-permission="customers.view"><span class="mobile-more-sheet__emoji" aria-hidden="true">👥</span> Clientes</a>
-                    <a href="dashboard.html?page=customers&amp;type=builder" class="mobile-more-sheet__btn mobile-more-sheet__btn--sub" data-crm-permission="customers.view"><span class="mobile-more-sheet__emoji" aria-hidden="true">🏗</span> Builders</a>
-                    <a href="financial.html#notas-recibos" class="mobile-more-sheet__btn mobile-more-sheet__btn--sub" data-crm-permission="contracts.view"><span class="mobile-more-sheet__emoji" aria-hidden="true">🧾</span> Notas / recibos</a>
-                    <a href="financial.html#recebimentos" class="mobile-more-sheet__btn mobile-more-sheet__btn--sub" data-crm-permission="contracts.view"><span class="mobile-more-sheet__emoji" aria-hidden="true">💰</span> Recebimentos</a>
+                    <a href="products-erp.html" class="mobile-more-sheet__btn mobile-more-sheet__btn--sub" data-crm-permission="quotes.view"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></span> Produtos</a>
+                    <a href="financial.html#vendors" class="mobile-more-sheet__btn mobile-more-sheet__btn--sub" data-crm-permission="contracts.view"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></span> Fornecedores</a>
+                    <a href="quote-catalog.html" class="mobile-more-sheet__btn mobile-more-sheet__btn--sub" data-crm-permission="quotes.edit"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/></svg></span> Serviços</a>
+                    <a href="dashboard.html?page=customers" class="mobile-more-sheet__btn mobile-more-sheet__btn--sub" data-crm-permission="customers.view"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span> Clientes</a>
+                    <a href="dashboard.html?page=customers&amp;type=builder" class="mobile-more-sheet__btn mobile-more-sheet__btn--sub" data-crm-permission="customers.view"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg></span> Builders</a>
+                    <a href="financial.html#notas-recibos" class="mobile-more-sheet__btn mobile-more-sheet__btn--sub" data-crm-permission="contracts.view"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/></svg></span> Notas / recibos</a>
+                    <a href="financial.html#recebimentos" class="mobile-more-sheet__btn mobile-more-sheet__btn--sub" data-crm-permission="contracts.view"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></span> Recebimentos</a>
                 </div>
             </details>
-            <button type="button" class="mobile-more-sheet__btn" data-page="activities" data-crm-permission="activities.view"><span class="mobile-more-sheet__emoji" aria-hidden="true">📝</span> Atividades</button>
-            <button type="button" class="mobile-more-sheet__btn" data-page="users" data-crm-permission="users.view"><span class="mobile-more-sheet__emoji" aria-hidden="true">👤</span> Utilizadores</button>
-            <a href="change-password.html" class="mobile-more-sheet__btn">Definições da conta</a>
+            <button type="button" class="mobile-more-sheet__btn" data-page="activities" data-crm-permission="activities.view"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/></svg></span> Atividades</button>
+            <button type="button" class="mobile-more-sheet__btn" data-page="users" data-crm-permission="users.view"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> Utilizadores</button>
+            <a href="change-password.html" class="mobile-more-sheet__btn"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span> Conta</a>
         </nav>
         <button type="button" class="mobile-more-sheet__btn mobile-more-sheet__btn--danger" id="mobileMoreLogout">Sair da conta</button>
     </div>
@@ -71,34 +71,36 @@
     <div class="mobile-more-backdrop" id="sfFabBackdrop" hidden aria-hidden="true"></div>
     <div class="mobile-more-sheet sf-fab-sheet" id="sfFabSheet" role="dialog" aria-modal="true" aria-labelledby="sfFabSheetTitle" hidden>
         <div class="sf-fab-sheet__handle mobile-more-sheet__handle" aria-hidden="true"></div>
-        <h2 class="sf-fab-sheet__title" id="sfFabSheetTitle">Criar rápido</h2>
+        <h2 class="sf-fab-sheet__title" id="sfFabSheetTitle">Criar</h2>
         <nav class="mobile-more-sheet__nav" aria-label="Ações">
-            <button type="button" class="sf-fab-sheet__btn sf-fab-sheet__btn--primary mobile-more-sheet__btn" id="sfFabQuickQuote" data-crm-permission="quotes.create">Field quote</button>
-            <button type="button" class="sf-fab-sheet__btn mobile-more-sheet__btn" id="sfFabNewQuote" data-crm-permission="quotes.edit">Novo orçamento</button>
-            <button type="button" class="sf-fab-sheet__btn mobile-more-sheet__btn" id="sfFabNewClient" data-crm-permission="customers.create">Novo cliente</button>
-            <button type="button" class="sf-fab-sheet__btn mobile-more-sheet__btn" id="sfFabSchedule" data-crm-permission="visits.view">Ver agenda</button>
-            <button type="button" class="sf-fab-sheet__btn mobile-more-sheet__btn" id="sfFabFinance" data-crm-permission="contracts.view">Financeiro</button>
+            <button type="button" class="sf-fab-sheet__btn sf-fab-sheet__btn--primary mobile-more-sheet__btn" id="sfFabQuickQuote" data-crm-permission="quotes.create"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M12 10v6"/></svg></span> Field quote</button>
+            <button type="button" class="sf-fab-sheet__btn mobile-more-sheet__btn" id="sfFabNewQuote" data-crm-permission="quotes.edit"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/></svg></span> Orçamento</button>
+            <button type="button" class="sf-fab-sheet__btn mobile-more-sheet__btn" id="sfFabNewClient" data-crm-permission="customers.create"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6"/><path d="M23 11h-6"/></svg></span> Cliente</button>
+            <button type="button" class="sf-fab-sheet__btn mobile-more-sheet__btn" id="sfFabSchedule" data-crm-permission="visits.view"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg></span> Agenda</button>
+            <button type="button" class="sf-fab-sheet__btn mobile-more-sheet__btn" id="sfFabFinance" data-crm-permission="contracts.view"><span class="mobile-more-sheet__emoji" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></span> Financeiro</button>
         </nav>
     </div>
 
     <nav class="sf-bottom-nav mobile-tab-bar" id="mobileTabBar" aria-label="Navegação principal">
         <button type="button" class="mobile-tab-bar__item mobile-tab-bar__item--active touchable" data-mobile-tab="dashboard" aria-current="page">
-            <span class="mobile-tab-bar__icon" aria-hidden="true">⌂</span>
+            <span class="mobile-tab-bar__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 10v10h14V10"/></svg></span>
             <span class="mobile-tab-bar__label">Home</span>
         </button>
         <button type="button" class="mobile-tab-bar__item touchable" data-mobile-tab="quotes">
-            <span class="mobile-tab-bar__icon" aria-hidden="true">📄</span>
+            <span class="mobile-tab-bar__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/></svg></span>
             <span class="mobile-tab-bar__label">Quotes</span>
         </button>
         <button type="button" class="mobile-tab-bar__item touchable" data-mobile-tab="customers">
-            <span class="mobile-tab-bar__icon" aria-hidden="true">👥</span>
+            <span class="mobile-tab-bar__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>
             <span class="mobile-tab-bar__label">Clients</span>
         </button>
         <div class="sf-bottom-nav__fab-slot" aria-hidden="true">
-            <button type="button" class="sf-fab touchable" id="sfMobileFab" aria-label="Field quote" title="Toque: Field quote · Segure: mais opções">+</button>
+            <button type="button" class="sf-fab touchable" id="sfMobileFab" aria-label="Field quote" title="Field quote">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+            </button>
         </div>
         <button type="button" class="mobile-tab-bar__item touchable" data-mobile-tab="more" aria-label="Mais módulos">
-            <span class="mobile-tab-bar__icon" aria-hidden="true">⋯</span>
+            <span class="mobile-tab-bar__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="5" cy="12" r="1.75"/><circle cx="12" cy="12" r="1.75"/><circle cx="19" cy="12" r="1.75"/></svg></span>
             <span class="mobile-tab-bar__label">Mais</span>
         </button>
     </nav>
@@ -275,9 +277,9 @@
                             <div id="sfMobileKpiGrid" class="sf-kpi-grid"></div>
                         </div>
                         <div class="sf-quick-actions sf-mobile-only--flex" id="sfMobileQuickActions"></div>
-                        <p class="sf-title" style="margin:12px 0 8px;">Atividades pendentes</p>
+                        <p class="sf-title" style="margin:12px 0 8px;">Pendentes</p>
                         <div id="sfMobileActivityChips" class="sf-quick-actions sf-mobile-only--flex"></div>
-                        <p class="sf-title" style="margin:12px 0 8px;">Orçamentos recentes</p>
+                        <p class="sf-title" style="margin:12px 0 8px;">Recentes</p>
                         <div id="sfMobileRecentQuotes" class="sf-quotes-card-list"></div>
                     </div>
 
@@ -1607,7 +1609,7 @@
     <script src="notification-center.js"></script>
     <script src="crm-viewport.js?v=20260826-ipad"></script>
     <script src="marketing-dashboard.js"></script>
-    <script src="dashboard.js?v=20260827-iphone-ux"></script>
+    <script src="dashboard.js?v=20260827-summit-mobile"></script>
     <script src="pipeline-stage-labels.js?v=20260510-follow-up-status"></script>
     <script src="lead-contact-links.js?v=20260826-email-html-sig"></script>
     <script src="crm-address-autocomplete.js?v=20260528-pac-dismiss"></script>

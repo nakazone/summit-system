@@ -788,42 +788,6 @@ document.getElementById('sfMobileFab')?.addEventListener('click', () => {
     });
 })();
 
-(function hintFabOnce() {
-    const run = () => {
-        const fab = document.getElementById('sfMobileFab');
-        const slot = fab && fab.closest('.sf-bottom-nav__fab-slot');
-        if (!fab || !slot) return;
-        if (!document.body.classList.contains('sf-mobile-shell')) return;
-        try {
-            if (localStorage.getItem('sf_fab_hint_seen') === '1') return;
-        } catch (_) {
-            return;
-        }
-        fab.classList.add('sf-fab--hint');
-        let hint = slot.querySelector('.sf-fab-hint');
-        if (!hint) {
-            hint = document.createElement('span');
-            hint.className = 'sf-fab-hint';
-            hint.textContent = 'Toque = Field quote';
-            slot.appendChild(hint);
-        }
-        window.setTimeout(() => {
-            fab.classList.remove('sf-fab--hint');
-            if (hint) hint.remove();
-            try {
-                localStorage.setItem('sf_fab_hint_seen', '1');
-            } catch (_) {
-                /* ignore */
-            }
-        }, 7200);
-    };
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => window.setTimeout(run, 400));
-    } else {
-        window.setTimeout(run, 400);
-    }
-})();
-
 document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
     const fabSheet = document.getElementById('sfFabSheet');
@@ -1941,11 +1905,11 @@ function renderSfMobileDashboardBlocks() {
     const qa = document.getElementById('sfMobileQuickActions');
     if (qa) {
         qa.innerHTML = `
-            <button type="button" class="sf-quick-pill touchable" data-crm-permission="quotes.create" onclick="location.href='onsite-quote.html'"><span aria-hidden="true">📐</span> Field quote</button>
-            <button type="button" class="sf-quick-pill touchable" data-crm-permission="quotes.edit" onclick="location.href='quote-builder.html'"><span aria-hidden="true">📋</span> + Quote</button>
-            <button type="button" class="sf-quick-pill touchable" data-crm-permission="customers.create" onclick="showPage('customers'); showNewCustomerModal();"><span aria-hidden="true">👤</span> + Cliente</button>
-            <button type="button" class="sf-quick-pill touchable" data-crm-permission="visits.view" onclick="showPage('schedule')"><span aria-hidden="true">📅</span> Ver agenda</button>
-            <button type="button" class="sf-quick-pill touchable" data-crm-permission="contracts.view" onclick="showPage('financeiro')"><span aria-hidden="true">💰</span> Financeiro</button>`;
+            <button type="button" class="sf-quick-pill touchable" data-crm-permission="quotes.create" onclick="location.href='onsite-quote.html'"><span class="sf-pill-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M12 10v6"/></svg></span>Field quote</button>
+            <button type="button" class="sf-quick-pill touchable" data-crm-permission="quotes.edit" onclick="location.href='quote-builder.html'"><span class="sf-pill-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg></span>Quote</button>
+            <button type="button" class="sf-quick-pill touchable" data-crm-permission="customers.create" onclick="showPage('customers'); showNewCustomerModal();"><span class="sf-pill-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6"/><path d="M23 11h-6"/></svg></span>Cliente</button>
+            <button type="button" class="sf-quick-pill touchable" data-crm-permission="visits.view" onclick="showPage('schedule')"><span class="sf-pill-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg></span>Agenda</button>
+            <button type="button" class="sf-quick-pill touchable" data-crm-permission="contracts.view" onclick="showPage('financeiro')"><span class="sf-pill-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></span>Financeiro</button>`;
         if (typeof applyCrmNavPermissions === 'function') {
             applyCrmNavPermissions(crmUserPermissions, crmUserRole);
         }
@@ -1957,19 +1921,19 @@ function renderSfMobileDashboardBlocks() {
         (d.new_leads_urgent || []).slice(0, 6).forEach((l) => {
             const nm = escapeHtmlCrm(l.name || 'Lead');
             chips.push(
-                `<button type="button" class="sf-quick-pill touchable" onclick="showPage('leads')"><span aria-hidden="true">⚡</span> ${nm}</button>`
+                `<button type="button" class="sf-quick-pill touchable" onclick="showPage('leads')">${nm}</button>`
             );
         });
         (d.upcoming_visits || []).slice(0, 6).forEach((v) => {
             const label = escapeHtmlCrm(v.lead_name || v.customer_name || v.project_name || 'Visita');
             chips.push(
-                `<button type="button" class="sf-quick-pill touchable" onclick="showPage('schedule')"><span aria-hidden="true">📍</span> ${label}</button>`
+                `<button type="button" class="sf-quick-pill touchable" onclick="showPage('schedule')">${label}</button>`
             );
         });
         act.innerHTML =
             chips.length > 0
                 ? chips.join('')
-                : '<span class="sf-empty-inline" role="status">Tudo em dia — sem follow-ups ou visitas urgentes</span>';
+                : '<span class="sf-empty-inline" role="status">Nada pendente</span>';
     }
 }
 
@@ -2773,12 +2737,12 @@ function sfQuotesMobileSkeleton(count) {
 
 function sfQuotesMobileEmptyHtml() {
     return `<div class="ds-empty-state" role="status">
-<div class="ds-empty-state__icon" aria-hidden="true">📄</div>
-<h3 class="ds-empty-state__title">Nenhum orçamento ainda</h3>
-<p class="ds-empty-state__text">Toque no + para Field quote, ou crie um orçamento completo.</p>
+<svg class="ds-empty-state__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+<h3 class="ds-empty-state__title">Sem orçamentos</h3>
+<p class="ds-empty-state__text">Comece com Field quote ou um orçamento completo.</p>
 <div class="ds-empty-state__actions" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
 <button type="button" class="btn btn-primary touchable" data-crm-permission="quotes.create" onclick="location.href='onsite-quote.html'">Field quote</button>
-<button type="button" class="btn touchable" data-crm-permission="quotes.edit" onclick="location.href='quote-builder.html'" style="min-height:48px;border-radius:12px;border:1px solid var(--sf-border-mid);background:transparent;color:var(--sf-text-primary)">+ Orçamento</button>
+<button type="button" class="btn touchable" data-crm-permission="quotes.edit" onclick="location.href='quote-builder.html'" style="min-height:48px;border-radius:12px;border:1px solid var(--sf-border-mid);background:transparent;color:var(--sf-text-primary)">Orçamento</button>
 </div>
 </div>`;
 }

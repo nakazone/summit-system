@@ -127,11 +127,11 @@
     dock.id = 'crmPhoneDock';
     dock.setAttribute('aria-label', 'Navegação rápida');
     dock.innerHTML =
-      '<a class="crm-phone-dock__item" href="dashboard.html"><span class="crm-phone-dock__icon" aria-hidden="true">⌂</span>Home</a>' +
-      '<a class="crm-phone-dock__item" href="dashboard.html?page=quotes"><span class="crm-phone-dock__icon" aria-hidden="true">📄</span>Quotes</a>' +
-      '<a class="crm-phone-dock__item crm-phone-dock__item--accent" href="onsite-quote.html" aria-label="Field quote"><span class="crm-phone-dock__fab" aria-hidden="true">+</span></a>' +
-      '<a class="crm-phone-dock__item" href="dashboard.html?page=customers"><span class="crm-phone-dock__icon" aria-hidden="true">👥</span>Clients</a>' +
-      '<a class="crm-phone-dock__item" href="dashboard.html?page=leads"><span class="crm-phone-dock__icon" aria-hidden="true">⋯</span>Mais</a>';
+      '<a class="crm-phone-dock__item" href="dashboard.html"><span class="crm-phone-dock__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 10v10h14V10"/></svg></span>Home</a>' +
+      '<a class="crm-phone-dock__item" href="dashboard.html?page=quotes"><span class="crm-phone-dock__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/></svg></span>Quotes</a>' +
+      '<a class="crm-phone-dock__item crm-phone-dock__item--accent" href="onsite-quote.html" aria-label="Field quote"><span class="crm-phone-dock__fab" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span></a>' +
+      '<a class="crm-phone-dock__item" href="dashboard.html?page=customers"><span class="crm-phone-dock__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>Clients</a>' +
+      '<a class="crm-phone-dock__item" href="dashboard.html?page=leads"><span class="crm-phone-dock__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="5" cy="12" r="1.75"/><circle cx="12" cy="12" r="1.75"/><circle cx="19" cy="12" r="1.75"/></svg></span>Mais</a>';
     document.body.appendChild(dock);
     document.body.classList.add('has-crm-phone-dock');
     return dock;
