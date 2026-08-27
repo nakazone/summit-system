@@ -6,7 +6,9 @@
     <title>Lead Details - Summit Flooring CRM</title>
     <link rel="stylesheet" href="styles.css?v=20260826-ipad">
     <link rel="stylesheet" href="design-system.css?v=20260826-ipad">
-    <link rel="stylesheet" href="crm-responsive.css?v=20260826-ipad">
+    <link rel="stylesheet" href="crm-shared-nav.css?v=20260827-shell">
+    <link rel="stylesheet" href="crm-responsive.css?v=20260827-shell">
+    <link rel="stylesheet" href="crm-page.css?v=20260827-shell">
     <style>
         .lead-detail-container {
             max-width: 1400px;
@@ -213,6 +215,8 @@
             margin-bottom: 10px;
         }
     </style>
+  <link rel="stylesheet" href="mobile-design-system.css?v=20260827-shell" />
+  <link rel="stylesheet" href="crm-toast.css" />
 </head>
 <body class="dashboard-app-body">
     <header class="mobile-app-header" id="mobileAppHeader" aria-label="Barra superior">
@@ -231,19 +235,20 @@
                 <img src="assets/logoSummitFlooring.png" alt="Summit Flooring" class="logo-image" onerror="this.style.display='none'">
                 <h1><span class="mobile-hidden">Summit Flooring CRM</span><span class="mobile-only">CRM</span></h1>
             </div>
-            <nav class="sidebar-nav">
-                <a href="dashboard.html" class="nav-item"><span>📊</span> Dashboard</a>
-                <a href="dashboard.html?page=leads" class="nav-item"><span>📋</span> Leads</a>
-                <a href="dashboard.html?page=customers" class="nav-item"><span>👥</span> Customers</a>
-                <a href="dashboard.html?page=quotes" class="nav-item"><span>💰</span> Quotes</a>
-                <a href="dashboard.html?page=projects" class="nav-item"><span>🏗️</span> Projects</a>
-                <a href="dashboard.html?page=schedule" class="nav-item"><span>📅</span> Schedule</a>
-                <a href="dashboard.html?page=financeiro" class="nav-item"><span>💵</span> Financeiro</a>
-                <a href="dashboard.html?page=activities" class="nav-item"><span>📝</span> Activities</a>
-                <a href="dashboard.html?page=users" class="nav-item"><span>👤</span> Users</a>
+            <nav class="sidebar-nav" aria-label="Navegação CRM">
+                <div id="crmSharedNavRoot" data-layout="sidebar"></div>
             </nav>
             <div class="sidebar-footer">
-                <button id="logoutBtn" class="btn">Logout</button>
+                <div class="sidebar-user-bar">
+                    <div class="sidebar-user-bar__avatar" id="sidebarUserAvatar" aria-hidden="true">—</div>
+                    <div class="sidebar-user-bar__text">
+                        <span class="sidebar-user-bar__name" id="sidebarUserName">—</span>
+                        <span class="sidebar-user-bar__role" id="sidebarUserRole"></span>
+                    </div>
+                    <button type="button" id="logoutBtn" class="sidebar-logout-btn" title="Sair" aria-label="Terminar sessão">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+                    </button>
+                </div>
             </div>
         </aside>
 
@@ -733,13 +738,15 @@
         </div>
     </div>
 
-    <script src="crm-viewport.js?v=20260826-ipad"></script>
-    <script src="crm-mobile-chrome.js?v=20260826-ipad"></script>
+    <script src="crm-viewport.js?v=20260827-shell"></script>
+    <script src="crm-mobile-chrome.js?v=20260827-shell"></script>
+    <script src="crm-shared-nav.js?v=20260827-shell"></script>
     <script src="pipeline-stage-labels.js?v=20260506-kanban-pt"></script>
     <script src="lead-contact-links.js?v=20260826-email-html-sig"></script>
     <script src="crm-address-autocomplete.js?v=20260528-pac-dismiss"></script>
     <script src="lead-visit-calendar-format.js?v=20260528-cal-address"></script>
     <script src="crm-device-calendar.js?v=20260819-ipad-ics"></script>
     <script src="lead-detail.js?v=20260826-email-signature"></script>
+  <script src="crm-toast.js"></script>
 </body>
 </html>

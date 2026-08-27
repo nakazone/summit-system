@@ -10,7 +10,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="stylesheet" href="styles.css?v=20260819-menu-fix-v2" />
   <link rel="stylesheet" href="design-system.css" />
-  <link rel="stylesheet" href="crm-shared-nav.css?v=11" />
+  <link rel="stylesheet" href="crm-shared-nav.css?v=20260827-shell" />
   <link rel="stylesheet" href="crm-toast.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -40,6 +40,9 @@
     .bpf-banner { display: none; padding: 10px 12px; border-radius: 8px; background: #fff8e6; border: 1px solid #e6d9a8; color: #5c4a1a; font-size: 13px; margin-bottom: 12px; }
     .bpf-banner.on { display: block; }
   </style>
+  <link rel="stylesheet" href="crm-responsive.css?v=20260827-shell" />
+  <link rel="stylesheet" href="mobile-design-system.css?v=20260827-shell" />
+  <link rel="stylesheet" href="crm-page.css?v=20260827-shell" />
 </head>
 <body class="dashboard-app-body bpf-page-body payroll-sidebar-page">
   <header class="mobile-app-header" id="mobileAppHeader" aria-label="Barra superior">
@@ -151,26 +154,11 @@
     </main>
   </div>
 
-  <script src="crm-shared-nav.js?v=12"></script>
+  <script src="crm-shared-nav.js?v=20260827-shell"></script>
   <script src="builder-payments-forecast.js?v=1"></script>
-  <script>
-    (function () {
-      var t = document.getElementById('mobileMenuToggle');
-      var s = document.getElementById('bpfSidebar');
-      var o = document.getElementById('mobileOverlay');
-      if (t && s && o) {
-        t.addEventListener('click', function () {
-          var open = s.classList.toggle('mobile-open');
-          o.classList.toggle('active', open);
-          t.setAttribute('aria-expanded', open ? 'true' : 'false');
-        });
-        o.addEventListener('click', function () {
-          s.classList.remove('mobile-open');
-          o.classList.remove('active');
-          t.setAttribute('aria-expanded', 'false');
-        });
-      }
-    })();
-  </script>
+
+  <script src="crm-viewport.js?v=20260827-shell"></script>
+  <script src="crm-mobile-chrome.js?v=20260827-shell"></script>
+  <script src="crm-toast.js"></script>
 </body>
 </html>

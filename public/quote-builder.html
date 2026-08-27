@@ -10,7 +10,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="stylesheet" href="styles.css?v=20260819-menu-fix-v2" />
   <link rel="stylesheet" href="design-system.css?v=20260819-menu-fix-v2" />
-  <link rel="stylesheet" href="crm-shared-nav.css?v=12" />
+  <link rel="stylesheet" href="crm-shared-nav.css?v=20260827-shell" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = { corePlugins: { preflight: false } };
@@ -1530,6 +1530,9 @@
   </style>
   <link rel="stylesheet" href="crm-toast.css" />
   <link rel="stylesheet" href="crm-pdf-viewer.css?v=20260531" />
+  <link rel="stylesheet" href="crm-responsive.css?v=20260827-shell" />
+  <link rel="stylesheet" href="mobile-design-system.css?v=20260827-shell" />
+  <link rel="stylesheet" href="crm-page.css?v=20260827-shell" />
 </head>
 <body class="qb-dashboard-inner dashboard-app-body qb-sidebar-page">
   <header class="mobile-app-header" id="mobileAppHeader" aria-label="Barra superior">
@@ -2146,30 +2149,14 @@
 
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <script src="crm-address-autocomplete.js?v=20260819-quote-job"></script>
-  <script src="crm-shared-nav.js?v=12"></script>
+  <script src="crm-shared-nav.js?v=20260827-shell"></script>
   <script src="crm-toast.js"></script>
   <script src="crm-pdf-viewer.js?v=20260531"></script>
   <script src="lead-contact-links.js?v=20260826-email-html-sig"></script>
   <script src="quote-signature-auto.js?v=20260708"></script>
   <script src="quote-builder.js?v=20260819-client-lock"></script>
-  <script>
-    (function () {
-      var t = document.getElementById('mobileMenuToggle');
-      var s = document.getElementById('quoteBuilderSidebar');
-      var o = document.getElementById('mobileOverlay');
-      if (t && s && o) {
-        t.addEventListener('click', function () {
-          var open = s.classList.toggle('mobile-open');
-          o.classList.toggle('active', open);
-          t.setAttribute('aria-expanded', open ? 'true' : 'false');
-        });
-        o.addEventListener('click', function () {
-          s.classList.remove('mobile-open');
-          o.classList.remove('active');
-          t.setAttribute('aria-expanded', 'false');
-        });
-      }
-    })();
-  </script>
+
+  <script src="crm-viewport.js?v=20260827-shell"></script>
+  <script src="crm-mobile-chrome.js?v=20260827-shell"></script>
 </body>
 </html>

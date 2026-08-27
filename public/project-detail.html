@@ -12,9 +12,13 @@
 <link rel="stylesheet" href="styles.css?v=20260819-menu-fix-v2" />
   <link rel="stylesheet" href="design-system.css" />
   <link rel="stylesheet" href="mobile-design-system.css" />
+  <link rel="stylesheet" href="crm-shared-nav.css?v=20260827-shell" />
+  <link rel="stylesheet" href="crm-responsive.css?v=20260827-shell" />
+  <link rel="stylesheet" href="crm-page.css?v=20260827-shell" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="crm-toast.css" />
 </head>
 <body class="dashboard-app-body pd-body payroll-sidebar-page project-detail-page">
   <header class="mobile-app-header" id="mobileAppHeader" aria-label="Barra superior">
@@ -35,69 +39,8 @@
         <img src="/assets/logoSummitFlooring.png" alt="Summit Flooring" class="sidebar-brand-logo logo-image" width="104" height="104" onerror="this.style.display='none'" />
       </div>
 
-      <nav class="sidebar-nav" aria-label="Principal">
-        <div class="sidebar-nav-group">
-          <a href="dashboard.html" class="nav-item" data-crm-permission="projects.view">
-            <svg class="nav-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
-            Dashboard
-          </a>
-        </div>
-        <div class="sidebar-nav-group">
-          <p class="sidebar-nav-group-label">Comercial</p>
-          <a href="marketing.html" class="nav-item" data-crm-permission="reports.view">
-            <svg class="nav-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 11v2a1 1 0 001 1h2l4 9V4L6 11H4a1 1 0 00-1 1z"/><path d="M16 9a4 4 0 010 8"/><path d="M19 6a8 8 0 010 12"/></svg>
-            Marketing
-          </a>
-          <a href="dashboard.html?page=leads" class="nav-item" data-crm-permission="leads.view">
-            <svg class="nav-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><path d="M9 5a2 2 0 012-2h2a2 2 0 012 2v0a2 2 0 01-2 2H9a2 2 0 01-2-2v0z"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>
-            Leads
-          </a>
-          <a href="dashboard.html?page=crm" class="nav-item" data-crm-permission="pipeline.view">
-            <svg class="nav-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-            CRM
-          </a>
-          <a href="dashboard.html?page=customers" class="nav-item" data-crm-permission="customers.view">
-            <svg class="nav-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-            Clients
-          </a>
-        </div>
-        <div class="sidebar-nav-group">
-          <p class="sidebar-nav-group-label">Operações</p>
-          <a href="dashboard.html?page=quotes" class="nav-item" data-crm-permission="quotes.view">
-            <svg class="nav-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
-            Quotes
-          </a>
-          <a href="dashboard.html?page=schedule" class="nav-item" data-crm-permission="visits.view">
-            <svg class="nav-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg>
-            Schedule
-          </a>
-          <a href="projects.html" class="nav-item active" data-crm-permission="projects.view">
-            <svg class="nav-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/><path d="M5 3l4 4"/></svg>
-            Projetos
-          </a>
-        </div>
-        <div class="sidebar-nav-group">
-          <p class="sidebar-nav-group-label">Financeiro &amp; registo</p>
-          <a href="financial.html" class="nav-item" data-crm-permission="contracts.view">
-            <svg class="nav-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-            Financeiro
-          </a>
-          <a href="payroll-module.html" class="nav-item" data-crm-permission="payroll.view">
-            <svg class="nav-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-            Folha de pagamento
-          </a>
-          <a href="dashboard.html?page=activities" class="nav-item" data-crm-permission="activities.view">
-            <svg class="nav-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-            Activities
-          </a>
-        </div>
-        <div class="sidebar-nav-group">
-          <p class="sidebar-nav-group-label">Sistema</p>
-          <a href="dashboard.html?page=users" class="nav-item" data-crm-permission="users.view">
-            <svg class="nav-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            Users
-          </a>
-        </div>
+      <nav class="sidebar-nav" aria-label="Navegação CRM">
+        <div id="crmSharedNavRoot" data-layout="sidebar"></div>
       </nav>
 
       <div class="sidebar-footer">
@@ -188,30 +131,11 @@
 
   <input type="file" id="pd-file-input" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" capture="environment" style="position:fixed;left:-9999px;width:1px;height:1px;opacity:0" />
 
+  <script src="crm-viewport.js?v=20260827-shell"></script>
+  <script src="crm-mobile-chrome.js?v=20260827-shell"></script>
+  <script src="crm-shared-nav.js?v=20260827-shell"></script>
   <script src="crm-address-autocomplete.js?v=20260528-pac-dismiss"></script>
   <script src="project-detail.js?v=14"></script>
-  <script>
-    (function () {
-      var t = document.getElementById('mobileMenuToggle');
-      var s = document.getElementById('dashboardSidebar');
-      var o = document.getElementById('mobileOverlay');
-      if (t && s && o) {
-        t.addEventListener('click', function () {
-          var open = s.classList.toggle('mobile-open');
-          o.classList.toggle('active', open);
-          t.setAttribute('aria-expanded', open ? 'true' : 'false');
-        });
-        o.addEventListener('click', function () {
-          s.classList.remove('mobile-open');
-          o.classList.remove('active');
-          t.setAttribute('aria-expanded', 'false');
-        });
-      }
-      document.getElementById('logoutBtn')?.addEventListener('click', async function () {
-        try { await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }); } catch (e) {}
-        window.location.href = 'login.html';
-      });
-    })();
-  </script>
+  <script src="crm-toast.js"></script>
 </body>
 </html>

@@ -42,14 +42,22 @@ PDFs (quotes, invoices, payroll): paleta RGB equivalente em `modules/**/*Pdf.js`
 
 ## Layout
 
+- **Shell padrão (obrigatório em módulos internos CRM):**
+  1. `body.dashboard-app-body`
+  2. `#mobileAppHeader` (hamburger)
+  3. `.dashboard-container` + `#mobileOverlay`
+  4. `aside.dashboard-sidebar` + `#crmSharedNavRoot[data-layout="sidebar"]`
+  5. `main.dashboard-main` + `.crm-page` (conteúdo)
+- Assets: `crm-shared-nav.css/js`, `crm-responsive.css`, `mobile-design-system.css`, `crm-page.css`, `crm-viewport.js`, `crm-mobile-chrome.js` (`?v=20260827-shell`)
 - Sidebar CRM: `--crm-sidebar-width: 264px`, fundo primary
 - Shell responsivo: `public/crm-responsive.css` + `crm-mobile-chrome.js`
 - Breakpoints padronizados:
-  - **Phone** ≤767.98px — tab bar + shell (`sf-mobile-shell`)
+  - **Phone** ≤767.98px — tab bar + shell (`sf-mobile-shell`) no dashboard
   - **Tablet / iPad (incl. Pro 13")** 768–1366px — gaveta + hamburger, **sem** tab bar
   - **Desktop** ≥1367px — sidebar fixa
 - Tokens: `--crm-bp-phone-max`, `--crm-bp-tablet-max`, `--crm-bp-desktop-min`
 - Helpers JS: `CrmViewport.isPhone()` / `.isCompact()` / `.isDesktop()`
+- **Não usar** `crm-standalone-page` nem nav horizontal para módulos internos.
 
 ## Componentes
 

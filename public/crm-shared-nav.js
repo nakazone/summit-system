@@ -147,6 +147,9 @@
     if (file === 'lead-detail.html') {
       return base === 'dashboard.html' && (item.page || '') === 'leads';
     }
+    if (file === 'project-detail.html') {
+      return base === 'projects.html';
+    }
     if (file === 'quote-builder.html') {
       if ((item.page || '') === 'quotes') return true;
       if (base === 'quote-builder.html') return true;

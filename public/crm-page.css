@@ -1,0 +1,139 @@
+/**
+ * Shared CRM page content chrome — use inside .dashboard-main on every internal module.
+ * Pair with: dashboard-app-body + mobileAppHeader + dashboard-sidebar + #crmSharedNavRoot[data-layout=sidebar]
+ */
+:root {
+  --crm-page-max: 1400px;
+  --crm-page-pad-x: 1.25rem;
+  --crm-page-pad-y: 1rem;
+  --crm-page-bg: var(--color-bg-light, var(--bg-light, #f7f8fc));
+}
+
+body.dashboard-app-body {
+  background: var(--crm-page-bg);
+  min-height: 100vh;
+}
+
+body.dashboard-app-body .dashboard-main {
+  background: var(--crm-page-bg);
+}
+
+/* Canonical content wrapper */
+.crm-page {
+  width: 100%;
+  max-width: var(--crm-page-max);
+  margin: 0 auto;
+  padding: var(--crm-page-pad-y) var(--crm-page-pad-x) 2rem;
+  box-sizing: border-box;
+}
+
+.crm-page--wide {
+  max-width: none;
+}
+
+.crm-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.crm-page-header__text {
+  min-width: 0;
+  flex: 1;
+}
+
+.crm-page-eyebrow {
+  margin: 0 0 0.25rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted, #718096);
+}
+
+.crm-page-title {
+  margin: 0;
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  font-weight: 700;
+  color: var(--color-primary, #1c1c1f);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.crm-page-subtitle {
+  margin: 0.35rem 0 0;
+  font-size: 0.875rem;
+  color: var(--text-light, #4a5568);
+}
+
+.crm-page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.crm-page-section {
+  background: #fff;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 12px;
+  padding: 1rem 1.15rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 2px rgba(28, 28, 31, 0.04);
+}
+
+.crm-page-section__title {
+  margin: 0 0 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-primary, #1c1c1f);
+}
+
+/* Aliases so older page classes inherit the same rhythm */
+.proj-main,
+.bp-main,
+.fin-main,
+.payroll-main,
+.marketing-main,
+.pd-main {
+  width: 100%;
+  max-width: var(--crm-page-max);
+  margin: 0 auto;
+  padding: var(--crm-page-pad-y) var(--crm-page-pad-x) 2rem;
+  box-sizing: border-box;
+}
+
+.proj-page-body,
+.bp-page-body,
+.pd-body,
+.fin-page,
+.marketing-page {
+  background: var(--crm-page-bg) !important;
+}
+
+.proj-eyebrow,
+.bp-eyebrow {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted, #718096);
+}
+
+.proj-title,
+.bp-title {
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  font-weight: 700;
+  color: var(--color-primary, #1c1c1f);
+}
+
+@media (max-width: 767.98px) {
+  :root {
+    --crm-page-pad-x: 0.75rem;
+    --crm-page-pad-y: 0.75rem;
+  }
+}

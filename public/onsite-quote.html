@@ -11,9 +11,9 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
   <link rel="stylesheet" href="styles.css?v=20260819-menu-fix-v2" />
   <link rel="stylesheet" href="design-system.css?v=20260819-menu-fix-v2" />
-  <link rel="stylesheet" href="crm-shared-nav.css?v=20260826-ipad" />
-  <link rel="stylesheet" href="crm-responsive.css?v=20260826-ipad" />
-  <link rel="stylesheet" href="mobile-design-system.css?v=20260826-ipad" />
+  <link rel="stylesheet" href="crm-shared-nav.css?v=20260827-shell" />
+  <link rel="stylesheet" href="crm-responsive.css?v=20260827-shell" />
+  <link rel="stylesheet" href="mobile-design-system.css?v=20260827-shell" />
   <script src="crm-tailwind-brand.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -169,6 +169,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="crm-page.css?v=20260827-shell" />
 </head>
 <body class="dashboard-app-body os-wizard-page qb-sidebar-page">
   <p id="authBanner" class="hidden fixed top-0 left-0 right-0 z-[10060] bg-red-600 text-white text-center text-sm py-2 px-3"></p>
@@ -347,31 +348,11 @@
     </main>
   </div>
 
-  <script src="crm-viewport.js?v=20260826-ipad"></script>
-  <script src="crm-mobile-chrome.js?v=20260826-ipad"></script>
-  <script src="crm-shared-nav.js?v=20260826-ipad"></script>
+  <script src="crm-viewport.js?v=20260827-shell"></script>
+  <script src="crm-mobile-chrome.js?v=20260827-shell"></script>
+  <script src="crm-shared-nav.js?v=20260827-shell"></script>
   <script src="crm-toast.js"></script>
   <script src="onsite-quote.js?v=wizard-2-shell"></script>
-  <script>
-    (function () {
-      var t = document.getElementById('mobileMenuToggle');
-      var s = document.getElementById('onsiteQuoteSidebar');
-      var o = document.getElementById('mobileOverlay');
-      if (t && s && o) {
-        t.addEventListener('click', function () {
-          var open = s.classList.toggle('mobile-open');
-          o.classList.toggle('active', open);
-          t.setAttribute('aria-expanded', open ? 'true' : 'false');
-          document.body.classList.toggle('crm-drawer-open', open);
-        });
-        o.addEventListener('click', function () {
-          s.classList.remove('mobile-open');
-          o.classList.remove('active');
-          t.setAttribute('aria-expanded', 'false');
-          document.body.classList.remove('crm-drawer-open');
-        });
-      }
-    })();
-  </script>
+
 </body>
 </html>

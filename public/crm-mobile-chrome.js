@@ -22,6 +22,14 @@
       document.getElementById('marketingSidebar') ||
       document.getElementById('bpfSidebar') ||
       document.getElementById('quoteBuilderSidebar') ||
+      document.getElementById('onsiteQuoteSidebar') ||
+      document.getElementById('buildersSidebar') ||
+      document.getElementById('productsSidebar') ||
+      document.getElementById('catalogSidebar') ||
+      document.getElementById('suppliersSidebar') ||
+      document.getElementById('estimateSidebar') ||
+      document.getElementById('estimateAnalyticsSidebar') ||
+      document.getElementById('leadDetailSidebar') ||
       document.querySelector('.dashboard-container > .dashboard-sidebar') ||
       document.querySelector('aside.dashboard-sidebar')
     );

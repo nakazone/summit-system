@@ -10,14 +10,48 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="stylesheet" href="styles.css?v=20260826-ipad" />
   <link rel="stylesheet" href="design-system.css?v=20260826-ipad" />
-  <link rel="stylesheet" href="crm-shared-nav.css?v=12" />
+  <link rel="stylesheet" href="crm-shared-nav.css?v=20260827-shell" />
   <link rel="stylesheet" href="crm-toast.css" />
   <link rel="stylesheet" href="css/builders-portal.css?v=20260530-pricing-split" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="crm-responsive.css?v=20260827-shell" />
+  <link rel="stylesheet" href="mobile-design-system.css?v=20260827-shell" />
+  <link rel="stylesheet" href="crm-page.css?v=20260827-shell" />
 </head>
 <body class="dashboard-app-body bp-page-body payroll-sidebar-page">
+
+  <header class="mobile-app-header" id="mobileAppHeader" aria-label="Barra superior">
+    <button type="button" class="mobile-app-header__menu" id="mobileMenuToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="bpSidebar">
+      <span class="mobile-app-header__menu-icon" aria-hidden="true"></span>
+    </button>
+    <div class="mobile-app-header__brand">
+      <img src="/assets/logoSummitFlooring.png" alt="" class="mobile-app-header__logo" width="28" height="28" onerror="this.style.display='none'" />
+      <h1 class="mobile-app-header__title">Tabela</h1>
+    </div>
+  </header>
+
   <div class="dashboard-container">
-    <aside class="dashboard-sidebar" id="bpSidebar"><nav class="sidebar-nav"><div id="crmSharedNavRoot" data-layout="sidebar"></div></nav></aside>
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+        <aside class="dashboard-sidebar" id="bpSidebar" aria-label="Menu lateral">
+      <div class="sidebar-header">
+        <img src="/assets/logoSummitFlooring.png" alt="Summit Flooring" class="sidebar-brand-logo logo-image" width="104" height="104" onerror="this.style.display='none'" />
+      </div>
+      <nav class="sidebar-nav" aria-label="Navegação CRM">
+        <div id="crmSharedNavRoot" data-layout="sidebar"></div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user-bar">
+          <div class="sidebar-user-bar__avatar" id="sidebarUserAvatar" aria-hidden="true">—</div>
+          <div class="sidebar-user-bar__text">
+            <span class="sidebar-user-bar__name" id="sidebarUserName">—</span>
+            <span class="sidebar-user-bar__role" id="sidebarUserRole"></span>
+          </div>
+          <button type="button" id="logoutBtn" class="sidebar-logout-btn" title="Sair" aria-label="Terminar sessão">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+          </button>
+        </div>
+      </div>
+    </aside>
     <main class="dashboard-main">
       <div class="bp-main">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:1rem">
@@ -56,8 +90,10 @@
       </div>
     </main>
   </div>
+  <script src="crm-viewport.js?v=20260827-shell"></script>
+  <script src="crm-mobile-chrome.js?v=20260827-shell"></script>
+  <script src="crm-shared-nav.js?v=20260827-shell"></script>
   <script src="crm-toast.js"></script>
-  <script src="crm-shared-nav.js?v=20260826-ipad"></script>
   <script src="builder-pricing-admin.js?v=20260531-perm-fix"></script>
 </body>
 </html>

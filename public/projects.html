@@ -10,7 +10,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="stylesheet" href="styles.css?v=20260819-menu-fix-v2" />
   <link rel="stylesheet" href="design-system.css" />
-  <link rel="stylesheet" href="crm-shared-nav.css?v=11" />
+  <link rel="stylesheet" href="crm-shared-nav.css?v=20260827-shell" />
   <link rel="stylesheet" href="crm-toast.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -39,6 +39,9 @@
     .proj-form-row input, .proj-form-row select { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--sf-border); box-sizing: border-box; }
     .proj-modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
   </style>
+  <link rel="stylesheet" href="crm-responsive.css?v=20260827-shell" />
+  <link rel="stylesheet" href="mobile-design-system.css?v=20260827-shell" />
+  <link rel="stylesheet" href="crm-page.css?v=20260827-shell" />
 </head>
 <body class="dashboard-app-body proj-page-body payroll-sidebar-page">
   <header class="mobile-app-header" id="mobileAppHeader" aria-label="Barra superior">
@@ -168,27 +171,10 @@
       </form>
     </div>
   </div>
-
-  <script src="crm-shared-nav.js?v=12"></script>
+  <script src="crm-viewport.js?v=20260827-shell"></script>
+  <script src="crm-mobile-chrome.js?v=20260827-shell"></script>
+  <script src="crm-shared-nav.js?v=20260827-shell"></script>
+  <script src="crm-toast.js"></script>
   <script src="projects.js?v=1"></script>
-  <script>
-    (function () {
-      var t = document.getElementById('mobileMenuToggle');
-      var s = document.getElementById('projectsSidebar');
-      var o = document.getElementById('mobileOverlay');
-      if (t && s && o) {
-        t.addEventListener('click', function () {
-          var open = s.classList.toggle('mobile-open');
-          o.classList.toggle('active', open);
-          t.setAttribute('aria-expanded', open ? 'true' : 'false');
-        });
-        o.addEventListener('click', function () {
-          s.classList.remove('mobile-open');
-          o.classList.remove('active');
-          t.setAttribute('aria-expanded', 'false');
-        });
-      }
-    })();
-  </script>
 </body>
 </html>

@@ -11,11 +11,15 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="stylesheet" href="styles.css?v=20260819-menu-fix-v2" />
   <link rel="stylesheet" href="design-system.css" />
-  <link rel="stylesheet" href="crm-shared-nav.css?v=8" />
+  <link rel="stylesheet" href="crm-shared-nav.css?v=20260827-shell" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="marketing.css?v=4" />
+  <link rel="stylesheet" href="crm-responsive.css?v=20260827-shell" />
+  <link rel="stylesheet" href="mobile-design-system.css?v=20260827-shell" />
+  <link rel="stylesheet" href="crm-page.css?v=20260827-shell" />
+  <link rel="stylesheet" href="crm-toast.css" />
 </head>
 <body class="dashboard-app-body marketing-page payroll-sidebar-page">
   <header class="mobile-app-header" id="mobileAppHeader" aria-label="Barra superior">
@@ -362,26 +366,11 @@
     </div>
   </div>
 
-  <script src="crm-shared-nav.js?v=8"></script>
+  <script src="crm-shared-nav.js?v=20260827-shell"></script>
   <script src="marketing.js?v=4"></script>
-  <script>
-    (function () {
-      var t = document.getElementById('mobileMenuToggle');
-      var s = document.getElementById('marketingSidebar');
-      var o = document.getElementById('mobileOverlay');
-      if (t && s && o) {
-        t.addEventListener('click', function () {
-          var open = s.classList.toggle('mobile-open');
-          o.classList.toggle('active', open);
-          t.setAttribute('aria-expanded', open ? 'true' : 'false');
-        });
-        o.addEventListener('click', function () {
-          s.classList.remove('mobile-open');
-          o.classList.remove('active');
-          t.setAttribute('aria-expanded', 'false');
-        });
-      }
-    })();
-  </script>
+
+  <script src="crm-viewport.js?v=20260827-shell"></script>
+  <script src="crm-mobile-chrome.js?v=20260827-shell"></script>
+  <script src="crm-toast.js"></script>
 </body>
 </html>
