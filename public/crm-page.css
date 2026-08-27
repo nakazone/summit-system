@@ -1,5 +1,5 @@
 /**
- * Shared CRM page content chrome — use inside .dashboard-main on every internal module.
+ * Shared CRM page content chrome — matches dashboard `.page-content` panel.
  * Pair with: dashboard-app-body + mobileAppHeader + dashboard-sidebar + #crmSharedNavRoot[data-layout=sidebar]
  */
 :root {
@@ -7,6 +7,10 @@
   --crm-page-pad-x: 1.25rem;
   --crm-page-pad-y: 1rem;
   --crm-page-bg: var(--color-bg-light, var(--bg-light, #f7f8fc));
+  --crm-page-panel-bg: var(--bg-white, #ffffff);
+  --crm-page-panel-border: var(--sf-border, var(--color-border, var(--border-color, #e5e3dd)));
+  --crm-page-panel-radius: 8px;
+  --crm-page-panel-shadow: var(--shadow, 0 1px 2px rgba(0, 0, 0, 0.05));
 }
 
 body.dashboard-app-body {
@@ -14,21 +18,80 @@ body.dashboard-app-body {
   min-height: 100vh;
 }
 
+/* Inset gutter so the white panel reads like Dashboard */
 body.dashboard-app-body .dashboard-main {
   background: var(--crm-page-bg);
+  padding: var(--spacing-md, 2rem);
+  box-sizing: border-box;
 }
 
-/* Canonical content wrapper */
-.crm-page {
+@media (max-width: 1366px) {
+  body.dashboard-app-body .dashboard-main {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    padding-bottom: 1rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  body.dashboard-app-body .dashboard-main {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-bottom: 0.75rem;
+  }
+}
+
+/* Dashboard panel (source of truth) + every module content wrapper */
+.page-content,
+.crm-page,
+.proj-main,
+.bp-main,
+.fin-main,
+.bpf-main,
+.payroll-main,
+.marketing-main,
+.pd-main,
+.lead-detail-container,
+body.payroll-sidebar-page .dashboard-main > main.payroll-main {
   width: 100%;
   max-width: var(--crm-page-max);
   margin: 0 auto;
-  padding: var(--crm-page-pad-y) var(--crm-page-pad-x) 2rem;
+  padding: var(--spacing-md, 2rem);
   box-sizing: border-box;
+  background: var(--crm-page-panel-bg);
+  border: 1px solid var(--crm-page-panel-border);
+  border-radius: var(--crm-page-panel-radius);
+  box-shadow: var(--crm-page-panel-shadow);
+  min-height: 320px;
+}
+
+/* Explicit parity for dashboard pages that already use .page-content */
+.page-content {
+  flex: 1;
+  min-height: 600px;
 }
 
 .crm-page--wide {
   max-width: none;
+}
+
+/* Full-bleed tools: keep their own chrome (no outer card) */
+body.os-wizard-page .dashboard-main,
+body.qb-sidebar-page .dashboard-main,
+body.qb-dashboard-inner .dashboard-main {
+  padding: 0;
+}
+
+.os-wizard-shell,
+.qb-page {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  min-height: 0;
 }
 
 .crm-page-header {
@@ -79,7 +142,7 @@ body.dashboard-app-body .dashboard-main {
 
 .crm-page-section {
   background: #fff;
-  border: 1px solid var(--border, #e2e8f0);
+  border: 1px solid var(--crm-page-panel-border);
   border-radius: 12px;
   padding: 1rem 1.15rem;
   margin-bottom: 1rem;
@@ -93,20 +156,6 @@ body.dashboard-app-body .dashboard-main {
   color: var(--color-primary, #1c1c1f);
 }
 
-/* Aliases so older page classes inherit the same rhythm */
-.proj-main,
-.bp-main,
-.fin-main,
-.payroll-main,
-.marketing-main,
-.pd-main {
-  width: 100%;
-  max-width: var(--crm-page-max);
-  margin: 0 auto;
-  padding: var(--crm-page-pad-y) var(--crm-page-pad-x) 2rem;
-  box-sizing: border-box;
-}
-
 .proj-page-body,
 .bp-page-body,
 .pd-body,
@@ -116,7 +165,8 @@ body.dashboard-app-body .dashboard-main {
 }
 
 .proj-eyebrow,
-.bp-eyebrow {
+.bp-eyebrow,
+.bpf-eyebrow {
   font-size: 0.625rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -125,7 +175,8 @@ body.dashboard-app-body .dashboard-main {
 }
 
 .proj-title,
-.bp-title {
+.bp-title,
+.bpf-title {
   font-size: clamp(1.25rem, 2.5vw, 1.5rem);
   font-weight: 700;
   color: var(--color-primary, #1c1c1f);
@@ -135,5 +186,20 @@ body.dashboard-app-body .dashboard-main {
   :root {
     --crm-page-pad-x: 0.75rem;
     --crm-page-pad-y: 0.75rem;
+  }
+
+  .page-content,
+  .crm-page,
+  .proj-main,
+  .bp-main,
+  .fin-main,
+  .bpf-main,
+  .payroll-main,
+  .marketing-main,
+  .pd-main,
+  .lead-detail-container,
+  body.payroll-sidebar-page .dashboard-main > main.payroll-main {
+    padding: var(--spacing-sm, 1rem);
+    min-height: 0;
   }
 }

@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
-<link rel="stylesheet" href="styles.css?v=20260819-menu-fix-v2" />
+<link rel="stylesheet" href="styles.css?v=20260827-page-panel" />
   <link rel="stylesheet" href="design-system.css" />
   <link rel="stylesheet" href="crm-shared-nav.css?v=20260827-shell" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,7 +17,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="crm-responsive.css?v=20260827-shell" />
   <link rel="stylesheet" href="mobile-design-system.css?v=20260827-shell" />
-  <link rel="stylesheet" href="crm-page.css?v=20260827-shell" />
+  <link rel="stylesheet" href="crm-page.css?v=20260827-page-panel" />
   <link rel="stylesheet" href="crm-toast.css" />
 </head>
 <body class="dashboard-app-body fin-page payroll-sidebar-page">
@@ -54,7 +54,8 @@
       </div>
     </aside>
 
-    <main class="dashboard-main" style="flex-direction:column;padding:0;background:#f5f4f1">
+    <main class="dashboard-main" style="flex-direction:column">
+      <div class="fin-main">
       <div class="fin-subnav" aria-label="Abas e filtros do financeiro">
         <div class="fin-tabs" role="tablist">
           <button type="button" class="fin-tab on" data-tab="pl" role="tab">P&amp;L</button>
@@ -77,7 +78,6 @@
         </div>
       </div>
 
-      <div class="fin-main">
         <!-- P&L -->
         <section id="pane-pl" class="fin-pane on" data-pane="pl" role="tabpanel">
           <div class="fin-kpi-grid" data-skeleton="pl">

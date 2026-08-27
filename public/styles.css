@@ -325,6 +325,7 @@ body {
 .page-content {
     flex: 1;
     background: var(--bg-white);
+    border: 1px solid var(--sf-border, var(--border-color, #e5e3dd));
     border-radius: 8px;
     box-shadow: var(--shadow);
     padding: var(--spacing-md);
