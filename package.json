@@ -18,6 +18,7 @@
     "migrate:lead-qualification-columns": "node database/run-add-lead-qualification-columns.js",
     "migrate:quotes-module": "node database/migrate-quotes-module-complete.js",
     "migrate:quote-enhancements-v2": "node database/migrate-quote-enhancements-v2.js",
+    "test:wizard-calc": "node --test modules/quotes/wizardCalculations.test.js",
     "migrate:supplier-product-erp": "node database/migrate-supplier-product-erp.js",
     "migrate:customers-lead-id": "node database/migrate-customers-lead-id.js",
     "migrate:customers-responsible-name": "node database/migrate-customers-responsible-name.js",

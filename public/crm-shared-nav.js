@@ -117,7 +117,7 @@
   /** Só na barra horizontal (páginas sem sidebar); não aparece no menu lateral fixo. */
   const TOOL_NAV = [
     { href: 'quote-builder.html', label: 'Novo orçamento', perm: 'quotes.edit' },
-    { href: 'onsite-quote.html', label: 'Quick quote', perm: 'quotes.create' },
+    { href: 'onsite-quote.html', label: 'Field quote', perm: 'quotes.create' },
     { href: 'estimate-builder.html', label: 'Estimate', perm: 'quotes.view' },
     { href: 'estimate-analytics.html', label: 'Est. analytics', perm: 'quotes.view' },
   ];

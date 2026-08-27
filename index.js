@@ -126,6 +126,7 @@ import { ensureQuoteNumberOffset } from './lib/ensureQuoteNumberOffset.js';
 import { ensureQuoteSignatureSchema } from './lib/ensureQuoteSignatureSchema.js';
 import { ensureQuotePartySchema } from './lib/ensureQuotePartySchema.js';
 import { ensureQuoteClientPublishSchema } from './lib/ensureQuoteClientPublishSchema.js';
+import { ensureQuoteWizardSchema } from './lib/ensureQuoteWizardSchema.js';
 import { ensureUserModuleColumns } from './lib/ensureUserModuleColumns.js';
 import { ensureCustomersResponsibleNameColumn } from './lib/ensureCustomersResponsibleNameColumn.js';
 import { ensureLeadPipelineStageEnteredAt } from './lib/ensureLeadPipelineStageEnteredAt.js';
@@ -479,6 +480,9 @@ app.get('/api/quotes/lookup/builders', requireAuth, requirePermission('quotes.vi
 app.post('/api/quotes/import-invoice-pdf', requireAuth, quotePdfUploadMiddleware, createQuoteFromInvoicePdf);
 app.post('/api/quotes/full', requireAuth, requirePermission('quotes.create'), quoteExt.postQuoteCreateFull);
 app.post('/api/quotes/from-template', requireAuth, requirePermission('quotes.create'), quoteExt.postQuoteFromTemplate);
+app.get('/api/quotes/wizard/catalog', requireAuth, requirePermission('quotes.view'), quoteExt.getQuoteWizardCatalog);
+app.get('/api/quotes/wizard/rates', requireAuth, requirePermission('quotes.view'), quoteExt.getQuoteWizardRateHints);
+app.post('/api/quotes/wizard/preview', requireAuth, requirePermission('quotes.view'), quoteExt.postQuoteWizardPreview);
 app.get('/api/quote-catalog', requireAuth, requirePermission('quotes.view'), quoteExt.getQuoteCatalog);
 app.post('/api/quote-catalog', requireAuth, requirePermission('quotes.edit'), quoteExt.postQuoteCatalog);
 app.put('/api/quote-catalog/:id', requireAuth, requirePermission('quotes.edit'), quoteExt.putQuoteCatalog);
@@ -506,6 +510,20 @@ app.post('/api/quotes/:id/duplicate', requireAuth, requirePermission('quotes.cre
 app.post('/api/quotes/:id/generate-pdf', requireAuth, requirePermission('quotes.edit'), quoteExt.postQuoteGeneratePdf);
 app.post('/api/quotes/:id/send-email', requireAuth, requirePermission('quotes.edit'), quoteExt.postQuoteSendEmail);
 app.post('/api/quotes/:id/publish-client', requireAuth, requirePermission('quotes.edit'), quoteExt.postQuotePublishClient);
+app.post(
+  '/api/quotes/:id/room-photo',
+  requireAuth,
+  requirePermission('quotes.edit'),
+  quoteExt.postQuoteRoomPhotoMiddleware,
+  quoteExt.postQuoteRoomPhoto
+);
+app.post(
+  '/api/quotes/:id/floor-plan',
+  requireAuth,
+  requirePermission('quotes.edit'),
+  quoteExt.postQuoteFloorPlanMiddleware,
+  quoteExt.postQuoteFloorPlan
+);
 app.get('/api/quotes/:id/engagement', requireAuth, requirePermission('quotes.view'), quoteExt.getQuoteEngagement);
 app.get('/api/quotes/:id/snapshots', requireAuth, requirePermission('quotes.view'), quoteExt.getQuoteSnapshots);
 registerQuoteInvoiceRoutes(app);
@@ -864,6 +882,7 @@ async function start() {
       await ensureQuoteSignatureSchema(pool);
       await ensureQuotePartySchema(pool);
       await ensureQuoteClientPublishSchema(pool);
+      await ensureQuoteWizardSchema(pool);
       await ensureUserModuleColumns(pool);
       await ensureCustomersResponsibleNameColumn(pool);
       await ensureLeadPipelineStageEnteredAt(pool);

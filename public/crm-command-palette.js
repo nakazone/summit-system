@@ -7,7 +7,7 @@
     { id: 'leads', label: 'Leads', sub: 'Kanban / pipeline', href: 'dashboard.html?page=leads', perm: 'leads.view' },
     { id: 'quotes', label: 'Orçamentos', sub: 'Lista de quotes', href: 'dashboard.html?page=quotes', perm: 'quotes.view' },
     { id: 'newq', label: 'Novo orçamento', sub: 'Quote builder', href: 'quote-builder.html', perm: 'quotes.edit' },
-    { id: 'onsite', label: 'Quick quote', sub: 'Field · 2 steps', href: 'onsite-quote.html', perm: 'quotes.create' },
+    { id: 'onsite', label: 'Field quote wizard', sub: 'Rooms · floor plan · send', href: 'onsite-quote.html', perm: 'quotes.create' },
     { id: 'cat', label: 'Catálogo de serviços', sub: '', href: 'quote-catalog.html', perm: 'quotes.edit' },
     { id: 'clients', label: 'Clientes', sub: '', href: 'dashboard.html?page=customers', perm: 'customers.view' },
     { id: 'proj', label: 'Projetos', sub: '', href: 'projects.html', perm: 'projects.view' },

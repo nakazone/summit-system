@@ -291,10 +291,19 @@ export async function loadQuoteContext(pool, quoteId) {
     [quoteId]
   );
   const mapped = items.map(mapItemRow);
+  let wizard = null;
+  if (q.wizard_payload != null && q.wizard_payload !== '') {
+    try {
+      wizard = typeof q.wizard_payload === 'string' ? JSON.parse(q.wizard_payload) : q.wizard_payload;
+    } catch {
+      wizard = null;
+    }
+  }
   return {
     quote: q,
     items: mapped,
     profit_summary: summarizeQuoteProfit(mapped),
+    wizard_payload: wizard,
   };
 }
 
@@ -339,6 +348,15 @@ export async function saveQuoteFull(pool, quoteId, body, userId, { snapshotPrevi
   if (body.notes !== undefined) set('notes', body.notes);
   if (body.internal_notes !== undefined) set('internal_notes', body.internal_notes);
   if (body.terms_conditions !== undefined) set('terms_conditions', body.terms_conditions);
+  if (body.wizard_payload !== undefined) {
+    const wp =
+      body.wizard_payload == null
+        ? null
+        : typeof body.wizard_payload === 'string'
+          ? body.wizard_payload
+          : JSON.stringify(body.wizard_payload);
+    set('wizard_payload', wp);
+  }
   set('subtotal', subtotal);
   set('discount_type', discountType);
   set('discount_value', discountValue);
@@ -434,6 +452,7 @@ export async function createQuoteFull(pool, body, userId) {
     'service_type',
     'assigned_to',
     'public_token',
+    'wizard_payload',
   ];
   const present = fields.filter((f) => cols.has(f));
   const placeholders = present.map(() => '?').join(', ');
@@ -485,6 +504,12 @@ export async function createQuoteFull(pool, body, userId) {
         return body.assigned_to ?? null;
       case 'public_token':
         return cols.has('public_token') ? token : null;
+      case 'wizard_payload': {
+        if (body.wizard_payload == null) return null;
+        return typeof body.wizard_payload === 'string'
+          ? body.wizard_payload
+          : JSON.stringify(body.wizard_payload);
+      }
       default:
         return null;
     }

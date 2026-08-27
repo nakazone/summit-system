@@ -1,9 +1,18 @@
 /**
  * Quote module v2 — full save, catalog, templates, PDF, email, duplicate, snapshots.
  */
+import path from 'path';
+import fs from 'fs';
 import { getDBConnection } from '../config/db.js';
 import * as business from '../modules/quotes/quoteBusiness.js';
 import * as repo from '../modules/quotes/quoteRepository.js';
+import { getPublicWizardCatalog, CATALOG_TYPE_HINTS } from '../modules/quotes/wizardCatalog.js';
+import {
+  summarizeRooms,
+  defaultWasteFactor,
+  buildLineItemsFromSummary,
+} from '../modules/quotes/wizardCalculations.js';
+import { uploadQuoteRoomPhoto, uploadQuoteFloorPlan } from '../lib/quoteRoomPhotoUpload.js';
 
 function mysqlText(e) {
   return String(e?.sqlMessage || e?.message || '');
@@ -451,3 +460,152 @@ export async function postQuoteFromTemplate(req, res) {
     res.status(500).json({ success: false, error: e.message });
   }
 }
+
+export async function getQuoteWizardCatalog(req, res) {
+  try {
+    res.json({ success: true, data: getPublicWizardCatalog() });
+  } catch (e) {
+    console.error('getQuoteWizardCatalog:', e);
+    res.status(500).json({ success: false, error: e.message });
+  }
+}
+
+/** Match catalog labor rates to demolition / installation / sanding for hybrid pricing. */
+export async function getQuoteWizardRateHints(req, res) {
+  try {
+    const pool = await getDBConnection();
+    if (!pool) return res.status(503).json({ success: false, error: 'Database not available' });
+    let rows = [];
+    try {
+      rows = await repo.listCatalog(pool, true);
+    } catch (err) {
+      if (isMissingTableOrUnknown(err, 'quote_service_catalog')) {
+        return res.json({ success: true, data: { rates: {}, catalog: [] } });
+      }
+      throw err;
+    }
+    const rates = { demolition: null, installation: null, sanding: null };
+    const matched = { demolition: null, installation: null, sanding: null };
+    for (const row of rows) {
+      const hay = `${row.name || ''} ${row.service_type || ''} ${row.default_description || ''}`.toLowerCase();
+      for (const [type, hints] of Object.entries(CATALOG_TYPE_HINTS)) {
+        if (matched[type]) continue;
+        if (hints.some((h) => hay.includes(h))) {
+          const rate = Number(row.rate_customer ?? row.default_rate) || 0;
+          rates[type] = rate;
+          matched[type] = {
+            id: row.id,
+            name: row.name,
+            rate,
+            unit_type: row.unit_type || 'sq_ft',
+          };
+        }
+      }
+    }
+    res.json({
+      success: true,
+      data: { rates, matched, catalog: rows },
+    });
+  } catch (e) {
+    console.error('getQuoteWizardRateHints:', e);
+    res.status(500).json({ success: false, error: e.message });
+  }
+}
+
+export async function postQuoteWizardPreview(req, res) {
+  try {
+    const rooms = req.body?.rooms || [];
+    const summary = summarizeRooms(rooms);
+    const rateMap = req.body?.rates || {};
+    const items = buildLineItemsFromSummary(summary, rateMap);
+    res.json({
+      success: true,
+      data: {
+        summary,
+        items,
+        default_waste_examples: {
+          straight: defaultWasteFactor({ serviceType: 'installation', pattern: 'straight' }),
+          diagonal: defaultWasteFactor({ serviceType: 'installation', pattern: 'diagonal' }),
+          herringbone: defaultWasteFactor({ serviceType: 'installation', pattern: 'herringbone' }),
+        },
+      },
+    });
+  } catch (e) {
+    console.error('postQuoteWizardPreview:', e);
+    res.status(500).json({ success: false, error: e.message });
+  }
+}
+
+export function postQuoteRoomPhotoMiddleware(req, res, next) {
+  uploadQuoteRoomPhoto.single('file')(req, res, (err) => {
+    if (err) return res.status(400).json({ success: false, error: err.message });
+    next();
+  });
+}
+
+export async function postQuoteRoomPhoto(req, res) {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (!id) return res.status(400).json({ success: false, error: 'Invalid id' });
+    if (!req.file) return res.status(400).json({ success: false, error: 'file required' });
+    const pool = await getDBConnection();
+    if (!pool) return res.status(503).json({ success: false, error: 'Database not available' });
+    const [rows] = await pool.query('SELECT id FROM quotes WHERE id = ? LIMIT 1', [id]);
+    if (!rows.length) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch {
+        /* ignore */
+      }
+      return res.status(404).json({ success: false, error: 'Quote not found' });
+    }
+    const url = `/uploads/quotes/${id}/rooms/${req.file.filename}`;
+    res.status(201).json({
+      success: true,
+      data: {
+        url,
+        filename: req.file.filename,
+        size: req.file.size,
+        mime: req.file.mimetype,
+      },
+    });
+  } catch (e) {
+    console.error('postQuoteRoomPhoto:', e);
+    res.status(500).json({ success: false, error: e.message });
+  }
+}
+
+export function postQuoteFloorPlanMiddleware(req, res, next) {
+  uploadQuoteFloorPlan.single('file')(req, res, (err) => {
+    if (err) return res.status(400).json({ success: false, error: err.message });
+    next();
+  });
+}
+
+export async function postQuoteFloorPlan(req, res) {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (!id) return res.status(400).json({ success: false, error: 'Invalid id' });
+    if (!req.file) return res.status(400).json({ success: false, error: 'file required' });
+    const pool = await getDBConnection();
+    if (!pool) return res.status(503).json({ success: false, error: 'Database not available' });
+    const [rows] = await pool.query('SELECT id FROM quotes WHERE id = ? LIMIT 1', [id]);
+    if (!rows.length) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch {
+        /* ignore */
+      }
+      return res.status(404).json({ success: false, error: 'Quote not found' });
+    }
+    const url = `/uploads/quotes/${id}/${req.file.filename}`;
+    res.status(201).json({
+      success: true,
+      data: { url, filename: req.file.filename, path: path.relative(process.cwd(), req.file.path) },
+    });
+  } catch (e) {
+    console.error('postQuoteFloorPlan:', e);
+    res.status(500).json({ success: false, error: e.message });
+  }
+}
+
