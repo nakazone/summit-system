@@ -667,10 +667,48 @@ document.getElementById('sfFabFinance')?.addEventListener('click', () => {
 
 document.getElementById('sfMobileFab')?.addEventListener('click', () => {
     closeMobileMoreSheet();
-    const sheet = document.getElementById('sfFabSheet');
-    if (sheet && !sheet.hidden) closeSfFabSheet();
-    else openSfFabSheet();
+    if (window.__sfFabLongPressHandled) {
+        window.__sfFabLongPressHandled = false;
+        return;
+    }
+    window.location.href = 'onsite-quote.html';
 });
+
+(function wireFabLongPress() {
+    const fab = document.getElementById('sfMobileFab');
+    if (!fab) return;
+    let timer = null;
+    const clear = () => {
+        if (timer) {
+            clearTimeout(timer);
+            timer = null;
+        }
+    };
+    fab.addEventListener('pointerdown', (e) => {
+        if (e.button != null && e.button !== 0) return;
+        clear();
+        window.__sfFabLongPressHandled = false;
+        timer = setTimeout(() => {
+            window.__sfFabLongPressHandled = true;
+            openSfFabSheet();
+            if (navigator.vibrate) {
+                try {
+                    navigator.vibrate(12);
+                } catch (_) {
+                    /* ignore */
+                }
+            }
+        }, 420);
+    });
+    fab.addEventListener('pointerup', clear);
+    fab.addEventListener('pointercancel', clear);
+    fab.addEventListener('pointerleave', clear);
+    fab.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        window.__sfFabLongPressHandled = true;
+        openSfFabSheet();
+    });
+})();
 
 document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
@@ -1789,6 +1827,7 @@ function renderSfMobileDashboardBlocks() {
     const qa = document.getElementById('sfMobileQuickActions');
     if (qa) {
         qa.innerHTML = `
+            <button type="button" class="sf-quick-pill touchable" data-crm-permission="quotes.create" onclick="location.href='onsite-quote.html'"><span aria-hidden="true">📐</span> Field quote</button>
             <button type="button" class="sf-quick-pill touchable" data-crm-permission="quotes.edit" onclick="location.href='quote-builder.html'"><span aria-hidden="true">📋</span> + Quote</button>
             <button type="button" class="sf-quick-pill touchable" data-crm-permission="customers.create" onclick="showPage('customers'); showNewCustomerModal();"><span aria-hidden="true">👤</span> + Cliente</button>
             <button type="button" class="sf-quick-pill touchable" data-crm-permission="visits.view" onclick="showPage('schedule')"><span aria-hidden="true">📅</span> Ver agenda</button>

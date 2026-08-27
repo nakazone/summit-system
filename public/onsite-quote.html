@@ -10,195 +10,368 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
   <link rel="stylesheet" href="styles.css?v=20260819-menu-fix-v2" />
-  <link rel="stylesheet" href="design-system.css" />
+  <link rel="stylesheet" href="design-system.css?v=20260819-menu-fix-v2" />
+  <link rel="stylesheet" href="crm-shared-nav.css?v=20260826-ipad" />
+  <link rel="stylesheet" href="crm-responsive.css?v=20260826-ipad" />
+  <link rel="stylesheet" href="mobile-design-system.css?v=20260826-ipad" />
   <script src="crm-tailwind-brand.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = window.SUMMIT_TAILWIND_CONFIG;
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="crm-shared-nav.css?v=8" />
   <link rel="stylesheet" href="crm-toast.css" />
   <style>
     html { font-family: Inter, system-ui, sans-serif; }
-    #crmSharedNavRoot { position: relative; top: auto; z-index: 1; max-height: min(32vh, 240px); overflow-y: auto; transition: max-height 0.2s ease, opacity 0.2s ease; }
-    #osTopFixed.os-crm-nav-collapsed #crmSharedNavRoot { max-height: 0; opacity: 0; overflow: hidden; pointer-events: none; margin: 0; padding: 0; border: none; }
-    #osTopFixed.os-crm-nav-collapsed { max-height: none; }
-    #mainScroll { -webkit-overflow-scrolling: touch; }
-    #mainScroll.os-pt-compact { padding-top: 132px !important; }
-    .os-safe-pb { padding-bottom: max(0.75rem, env(safe-area-inset-bottom)); }
-    .os-safe-pt { padding-top: max(0.5rem, env(safe-area-inset-top)); }
-    .os-step-dot { width: 8px; height: 8px; border-radius: 9999px; background: rgba(255,255,255,0.22); transition: background 0.2s, transform 0.2s; }
+    body.os-wizard-page .dashboard-container { min-height: 100vh; }
+    body.os-wizard-page .dashboard-main {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 0;
+      overflow: hidden;
+    }
+    body.os-wizard-page .os-wizard-shell {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+    }
+    .os-wizard-topbar {
+      flex-shrink: 0;
+      background: #1c1c1f;
+      color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 0.5rem 0.75rem 0.65rem;
+    }
+    .os-wizard-topbar__row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .os-wizard-topbar__back {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .os-wizard-topbar__back:hover { color: #fff; text-decoration: underline; }
+    .os-wizard-topbar__center { text-align: center; min-width: 0; flex: 1; }
+    .os-wizard-topbar__eyebrow {
+      font-size: 0.625rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+    .os-wizard-topbar__title {
+      font-size: 0.875rem;
+      font-weight: 700;
+      margin: 0;
+      letter-spacing: -0.01em;
+    }
+    .os-wizard-topbar__step {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #d6c4a8;
+      white-space: nowrap;
+    }
+    .os-wizard-topbar__meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .os-autosave { font-size: 0.625rem; color: rgba(255,255,255,0.55); font-variant-numeric: tabular-nums; }
+    .os-est-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 0.75rem;
+      padding: 0.35rem 0.75rem;
+    }
+    .os-est-pill__label {
+      font-size: 0.625rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.7);
+    }
+    .os-est-pill__value {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #d6c4a8;
+      font-variant-numeric: tabular-nums;
+    }
+    .os-step-dot {
+      width: 8px; height: 8px; border-radius: 9999px;
+      background: rgba(255,255,255,0.22);
+      transition: background 0.2s, transform 0.2s;
+    }
     .os-step-dot--on { background: #d6c4a8; transform: scale(1.25); }
     .os-step-dot--done { background: rgba(214,196,168,0.55); }
     .os-card-tap { transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.15s ease; min-height: 48px; }
     .os-card-tap:active { transform: scale(0.98); }
     .os-card-tap--sel { box-shadow: 0 0 0 2px #d6c4a8; border-color: #d6c4a8 !important; }
     .os-touch { min-height: 48px; font-size: 1rem; }
-    #floorCanvasWrap { touch-action: none; user-select: none; background:
-      linear-gradient(#e2e8f0 1px, transparent 1px),
-      linear-gradient(90deg, #e2e8f0 1px, transparent 1px);
-      background-size: 24px 24px; background-color: #f8fafc; }
-    .fp-room { position: absolute; border: 2px solid #1c1c1f; border-radius: 6px; padding: 6px; overflow: hidden; cursor: grab; box-sizing: border-box; }
+    #mainScroll {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      padding: 0.75rem 0.75rem 7.5rem;
+      background: #f1f5f9;
+    }
+    .os-safe-pb { padding-bottom: max(0.75rem, env(safe-area-inset-bottom)); }
+    #floorCanvasWrap {
+      touch-action: none; user-select: none;
+      background:
+        linear-gradient(#e2e8f0 1px, transparent 1px),
+        linear-gradient(90deg, #e2e8f0 1px, transparent 1px);
+      background-size: 24px 24px;
+      background-color: #f8fafc;
+    }
+    .fp-room {
+      position: absolute; border: 2px solid #1c1c1f; border-radius: 6px;
+      padding: 6px; overflow: hidden; cursor: grab; box-sizing: border-box;
+    }
     .fp-room:active { cursor: grabbing; }
-    .fp-room .fp-handle { position: absolute; right: 0; bottom: 0; width: 18px; height: 18px; background: #1c1c1f; border-radius: 4px 0 4px 0; cursor: nwse-resize; }
+    .fp-room .fp-handle {
+      position: absolute; right: 0; bottom: 0; width: 18px; height: 18px;
+      background: #1c1c1f; border-radius: 4px 0 4px 0; cursor: nwse-resize;
+    }
     .fp-legend-swatch { width: 12px; height: 12px; border-radius: 2px; display: inline-block; }
-    .os-autosave { font-variant-numeric: tabular-nums; }
+    #actionFooter {
+      position: sticky;
+      bottom: 0;
+      z-index: 40;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid #e2e8f0;
+      box-shadow: 0 -4px 24px rgba(0,0,0,0.06);
+    }
+    @media (max-width: 767.98px) {
+      body.os-wizard-page .dashboard-main {
+        padding-bottom: 0;
+      }
+      #actionFooter {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+    }
   </style>
 </head>
-<body class="crm-standalone-page bg-slate-100 text-slate-900 min-h-screen">
-  <p id="authBanner" class="hidden fixed top-0 left-0 right-0 z-[10060] bg-red-600 text-white text-center text-sm py-2 px-3 os-safe-pt"></p>
+<body class="dashboard-app-body os-wizard-page qb-sidebar-page">
+  <p id="authBanner" class="hidden fixed top-0 left-0 right-0 z-[10060] bg-red-600 text-white text-center text-sm py-2 px-3"></p>
 
-  <div id="osTopFixed" class="fixed top-0 left-0 right-0 z-[10040] flex flex-col shadow-lg os-safe-pt">
-    <div id="crmSharedNavRoot"></div>
-    <header class="shrink-0 bg-primary text-white border-t border-white/10">
-      <div class="flex items-center justify-between gap-2 px-3 py-2">
-        <div class="flex items-center gap-1.5 shrink-0">
-          <a href="dashboard.html?page=quotes" class="text-sm font-medium text-white/90 hover:text-white">← CRM</a>
-          <button type="button" id="btnToggleCrmNav" class="text-[10px] font-bold uppercase tracking-wide px-2 py-1 rounded-md bg-white/15 hover:bg-white/25 text-white/95" aria-expanded="true" aria-controls="crmSharedNavRoot">Nav</button>
-        </div>
-        <div class="text-center min-w-0 flex-1">
-          <div class="text-[10px] uppercase tracking-wider text-white/50 font-semibold">Field quote</div>
-          <h1 class="text-sm font-bold truncate tracking-tight">Quote Wizard</h1>
-        </div>
-        <span id="stepLabel" class="text-[11px] text-accent font-bold shrink-0 whitespace-nowrap uppercase tracking-wide">Client</span>
+  <header class="mobile-app-header" id="mobileAppHeader" aria-label="Barra superior">
+    <button type="button" class="mobile-app-header__menu" id="mobileMenuToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="onsiteQuoteSidebar">
+      <span class="mobile-app-header__menu-icon" aria-hidden="true"></span>
+    </button>
+    <div class="mobile-app-header__brand">
+      <img src="/assets/logoSummitFlooring.png" alt="" class="mobile-app-header__logo" width="28" height="28" onerror="this.style.display='none'" />
+      <h1 class="mobile-app-header__title">Field Quote</h1>
+    </div>
+  </header>
+
+  <div class="dashboard-container">
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    <aside class="dashboard-sidebar" id="onsiteQuoteSidebar" aria-label="Menu lateral">
+      <div class="sidebar-header">
+        <img src="/assets/logoSummitFlooring.png" alt="Summit Flooring" class="sidebar-brand-logo logo-image" width="104" height="104" onerror="this.style.display='none'" />
       </div>
-      <div id="stepperDots" class="flex justify-center gap-1.5 px-3 pb-1.5" aria-hidden="true"></div>
-      <div class="px-3 pb-2 flex items-center justify-between gap-2 border-t border-white/10 pt-1.5">
-        <span id="autosaveStatus" class="os-autosave text-[10px] text-white/55">Draft local</span>
-        <div class="flex items-center gap-2 bg-white/10 rounded-xl px-3 py-1.5">
-          <span class="text-[10px] font-semibold text-white/75 uppercase tracking-wide">Est.</span>
-          <span id="pricingTotal" class="text-base font-bold text-accent tabular-nums tracking-tight">$0.00</span>
+      <nav class="sidebar-nav" aria-label="Navegação CRM">
+        <div id="crmSharedNavRoot" data-layout="sidebar"></div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user-bar">
+          <div class="sidebar-user-bar__avatar" id="sidebarUserAvatar" aria-hidden="true">—</div>
+          <div class="sidebar-user-bar__text">
+            <span class="sidebar-user-bar__name" id="sidebarUserName">—</span>
+            <span class="sidebar-user-bar__role" id="sidebarUserRole"></span>
+          </div>
+          <a href="dashboard.html" class="sidebar-logout-btn" title="Home" aria-label="Voltar ao dashboard" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
+          </a>
         </div>
       </div>
-    </header>
+    </aside>
+
+    <main class="dashboard-main">
+      <div class="os-wizard-shell">
+        <div class="os-wizard-topbar">
+          <div class="os-wizard-topbar__row">
+            <a href="dashboard.html" class="os-wizard-topbar__back">← Home</a>
+            <div class="os-wizard-topbar__center">
+              <div class="os-wizard-topbar__eyebrow">Field quote</div>
+              <h1 class="os-wizard-topbar__title">Quote Wizard</h1>
+            </div>
+            <span id="stepLabel" class="os-wizard-topbar__step">Client</span>
+          </div>
+          <div id="stepperDots" class="flex justify-center gap-1.5 pt-2" aria-hidden="true"></div>
+          <div class="os-wizard-topbar__meta">
+            <span id="autosaveStatus" class="os-autosave">Draft local</span>
+            <div class="os-est-pill">
+              <span class="os-est-pill__label">Est.</span>
+              <span id="pricingTotal" class="os-est-pill__value">$0.00</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="mainScroll">
+          <p id="migrateMsg" class="text-amber-800 text-xs mb-3 hidden"></p>
+
+          <section id="panel-client" class="step-panel space-y-3 pb-4">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 space-y-3">
+              <h2 class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Customer &amp; job</h2>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Name <span class="text-red-500">*</span></label>
+                <input id="clientName" type="text" autocomplete="name" class="os-touch w-full rounded-xl border border-slate-200 px-3 py-2.5" placeholder="Client name" />
+              </div>
+              <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-600 mb-1">Phone</label>
+                  <input id="clientPhone" type="tel" autocomplete="tel" class="os-touch w-full rounded-xl border border-slate-200 px-3 py-2.5" placeholder="Mobile" />
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-600 mb-1">Email</label>
+                  <input id="clientEmail" type="email" autocomplete="email" class="os-touch w-full rounded-xl border border-slate-200 px-3 py-2.5" placeholder="Optional" />
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Job address</label>
+                <input id="clientAddress" type="text" autocomplete="street-address" class="os-touch w-full rounded-xl border border-slate-200 px-3 py-2.5" placeholder="Street, city" />
+                <p id="placesHint" class="text-[11px] text-slate-500 mt-1 hidden">Google address suggestions enabled.</p>
+                <div id="addressSuggestions" class="hidden mt-1 rounded-xl border border-slate-200 bg-white divide-y divide-slate-100 max-h-36 overflow-y-auto text-sm"></div>
+                <button type="button" id="btnUseLocation" class="mt-2 w-full py-3 rounded-xl border-2 border-primary/25 font-semibold text-primary text-sm os-card-tap">Use current location</button>
+              </div>
+            </div>
+          </section>
+
+          <section id="panel-types" class="step-panel hidden space-y-3 pb-4">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+              <h2 class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1">Project type</h2>
+              <p class="text-xs text-slate-500 mb-3">Select all that apply (e.g. demo carpet + install LVP).</p>
+              <div id="projectTypeGrid" class="grid grid-cols-1 gap-2"></div>
+            </div>
+          </section>
+
+          <section id="panel-questions" class="step-panel hidden space-y-3 pb-4">
+            <div id="questionsHost" class="space-y-3"></div>
+          </section>
+
+          <section id="panel-rooms" class="step-panel hidden space-y-3 pb-4">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 space-y-3">
+              <div class="flex items-center justify-between gap-2">
+                <h2 class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Rooms &amp; area</h2>
+                <span id="houseSqftBadge" class="text-xs font-bold text-primary tabular-nums">0 sqft</span>
+              </div>
+              <div id="roomList" class="space-y-3"></div>
+              <div class="grid grid-cols-2 gap-2">
+                <button type="button" id="btnAddRoom" class="os-card-tap py-3.5 rounded-xl bg-primary text-white font-bold text-sm">+ Room</button>
+                <label class="os-card-tap flex items-center justify-center py-3.5 rounded-xl border-2 border-dashed border-slate-300 font-bold text-sm text-slate-700 cursor-pointer">
+                  📷 Photo room
+                  <input id="photoRoomInput" type="file" accept="image/*" capture="environment" class="hidden" />
+                </label>
+              </div>
+              <div id="serviceTotals" class="rounded-xl bg-slate-50 border border-slate-100 p-3 text-xs space-y-1"></div>
+            </div>
+          </section>
+
+          <section id="panel-floorplan" class="step-panel hidden space-y-3 pb-4">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 space-y-3">
+              <h2 class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Floor plan</h2>
+              <p class="text-xs text-slate-500">Drag rooms to approximate layout. Resize from the corner handle.</p>
+              <div id="floorLegend" class="flex flex-wrap gap-3 text-[11px] font-semibold text-slate-600"></div>
+              <div id="floorCanvasWrap" class="relative w-full h-[420px] rounded-xl border border-slate-200 overflow-hidden"></div>
+              <div class="grid grid-cols-2 gap-2">
+                <button type="button" id="btnAutoLayout" class="os-card-tap py-3 rounded-xl border border-slate-200 font-semibold text-sm">Auto layout</button>
+                <button type="button" id="btnExportFloorPng" class="os-card-tap py-3 rounded-xl border border-slate-200 font-semibold text-sm">Export PNG</button>
+              </div>
+            </div>
+          </section>
+
+          <section id="panel-review" class="step-panel hidden space-y-3 pb-4">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 space-y-3">
+              <h2 class="text-base font-bold text-primary">Review quote</h2>
+              <div id="reviewClient" class="text-sm text-slate-700"></div>
+              <div id="reviewRooms" class="text-sm space-y-2 border-t border-slate-100 pt-3"></div>
+              <div id="reviewFloorThumb" class="hidden rounded-xl overflow-hidden border border-slate-200"></div>
+              <div class="border-t border-slate-100 pt-3 space-y-2">
+                <h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Pricing (hybrid)</h3>
+                <p class="text-[11px] text-slate-500">Catalog rates when matched; edit manually anytime.</p>
+                <div id="rateFields" class="space-y-2"></div>
+                <div id="reviewLines" class="text-sm space-y-1.5 pt-1"></div>
+                <div class="flex justify-between text-lg font-bold pt-2 border-t border-slate-100">
+                  <span>Total</span>
+                  <span id="summaryTotal" class="text-primary tabular-nums">$0.00</span>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Notes</label>
+                <textarea id="quoteNotes" rows="2" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm" placeholder="Internal / customer notes"></textarea>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Send to email (optional)</label>
+                <input id="sendToEmail" type="email" class="os-touch w-full rounded-xl border border-slate-200 px-3 py-2.5" placeholder="Uses customer email if empty" />
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <footer id="actionFooter" class="os-safe-pb">
+          <div id="footerNav" class="flex gap-2 p-3">
+            <button type="button" id="btnBack" class="flex-1 py-3.5 rounded-xl border-2 border-slate-200 font-semibold text-slate-700 text-sm hidden">Back</button>
+            <button type="button" id="btnNext" class="flex-[2] py-3.5 rounded-xl bg-primary text-white font-bold text-sm shadow-md">Continue →</button>
+          </div>
+          <div id="footerFinal" class="hidden p-3 space-y-2">
+            <button type="button" id="btnSaveDraft" class="w-full py-3 rounded-xl border-2 border-slate-200 font-semibold text-sm">Save draft</button>
+            <button type="button" id="btnSendQuote" class="w-full py-3.5 rounded-xl bg-primary text-white font-bold text-sm">Save &amp; send</button>
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" id="btnApprove" class="py-3 rounded-xl bg-emerald-600 text-white font-semibold text-sm">Approve</button>
+              <button type="button" id="btnPdf" class="py-3 rounded-xl bg-slate-800 text-white font-semibold text-sm">PDF</button>
+            </div>
+            <a id="linkOpenBuilder" href="#" class="block text-center text-xs font-semibold text-slate-500 py-1 hidden">Open in quote builder →</a>
+          </div>
+        </footer>
+      </div>
+    </main>
   </div>
 
-  <main id="mainScroll" class="overflow-y-auto overscroll-contain px-3 pb-28 min-h-screen" style="padding-top: min(38vh, 280px);">
-    <p id="migrateMsg" class="text-amber-800 text-xs mb-3 hidden"></p>
-
-    <!-- 1 Client -->
-    <section id="panel-client" class="step-panel space-y-3 pb-4">
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 space-y-3">
-        <h2 class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Customer &amp; job</h2>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Name <span class="text-red-500">*</span></label>
-          <input id="clientName" type="text" autocomplete="name" class="os-touch w-full rounded-xl border border-slate-200 px-3 py-2.5" placeholder="Client name" />
-        </div>
-        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Phone</label>
-            <input id="clientPhone" type="tel" autocomplete="tel" class="os-touch w-full rounded-xl border border-slate-200 px-3 py-2.5" placeholder="Mobile" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Email</label>
-            <input id="clientEmail" type="email" autocomplete="email" class="os-touch w-full rounded-xl border border-slate-200 px-3 py-2.5" placeholder="Optional" />
-          </div>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Job address</label>
-          <input id="clientAddress" type="text" autocomplete="street-address" class="os-touch w-full rounded-xl border border-slate-200 px-3 py-2.5" placeholder="Street, city" />
-          <p id="placesHint" class="text-[11px] text-slate-500 mt-1 hidden">Google address suggestions enabled.</p>
-          <div id="addressSuggestions" class="hidden mt-1 rounded-xl border border-slate-200 bg-white divide-y divide-slate-100 max-h-36 overflow-y-auto text-sm"></div>
-          <button type="button" id="btnUseLocation" class="mt-2 w-full py-3 rounded-xl border-2 border-primary/25 font-semibold text-primary text-sm os-card-tap">Use current location</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- 2 Project types -->
-    <section id="panel-types" class="step-panel hidden space-y-3 pb-4">
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
-        <h2 class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1">Project type</h2>
-        <p class="text-xs text-slate-500 mb-3">Select all that apply (e.g. demo carpet + install LVP).</p>
-        <div id="projectTypeGrid" class="grid grid-cols-1 gap-2"></div>
-      </div>
-    </section>
-
-    <!-- 3 Conditional Q&A -->
-    <section id="panel-questions" class="step-panel hidden space-y-3 pb-4">
-      <div id="questionsHost" class="space-y-3"></div>
-    </section>
-
-    <!-- 4 Rooms -->
-    <section id="panel-rooms" class="step-panel hidden space-y-3 pb-4">
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 space-y-3">
-        <div class="flex items-center justify-between gap-2">
-          <h2 class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Rooms &amp; area</h2>
-          <span id="houseSqftBadge" class="text-xs font-bold text-primary tabular-nums">0 sqft</span>
-        </div>
-        <div id="roomList" class="space-y-3"></div>
-        <div class="grid grid-cols-2 gap-2">
-          <button type="button" id="btnAddRoom" class="os-card-tap py-3.5 rounded-xl bg-primary text-white font-bold text-sm">+ Room</button>
-          <label class="os-card-tap flex items-center justify-center py-3.5 rounded-xl border-2 border-dashed border-slate-300 font-bold text-sm text-slate-700 cursor-pointer">
-            📷 Photo room
-            <input id="photoRoomInput" type="file" accept="image/*" capture="environment" class="hidden" />
-          </label>
-        </div>
-        <div id="serviceTotals" class="rounded-xl bg-slate-50 border border-slate-100 p-3 text-xs space-y-1"></div>
-      </div>
-    </section>
-
-    <!-- 5 Floor plan -->
-    <section id="panel-floorplan" class="step-panel hidden space-y-3 pb-4">
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 space-y-3">
-        <h2 class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Floor plan</h2>
-        <p class="text-xs text-slate-500">Drag rooms to approximate layout. Resize from the corner handle.</p>
-        <div id="floorLegend" class="flex flex-wrap gap-3 text-[11px] font-semibold text-slate-600"></div>
-        <div id="floorCanvasWrap" class="relative w-full h-[420px] rounded-xl border border-slate-200 overflow-hidden"></div>
-        <div class="grid grid-cols-2 gap-2">
-          <button type="button" id="btnAutoLayout" class="os-card-tap py-3 rounded-xl border border-slate-200 font-semibold text-sm">Auto layout</button>
-          <button type="button" id="btnExportFloorPng" class="os-card-tap py-3 rounded-xl border border-slate-200 font-semibold text-sm">Export PNG</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- 6 Review -->
-    <section id="panel-review" class="step-panel hidden space-y-3 pb-4">
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 space-y-3">
-        <h2 class="text-base font-bold text-primary">Review quote</h2>
-        <div id="reviewClient" class="text-sm text-slate-700"></div>
-        <div id="reviewRooms" class="text-sm space-y-2 border-t border-slate-100 pt-3"></div>
-        <div id="reviewFloorThumb" class="hidden rounded-xl overflow-hidden border border-slate-200"></div>
-        <div class="border-t border-slate-100 pt-3 space-y-2">
-          <h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Pricing (hybrid)</h3>
-          <p class="text-[11px] text-slate-500">Catalog rates when matched; edit manually anytime.</p>
-          <div id="rateFields" class="space-y-2"></div>
-          <div id="reviewLines" class="text-sm space-y-1.5 pt-1"></div>
-          <div class="flex justify-between text-lg font-bold pt-2 border-t border-slate-100">
-            <span>Total</span>
-            <span id="summaryTotal" class="text-primary tabular-nums">$0.00</span>
-          </div>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Notes</label>
-          <textarea id="quoteNotes" rows="2" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm" placeholder="Internal / customer notes"></textarea>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Send to email (optional)</label>
-          <input id="sendToEmail" type="email" class="os-touch w-full rounded-xl border border-slate-200 px-3 py-2.5" placeholder="Uses customer email if empty" />
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer id="actionFooter" class="fixed bottom-0 left-0 right-0 z-[10100] bg-white/95 backdrop-blur-sm border-t border-slate-200 shadow-[0_-4px_24px_rgba(0,0,0,0.06)] os-safe-pb">
-    <div id="footerNav" class="flex gap-2 p-3">
-      <button type="button" id="btnBack" class="flex-1 py-3.5 rounded-xl border-2 border-slate-200 font-semibold text-slate-700 text-sm hidden">Back</button>
-      <button type="button" id="btnNext" class="flex-[2] py-3.5 rounded-xl bg-primary text-white font-bold text-sm shadow-md">Continue →</button>
-    </div>
-    <div id="footerFinal" class="hidden p-3 space-y-2">
-      <button type="button" id="btnSaveDraft" class="w-full py-3 rounded-xl border-2 border-slate-200 font-semibold text-sm">Save draft</button>
-      <button type="button" id="btnSendQuote" class="w-full py-3.5 rounded-xl bg-primary text-white font-bold text-sm">Save &amp; send</button>
-      <div class="grid grid-cols-2 gap-2">
-        <button type="button" id="btnApprove" class="py-3 rounded-xl bg-emerald-600 text-white font-semibold text-sm">Approve</button>
-        <button type="button" id="btnPdf" class="py-3 rounded-xl bg-slate-800 text-white font-semibold text-sm">PDF</button>
-      </div>
-      <a id="linkOpenBuilder" href="#" class="block text-center text-xs font-semibold text-slate-500 py-1 hidden">Open in quote builder →</a>
-    </div>
-  </footer>
-
-  <script src="crm-shared-nav.js?v=8"></script>
+  <script src="crm-viewport.js?v=20260826-ipad"></script>
+  <script src="crm-mobile-chrome.js?v=20260826-ipad"></script>
+  <script src="crm-shared-nav.js?v=20260826-ipad"></script>
   <script src="crm-toast.js"></script>
-  <script src="onsite-quote.js?v=wizard-1"></script>
+  <script src="onsite-quote.js?v=wizard-2-shell"></script>
+  <script>
+    (function () {
+      var t = document.getElementById('mobileMenuToggle');
+      var s = document.getElementById('onsiteQuoteSidebar');
+      var o = document.getElementById('mobileOverlay');
+      if (t && s && o) {
+        t.addEventListener('click', function () {
+          var open = s.classList.toggle('mobile-open');
+          o.classList.toggle('active', open);
+          t.setAttribute('aria-expanded', open ? 'true' : 'false');
+          document.body.classList.toggle('crm-drawer-open', open);
+        });
+        o.addEventListener('click', function () {
+          s.classList.remove('mobile-open');
+          o.classList.remove('active');
+          t.setAttribute('aria-expanded', 'false');
+          document.body.classList.remove('crm-drawer-open');
+        });
+      }
+    })();
+  </script>
 </body>
 </html>

@@ -66,6 +66,7 @@
       label: 'Operações',
       items: [
         { href: 'dashboard.html?page=quotes', label: 'Quotes', perm: 'quotes.view', page: 'quotes', iconKey: 'quotes' },
+        { href: 'onsite-quote.html', label: 'Field quote', perm: 'quotes.create', page: '', iconKey: 'quotes' },
         { href: 'dashboard.html?page=schedule', label: 'Schedule', perm: 'visits.view', page: 'schedule', iconKey: 'schedule' },
         { href: 'projects.html', label: 'Projetos', perm: 'projects.view', page: '', iconKey: 'projects' },
         {
@@ -149,6 +150,10 @@
     if (file === 'quote-builder.html') {
       if ((item.page || '') === 'quotes') return true;
       if (base === 'quote-builder.html') return true;
+    }
+    if (file === 'onsite-quote.html') {
+      if (base === 'onsite-quote.html') return true;
+      if ((item.page || '') === 'quotes' && base === 'dashboard.html') return false;
     }
     if (base === 'marketing.html') {
       return file === 'marketing.html';

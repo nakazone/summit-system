@@ -1311,36 +1311,6 @@
   }
 
   function bind() {
-    const navToggle = $('btnToggleCrmNav');
-    const osTop = $('osTopFixed');
-    const mainScroll = $('mainScroll');
-    function applyOsCrmNavCollapse(collapsed) {
-      if (!osTop || !mainScroll) return;
-      osTop.classList.toggle('os-crm-nav-collapsed', collapsed);
-      mainScroll.classList.toggle('os-pt-compact', collapsed);
-      if (navToggle) {
-        navToggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
-        navToggle.textContent = collapsed ? 'Menu' : 'Hide';
-      }
-      try {
-        localStorage.setItem('osCrmNavCollapsed', collapsed ? '1' : '0');
-      } catch {
-        /* ignore */
-      }
-    }
-    if (navToggle && osTop && mainScroll) {
-      let startCollapsed = false;
-      try {
-        startCollapsed = localStorage.getItem('osCrmNavCollapsed') === '1';
-      } catch {
-        startCollapsed = false;
-      }
-      applyOsCrmNavCollapse(startCollapsed);
-      navToggle.addEventListener('click', () => {
-        applyOsCrmNavCollapse(!osTop.classList.contains('os-crm-nav-collapsed'));
-      });
-    }
-
     ['clientName', 'clientEmail', 'clientPhone', 'clientAddress'].forEach((id) => {
       const map = { clientName: 'name', clientEmail: 'email', clientPhone: 'phone', clientAddress: 'address' };
       $(id)?.addEventListener('input', (e) => {
