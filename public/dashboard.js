@@ -485,9 +485,16 @@ function syncMobileAppChrome(pageName) {
         if (!tab) return;
         const inMore = MOBILE_MORE_PAGES.has(pageName);
         const active = tab === 'more' ? inMore : tab === pageName;
+        const wasActive = btn.classList.contains('mobile-tab-bar__item--active');
         btn.classList.toggle('mobile-tab-bar__item--active', active);
         if (active) btn.setAttribute('aria-current', 'page');
         else btn.removeAttribute('aria-current');
+        if (active && !wasActive && document.body.classList.contains('sf-mobile-shell')) {
+            btn.classList.remove('sf-tab-pop');
+            void btn.offsetWidth;
+            btn.classList.add('sf-tab-pop');
+            window.setTimeout(() => btn.classList.remove('sf-tab-pop'), 220);
+        }
     });
     if (isMobile()) {
         try {
@@ -507,9 +514,7 @@ function syncMobileAppChrome(pageName) {
 function closeMobileMoreSheet() {
     const backdrop = document.getElementById('mobileMoreBackdrop');
     const sheet = document.getElementById('mobileMoreSheet');
-    if (backdrop) backdrop.hidden = true;
-    if (sheet) sheet.hidden = true;
-    document.body.classList.remove('mobile-more-open');
+    animateSheetClose(sheet, backdrop, 'mobile-more-open');
 }
 
 function openMobileMoreSheet() {
@@ -517,9 +522,103 @@ function openMobileMoreSheet() {
     const sheet = document.getElementById('mobileMoreSheet');
     if (!backdrop || !sheet) return;
     closeSfFabSheet();
+    animateSheetOpen(sheet, backdrop, 'mobile-more-open');
+}
+
+function animateSheetOpen(sheet, backdrop, bodyClass) {
+    if (!sheet || !backdrop) return;
     backdrop.hidden = false;
+    backdrop.setAttribute('aria-hidden', 'false');
     sheet.hidden = false;
-    document.body.classList.add('mobile-more-open');
+    backdrop.classList.add('sf-sheet-animating');
+    sheet.classList.add('sf-sheet-animating');
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            backdrop.classList.add('is-open');
+            sheet.classList.add('is-open');
+        });
+    });
+    if (bodyClass) document.body.classList.add(bodyClass);
+    wireSheetDragDismiss(sheet, () => {
+        if (bodyClass === 'sf-fab-open') closeSfFabSheet();
+        else closeMobileMoreSheet();
+    });
+}
+
+function animateSheetClose(sheet, backdrop, bodyClass) {
+    if (!sheet || !backdrop) {
+        if (bodyClass) document.body.classList.remove(bodyClass);
+        return;
+    }
+    backdrop.classList.remove('is-open');
+    sheet.classList.remove('is-open');
+    sheet.style.transform = '';
+    if (bodyClass) document.body.classList.remove(bodyClass);
+    const finish = () => {
+        sheet.hidden = true;
+        backdrop.hidden = true;
+        backdrop.setAttribute('aria-hidden', 'true');
+        sheet.classList.remove('sf-sheet-animating');
+        backdrop.classList.remove('sf-sheet-animating');
+    };
+    const reduce =
+        window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !document.body.classList.contains('sf-mobile-shell')) {
+        finish();
+        return;
+    }
+    window.setTimeout(finish, 300);
+}
+
+function wireSheetDragDismiss(sheet, onDismiss) {
+    if (!sheet || sheet.dataset.sfDragWired === '1') return;
+    const handle = sheet.querySelector('.mobile-more-sheet__handle, .sf-fab-sheet__handle');
+    if (!handle) return;
+    sheet.dataset.sfDragWired = '1';
+    let startY = 0;
+    let dragging = false;
+    handle.addEventListener(
+        'pointerdown',
+        (e) => {
+            if (!document.body.classList.contains('sf-mobile-shell')) return;
+            dragging = true;
+            startY = e.clientY;
+            handle.setPointerCapture?.(e.pointerId);
+        },
+        { passive: true }
+    );
+    handle.addEventListener(
+        'pointermove',
+        (e) => {
+            if (!dragging) return;
+            const dy = Math.max(0, e.clientY - startY);
+            sheet.style.transform = `translateY(${dy}px)`;
+        },
+        { passive: true }
+    );
+    const end = (e) => {
+        if (!dragging) return;
+        dragging = false;
+        const dy = Math.max(0, (e.clientY || 0) - startY);
+        sheet.style.transform = '';
+        if (dy > 90) onDismiss();
+    };
+    handle.addEventListener('pointerup', end);
+    handle.addEventListener('pointercancel', end);
+}
+
+function openSfFabSheet() {
+    const backdrop = document.getElementById('sfFabBackdrop');
+    const sheet = document.getElementById('sfFabSheet');
+    if (!backdrop || !sheet) return;
+    closeMobileMoreSheet();
+    animateSheetOpen(sheet, backdrop, 'sf-fab-open');
+}
+
+function closeSfFabSheet() {
+    const backdrop = document.getElementById('sfFabBackdrop');
+    const sheet = document.getElementById('sfFabSheet');
+    animateSheetClose(sheet, backdrop, 'sf-fab-open');
 }
 
 function updateMobileChromeVisibility() {
@@ -619,27 +718,6 @@ document.getElementById('mobileMoreLogout')?.addEventListener('click', () => {
     document.getElementById('logoutBtn')?.click();
 });
 
-function openSfFabSheet() {
-    const backdrop = document.getElementById('sfFabBackdrop');
-    const sheet = document.getElementById('sfFabSheet');
-    if (!backdrop || !sheet) return;
-    backdrop.hidden = false;
-    backdrop.setAttribute('aria-hidden', 'false');
-    sheet.hidden = false;
-    document.body.classList.add('sf-fab-open');
-}
-
-function closeSfFabSheet() {
-    const backdrop = document.getElementById('sfFabBackdrop');
-    const sheet = document.getElementById('sfFabSheet');
-    if (backdrop) {
-        backdrop.hidden = true;
-        backdrop.setAttribute('aria-hidden', 'true');
-    }
-    if (sheet) sheet.hidden = true;
-    document.body.classList.remove('sf-fab-open');
-}
-
 document.getElementById('sfFabBackdrop')?.addEventListener('click', () => closeSfFabSheet());
 
 document.getElementById('sfFabNewQuote')?.addEventListener('click', () => {
@@ -708,6 +786,42 @@ document.getElementById('sfMobileFab')?.addEventListener('click', () => {
         window.__sfFabLongPressHandled = true;
         openSfFabSheet();
     });
+})();
+
+(function hintFabOnce() {
+    const run = () => {
+        const fab = document.getElementById('sfMobileFab');
+        const slot = fab && fab.closest('.sf-bottom-nav__fab-slot');
+        if (!fab || !slot) return;
+        if (!document.body.classList.contains('sf-mobile-shell')) return;
+        try {
+            if (localStorage.getItem('sf_fab_hint_seen') === '1') return;
+        } catch (_) {
+            return;
+        }
+        fab.classList.add('sf-fab--hint');
+        let hint = slot.querySelector('.sf-fab-hint');
+        if (!hint) {
+            hint = document.createElement('span');
+            hint.className = 'sf-fab-hint';
+            hint.textContent = 'Toque = Field quote';
+            slot.appendChild(hint);
+        }
+        window.setTimeout(() => {
+            fab.classList.remove('sf-fab--hint');
+            if (hint) hint.remove();
+            try {
+                localStorage.setItem('sf_fab_hint_seen', '1');
+            } catch (_) {
+                /* ignore */
+            }
+        }, 7200);
+    };
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => window.setTimeout(run, 400));
+    } else {
+        window.setTimeout(run, 400);
+    }
 })();
 
 document.addEventListener('keydown', (e) => {
@@ -1799,26 +1913,26 @@ function renderSfMobileDashboardBlocks() {
         const mFu = Number(pl.followups_pending) || 0;
         const mFuOd = Number(pl.followups_overdue) || 0;
         kpiGrid.innerHTML = `
-            <div class="sf-kpi-card touchable" onclick="showPage('leads')">
+            <div class="sf-kpi-card sf-kpi-card--link touchable" role="button" tabindex="0" onclick="showPage('leads')">
                 <div class="sf-kpi-card__value">${mFu}</div>
                 <div class="sf-kpi-card__label">Follow-ups</div>
                 <div class="sf-kpi-card__meta">${mFuOd > 0 ? mFuOd + ' atras.' : 'abertos'}</div>
             </div>
-            <div class="sf-kpi-card touchable">
+            <div class="sf-kpi-card sf-kpi-card--link touchable" role="button" tabindex="0" onclick="showPage('leads')">
                 <div class="sf-kpi-card__value">${pl.leads_received}</div>
                 <div class="sf-kpi-card__label">Leads (período)</div>
             </div>
-            <div class="sf-kpi-card touchable">
+            <div class="sf-kpi-card sf-kpi-card--link touchable" role="button" tabindex="0" onclick="showPage('quotes')">
                 <div class="sf-kpi-card__value">${openVal}</div>
                 <div class="sf-kpi-card__label">Em aberto</div>
                 <div class="sf-kpi-card__meta">${pl.proposals_open_count || 0} orç./prop.</div>
             </div>
-            <div class="sf-kpi-card touchable">
+            <div class="sf-kpi-card sf-kpi-card--link touchable" role="button" tabindex="0" onclick="showPage('leads')">
                 <div class="sf-kpi-card__value">${closedVal}</div>
                 <div class="sf-kpi-card__label">Fechado (valor)</div>
                 <div class="sf-kpi-card__meta">${pl.closed_won_count || 0} leads won · ${d.period === 'today' ? 'hoje' : d.period === 'week' ? '7 dias' : d.period === 'overall' ? 'geral' : 'mês'}</div>
             </div>
-            <div class="sf-kpi-card touchable">
+            <div class="sf-kpi-card sf-kpi-card--link touchable" role="button" tabindex="0" onclick="showPage('quotes')">
                 <div class="sf-kpi-card__value">${formatDashboardPercent(conv.proposal_win_rate)}</div>
                 <div class="sf-kpi-card__label">Win rate</div>
             </div>`;
@@ -1855,7 +1969,7 @@ function renderSfMobileDashboardBlocks() {
         act.innerHTML =
             chips.length > 0
                 ? chips.join('')
-                : '<span class="sf-caption" style="padding:8px 0;">Sem pendências urgentes na agenda</span>';
+                : '<span class="sf-empty-inline" role="status">Tudo em dia — sem follow-ups ou visitas urgentes</span>';
     }
 }
 
@@ -2659,9 +2773,13 @@ function sfQuotesMobileSkeleton(count) {
 
 function sfQuotesMobileEmptyHtml() {
     return `<div class="ds-empty-state" role="status">
+<div class="ds-empty-state__icon" aria-hidden="true">📄</div>
 <h3 class="ds-empty-state__title">Nenhum orçamento ainda</h3>
-<p class="ds-empty-state__text">Crie o primeiro orçamento tocando no +</p>
-<button type="button" class="btn btn-primary touchable" data-crm-permission="quotes.edit" onclick="location.href='quote-builder.html'">+ Novo orçamento</button>
+<p class="ds-empty-state__text">Toque no + para Field quote, ou crie um orçamento completo.</p>
+<div class="ds-empty-state__actions" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
+<button type="button" class="btn btn-primary touchable" data-crm-permission="quotes.create" onclick="location.href='onsite-quote.html'">Field quote</button>
+<button type="button" class="btn touchable" data-crm-permission="quotes.edit" onclick="location.href='quote-builder.html'" style="min-height:48px;border-radius:12px;border:1px solid var(--sf-border-mid);background:transparent;color:var(--sf-text-primary)">+ Orçamento</button>
+</div>
 </div>`;
 }
 

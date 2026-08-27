@@ -12,6 +12,31 @@
   pointer-events: none;
 }
 
+@media (max-width: 767.98px) {
+  body.sf-mobile-shell #crmToastHost {
+    bottom: calc(var(--sf-nav-height, 64px) + env(safe-area-inset-bottom, 0px) + 12px);
+    left: 12px;
+    right: 12px;
+    max-width: none;
+  }
+
+  body:not(.sf-mobile-shell) #crmToastHost {
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+    left: 12px;
+    right: 12px;
+    max-width: none;
+  }
+
+  body.os-wizard-page #crmToastHost,
+  body.qb-dashboard-inner #crmToastHost,
+  body.qb-sidebar-page #crmToastHost {
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    left: auto;
+    right: max(1rem, env(safe-area-inset-right));
+    max-width: min(420px, calc(100vw - 2rem));
+  }
+}
+
 .crm-toast {
   pointer-events: auto;
   padding: 0.85rem 1rem;

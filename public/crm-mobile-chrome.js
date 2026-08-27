@@ -7,9 +7,16 @@
   window.__crmMobileChromeInit = true;
 
   const COMPACT_MQ = '(max-width: 1366px)';
+  const PHONE_MQ = '(max-width: 767.98px)';
 
   function isCompact() {
     return window.CrmViewport ? window.CrmViewport.isCompact() : window.matchMedia(COMPACT_MQ).matches;
+  }
+
+  function isPhone() {
+    return window.CrmViewport && typeof window.CrmViewport.isPhone === 'function'
+      ? window.CrmViewport.isPhone()
+      : window.matchMedia(PHONE_MQ).matches;
   }
 
   function findSidebar() {
@@ -84,6 +91,52 @@
     return header;
   }
 
+  function shouldSkipPhoneDock() {
+    const b = document.body;
+    return (
+      b.classList.contains('dashboard-app-body') ||
+      b.classList.contains('sf-mobile-shell') ||
+      b.classList.contains('os-wizard-page') ||
+      b.classList.contains('qb-dashboard-inner') ||
+      b.classList.contains('qb-sidebar-page') ||
+      b.classList.contains('crm-standalone-page') ||
+      !!document.getElementById('mobileTabBar')
+    );
+  }
+
+  function ensurePhoneDock() {
+    if (shouldSkipPhoneDock()) {
+      const existing = document.getElementById('crmPhoneDock');
+      if (existing) existing.remove();
+      document.body.classList.remove('has-crm-phone-dock');
+      return null;
+    }
+    if (!isPhone()) {
+      const existing = document.getElementById('crmPhoneDock');
+      if (existing) existing.remove();
+      document.body.classList.remove('has-crm-phone-dock');
+      return null;
+    }
+    let dock = document.getElementById('crmPhoneDock');
+    if (dock) {
+      document.body.classList.add('has-crm-phone-dock');
+      return dock;
+    }
+    dock = document.createElement('nav');
+    dock.className = 'crm-phone-dock';
+    dock.id = 'crmPhoneDock';
+    dock.setAttribute('aria-label', 'Navegação rápida');
+    dock.innerHTML =
+      '<a class="crm-phone-dock__item" href="dashboard.html"><span class="crm-phone-dock__icon" aria-hidden="true">⌂</span>Home</a>' +
+      '<a class="crm-phone-dock__item" href="dashboard.html?page=quotes"><span class="crm-phone-dock__icon" aria-hidden="true">📄</span>Quotes</a>' +
+      '<a class="crm-phone-dock__item crm-phone-dock__item--accent" href="onsite-quote.html" aria-label="Field quote"><span class="crm-phone-dock__fab" aria-hidden="true">+</span></a>' +
+      '<a class="crm-phone-dock__item" href="dashboard.html?page=customers"><span class="crm-phone-dock__icon" aria-hidden="true">👥</span>Clients</a>' +
+      '<a class="crm-phone-dock__item" href="dashboard.html?page=leads"><span class="crm-phone-dock__icon" aria-hidden="true">⋯</span>Mais</a>';
+    document.body.appendChild(dock);
+    document.body.classList.add('has-crm-phone-dock');
+    return dock;
+  }
+
   function setOpen(sidebar, overlay, toggle, open) {
     if (!sidebar) return;
     sidebar.classList.toggle('mobile-open', open);
@@ -130,6 +183,7 @@
 
     const onResize = () => {
       if (!isCompact()) setOpen(sidebar, overlay, toggle, false);
+      ensurePhoneDock();
     };
     window.addEventListener('resize', onResize);
   }
@@ -137,8 +191,8 @@
   function init() {
     if (document.body.classList.contains('crm-standalone-page')) return;
     const sidebar = findSidebar();
-    if (!sidebar) return;
-    wire(sidebar);
+    if (sidebar) wire(sidebar);
+    ensurePhoneDock();
   }
 
   if (document.readyState === 'loading') {
@@ -147,10 +201,14 @@
     init();
   }
 
-  window.CrmMobileChrome = { init, setOpen: (open) => {
-    const sidebar = findSidebar();
-    const overlay = document.getElementById('mobileOverlay');
-    const toggle = document.getElementById('mobileMenuToggle') || document.getElementById('bpMenuToggle');
-    setOpen(sidebar, overlay, toggle, !!open);
-  } };
+  window.CrmMobileChrome = {
+    init,
+    ensurePhoneDock,
+    setOpen: (open) => {
+      const sidebar = findSidebar();
+      const overlay = document.getElementById('mobileOverlay');
+      const toggle = document.getElementById('mobileMenuToggle') || document.getElementById('bpMenuToggle');
+      setOpen(sidebar, overlay, toggle, !!open);
+    },
+  };
 })();
